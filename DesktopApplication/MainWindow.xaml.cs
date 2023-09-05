@@ -18,9 +18,42 @@ public partial class MainWindow : Window
                 CourseName = "System Engineer",
                 Groups = new List<Group>
                 {
-                    new() {GroupId = 11, GroupName = "SSE-22"},
-                    new() {GroupId = 12, GroupName = "SSE-11"},
-                    new() {GroupId = 12, GroupName = "SSE-12"}
+                    new ()
+                    {
+                        GroupId = 11,
+                        GroupName = "SSE-22",
+                        Students = new List<Student>
+                        {
+                            new() {StudentId = 0, StudentFullName = "FillFullName", isWorkingInDepartment = false},
+                            new() {StudentId = 0, StudentFullName = "FillFullName", isWorkingInDepartment = false},
+                            new() {StudentId = 0, StudentFullName = "FillFullName", isWorkingInDepartment = false},
+                            new() {StudentId = 0, StudentFullName = "FillFullName", isWorkingInDepartment = false}
+                        }
+                    },
+                    new ()
+                    {
+                        GroupId = 12,
+                        GroupName = "SSE-11",
+                        Students = new List<Student>
+                        {
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = false},
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = false},
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = false},
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = false}
+                        }
+                    },
+                    new ()
+                    {
+                        GroupId = 13,
+                        GroupName = "SSE-12",
+                        Students = new List<Student>
+                        {
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = false},
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = true},
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = true},
+                            new() {StudentId = 111, StudentFullName = "FillFullName", isWorkingInDepartment = false}
+                        }
+                    },
                 }
             },
             new()
@@ -79,6 +112,8 @@ public partial class MainWindow : Window
         
         CourseListView.SelectionChanged += CourseListView_SelectionChanged;
         
+        GroupListView.SelectionChanged += GroupListView_SelectionChanged;
+        
     }
 
     private void CourseListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -92,6 +127,20 @@ public partial class MainWindow : Window
         else
         {
             GroupListView.ItemsSource = null;
+        }
+    }
+
+    private void GroupListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (GroupListView.SelectedItem != null)
+        {
+            var selectedGroup = (Group)GroupListView.SelectedItem;
+
+            StudentListView.ItemsSource = selectedGroup.Students;
+        }
+        else
+        {
+            StudentListView.ItemsSource = null;
         }
     }
 }
