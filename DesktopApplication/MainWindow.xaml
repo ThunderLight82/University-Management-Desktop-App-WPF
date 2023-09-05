@@ -3,15 +3,26 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DesktopApplication"
         mc:Ignorable="d"
         Title="Teacher App" Height="450" Width="500">
     <Grid>
-        <ListView ItemsSource="{Binding}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <ListView Name="CourseListView" Grid.Column="0" ItemsSource="{Binding}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Course ID" Width="60" DisplayMemberBinding="{Binding CourseId}" />
                     <GridViewColumn Header="Course Name" Width="150" DisplayMemberBinding="{Binding CourseName}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Name="GroupListView" Grid.Column="1" ItemsSource="{Binding SelectedItem.Groups, ElementName=CourseListView}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Group ID" Width="60" DisplayMemberBinding="{Binding GroupId}" />
+                    <GridViewColumn Header="Group Name" Width="100" DisplayMemberBinding="{Binding GroupName}" />
                 </GridView>
             </ListView.View>
         </ListView>
