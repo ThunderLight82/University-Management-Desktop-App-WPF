@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopApplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Teacher App" Height="450" Width="500">
     <Grid>
-
+        <ListView ItemsSource="{Binding}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Course ID" Width="60" DisplayMemberBinding="{Binding CourseId}" />
+                    <GridViewColumn Header="Course Name" Width="150" DisplayMemberBinding="{Binding CourseName}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace DesktopApplication
+namespace DesktopApplication;
+
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+
+        var courses = new List<Course>
         {
-            InitializeComponent();
-        }
+            new() {CourseId = 001, CourseName = "System Engineer"},
+            new() {CourseId = 002, CourseName = "Software Engineer"},
+            new() {CourseId = 003, CourseName = "Data Science"},
+            new() {CourseId = 004, CourseName = "Data Analysis"},
+            new() {CourseId = 005, CourseName = "Cyber Security"}
+        };
+        
+        DataContext = courses;
     }
 }
