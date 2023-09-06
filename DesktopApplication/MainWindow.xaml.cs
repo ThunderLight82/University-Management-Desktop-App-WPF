@@ -6,11 +6,19 @@ namespace DesktopApplication;
 
 public partial class MainWindow : Window
 {
+    private readonly DataRepository _dataRepository;
+    
     public MainWindow()
     {
         InitializeComponent();
 
-        var courses = new List<Course>
+        _dataRepository = new DataRepository();
+
+        InitializeData();
+
+        DataContext = _dataRepository.Courses;
+
+        /*var courses = new List<Course>
         {
             new()
             {
@@ -106,14 +114,39 @@ public partial class MainWindow : Window
                     new() {GroupId = 51, GroupName = "CS-21"}
                 }
             },
-        };
-        
-        DataContext = courses;
-        
+        };*/
+
         CourseListView.SelectionChanged += CourseListView_SelectionChanged;
         
         GroupListView.SelectionChanged += GroupListView_SelectionChanged;
+    }
+
+    private void InitializeData()
+    {
+        Course course = new Course
+        {
+            CourseId = 1,
+            CourseName = "System Engineer"
+        };
+
+        Group group = new Group
+        {
+            GroupId = 11,
+            GroupName = "SSE-22"
+        };
+
+        Student student1 = new Student
+        {
+            StudentId = 1,
+            StudentFullName = "Student 1",
+            isWorkingInDepartment = false
+        };
         
+        group.Students.Add(student1);
+        
+        course.Groups.Add(group);
+        
+        _dataRepository.Courses.Add(course);
     }
 
     private void CourseListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -142,5 +175,11 @@ public partial class MainWindow : Window
         {
             StudentListView.ItemsSource = null;
         }
+    }
+
+    private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
+    {
+        GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
+        groupManagementWindow.ShowDialog();
     }
 }
