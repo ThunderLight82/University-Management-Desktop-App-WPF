@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -179,7 +180,14 @@ public partial class MainWindow : Window
 
     private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        GroupManagementWindow groupManagementWindow = new GroupManagementWindow();
-        groupManagementWindow.ShowDialog();
+        try
+        {
+            GroupManagementWindow groupManagementWindow = new GroupManagementWindow(_dataRepository);
+            groupManagementWindow.ShowDialog();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
