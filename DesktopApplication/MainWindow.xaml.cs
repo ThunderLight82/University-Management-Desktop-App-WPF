@@ -7,7 +7,7 @@ namespace DesktopApplication;
 
 public partial class MainWindow : Window
 {
-    private readonly DataRepository _dataRepository;
+    private DataRepository _dataRepository;
     
     public MainWindow()
     {

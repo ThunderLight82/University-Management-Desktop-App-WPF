@@ -6,18 +6,23 @@
         mc:Ignorable="d"
         Title="[WiP Title] App" Height="500" Width="800">
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <Button Content="Manage Groups" Click="OpenGroupManagementWindow_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5" />
+        
         <Grid Grid.Row="1">
             <Grid>
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
+                
                 <ListView Name="CourseListView" Grid.Column="0" ItemsSource="{Binding}">
                         <ListView.View>
                             <GridView>
@@ -26,6 +31,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                
                     <ListView Name="GroupListView" Grid.Column="1" ItemsSource="{Binding SelectedItem.Groups, ElementName=CourseListView}">
                         <ListView.View>
                             <GridView>
@@ -34,6 +40,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
+                
                     <ListView Name="StudentListView" Grid.Column="2" ItemsSource="{Binding SelectedItem.Students, ElementName=GroupListView}">
                         <ListView.View>
                             <GridView>
