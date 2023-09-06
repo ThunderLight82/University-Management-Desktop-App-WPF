@@ -1,0 +1,21 @@
+﻿<Window x:Class="DesktopApplication.GroupManagementWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="Groups Management" Height="400" Width="600">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Text="Create New Group" FontWeight="Bold" />
+            <TextBox Name="GroupNameTextBox" Width="200" />
+            <ComboBox Name="GroupComboBox" Width="200" />
+            <ComboBox Name="CourseComboBox" Width="200" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" />
+            <Button Content="Create Group" Click="CreateGroup_Click" />
+            
+            <TextBlock Text="Delete Group" FontWeight="Bold" Margin="0,20,0,0" />
+            <ComboBox Name="DeleteGroupComboBox" Width="200" />
+            <Button Content="Delete Group" Click="DeleteGroup_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
