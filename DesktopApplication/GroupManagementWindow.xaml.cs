@@ -12,7 +12,7 @@ public partial class GroupManagementWindow : Window
     {
         InitializeComponent();
         _dataRepository = dataRepository;
-        InitializeComboBoxes();
+        CourseComboBox.ItemsSource = _dataRepository.Courses;
         CourseComboBox.SelectionChanged += CourseComboBox_SelectionChanged;
     }
 
@@ -111,7 +111,7 @@ public partial class GroupManagementWindow : Window
                 {
                     selectedCourse.Groups.Remove(deleteGroup);
 
-                    InitializeComboBoxes();
+                    DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
                 }
             }
             else
@@ -129,7 +129,6 @@ public partial class GroupManagementWindow : Window
     
     private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // Update the DeleteGroupComboBox based on the selected course
         Course selectedCourse = CourseComboBox.SelectedItem as Course;
 
         if (selectedCourse != null)
@@ -137,14 +136,5 @@ public partial class GroupManagementWindow : Window
             DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
         }
     }
-
-    private void InitializeComboBoxes()
-    {
-        // Set the CourseComboBox's items source
-        CourseComboBox.ItemsSource = _dataRepository.Courses;
-
-        // Clear the DeleteGroupComboBox items
-        DeleteGroupComboBox.Items.Clear();
-        
-    }
+    
 }
