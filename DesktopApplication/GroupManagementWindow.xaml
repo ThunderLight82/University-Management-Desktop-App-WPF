@@ -7,13 +7,45 @@
         Title="Groups Management" Height="400" Width="600">
     <Grid>
         <StackPanel Margin="10">
-            <TextBlock Text="Create New Group" FontWeight="Bold" />
-            <TextBox Name="GroupNameTextBox" Width="200" />
-            <ComboBox Name="GroupComboBox" Width="200" />
+            <TextBlock Text="Please, select a course to change group within below" FontWeight="Bold" HorizontalAlignment="Center" />
             <ComboBox Name="CourseComboBox" Width="200" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" />
+            
+            <TextBlock Text="Create new group in selected course" FontWeight="Bold" />
+            <TextBox Name="GroupNameTextBox" Width="200" Margin="10">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="TextBox">
+                                    <Grid>
+                                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}" />
+                                        <ScrollViewer x:Name="PART_ContentHost" />
+                                        <TextBlock Name="PlaceholderForFutureName" Text="Enter a new group name here"
+                                                   Foreground="Gray" Margin="2,0,0,0" />
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                            <Setter TargetName="PlaceholderForFutureName" Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="{x:Null}">
+                                            <Setter TargetName="PlaceholderForFutureName" Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter TargetName="PlaceholderForFutureName" Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            
             <Button Content="Create Group" Click="CreateGroup_Click" />
             
-            <TextBlock Text="Delete Group" FontWeight="Bold" Margin="0,20,0,0" />
+            <TextBlock Text="Delete group in selected course" FontWeight="Bold" Margin="0,10,0,0" />
             <ComboBox Name="DeleteGroupComboBox" Width="200" />
             <Button Content="Delete Group" Click="DeleteGroup_Click" />
         </StackPanel>
