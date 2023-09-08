@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace DesktopApplication;
 
 public partial class GroupManagementWindow : Window
 {
-
     private DataRepository _dataRepository;
     
     public GroupManagementWindow(DataRepository dataRepository)
@@ -13,6 +13,7 @@ public partial class GroupManagementWindow : Window
         InitializeComponent();
         _dataRepository = dataRepository;
         InitializeComboBoxes();
+        CourseComboBox.SelectionChanged += CourseComboBox_SelectionChanged;
     }
 
     /*private void EditGroup_Click(object sender, RoutedEventArgs e)
@@ -56,22 +57,32 @@ public partial class GroupManagementWindow : Window
             
             if (selectedCourse != null)
             {
-                Group createNewGroup = new Group { GroupName = groupName };
-                selectedCourse.Groups.Add(createNewGroup);
+                bool groupNameExists = selectedCourse.Groups.Any(group => group.GroupName == groupName);
                 
-                GroupNameTextBox.Clear();
+                if(!groupNameExists)
+                {
+                    Group createNewGroup = new Group { GroupName = groupName };
+                    selectedCourse.Groups.Add(createNewGroup);
                 
-                InitializeComboBoxes();
+                    GroupNameTextBox.Clear();
+                
+                    DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
+                }
+                else
+                {
+                    MessageBox.Show("A group with same name already exist. Please, select other name for new group", "Error", 
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
             else
             {
-                MessageBox.Show("Please select a course to add group to it", "Error", 
+                MessageBox.Show("Please, select a course to add group to it", "Error", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else
         {
-            MessageBox.Show("Please enter a valid group name", "Error", 
+            MessageBox.Show("Please, enter a valid group name", "Error", 
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
         
@@ -96,35 +107,37 @@ public partial class GroupManagementWindow : Window
                     InitializeComboBoxes();
                 }
             }
+            else
+            {
+                MessageBox.Show("Please, select a course to delete the group from", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         else
         {
-            MessageBox.Show("Please select a group to delete", "Error",
+            MessageBox.Show("Please, select a group from course to delete", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+    
+    private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        // Update the DeleteGroupComboBox based on the selected course
+        Course selectedCourse = CourseComboBox.SelectedItem as Course;
+
+        if (selectedCourse != null)
+        {
+            DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
         }
     }
 
     private void InitializeComboBoxes()
     {
+        // Set the CourseComboBox's items source
         CourseComboBox.ItemsSource = _dataRepository.Courses;
+
+        // Clear the DeleteGroupComboBox items
+        DeleteGroupComboBox.Items.Clear();
         
-        foreach (var group in _dataRepository.Courses.SelectMany(course => course.Groups))
-        {
-            GroupComboBox.Items.Add(group.GroupName);
-            DeleteGroupComboBox.Items.Add(group.GroupName);
-        }
     }
 }
-
-/*private void UpdateGroupComboBoxes()
-{
-    GroupComboBox.Items.Clear();
-    
-    DeleteGroupComboBox.Items.Clear();
-
-    foreach (Group group in groupList)
-    {
-        GroupComboBox.Items.Add(group.GroupName);
-        DeleteGroupComboBox.Items.Add(group.GroupName);
-    }
-}*/
