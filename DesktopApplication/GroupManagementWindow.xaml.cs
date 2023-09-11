@@ -61,7 +61,14 @@ public partial class GroupManagementWindow : Window
                 
                 if(!groupNameExists)
                 {
-                    Group createNewGroup = new Group { GroupName = groupName };
+                    selectedCourse.LastUsedGroupId++;
+
+                    Group createNewGroup = new Group
+                    {
+                        GroupId = selectedCourse.CourseId * 10 + selectedCourse.LastUsedGroupId,
+                        GroupName = groupName
+                    };
+                        
                     selectedCourse.Groups.Add(createNewGroup);
                 
                     GroupNameTextBox.Clear();
