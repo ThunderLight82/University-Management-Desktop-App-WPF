@@ -52,6 +52,37 @@ public partial class GroupManagementWindow : Window
         }
 
     }
+
+    private void SelectGroupCurator_Click(object sender, RoutedEventArgs e)
+    {
+        string selectedGroupName = SelectGroupCuratorComboBox.SelectedItem as string;
+        string selectedCuratorName = SelectCuratorComboBox.SelectedItem as string;
+
+        if (!string.IsNullOrWhiteSpace(selectedGroupName) && !string.IsNullOrWhiteSpace(selectedCuratorName))
+        {
+            Course selectedCourse = CourseComboBox.SelectedItem as Course;
+            if (selectedCourse != null)
+            {
+                Group selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+
+                if (selectedGroup != null)
+                {
+                    selectedGroup.GroupCuratorName = selectedCuratorName;
+                    
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a course to assign the curator/teacher to a group", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        else
+        {
+            MessageBox.Show("Please select a group and a curator/teacher to apply the selection", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
     
     private void CreateGroup_Click(object sender, RoutedEventArgs e)
     {
@@ -119,7 +150,8 @@ public partial class GroupManagementWindow : Window
                     if (deleteGroup.Students.Count > 0)
                     {
                         MessageBox.Show("Cannot delete this group because it contains students.\n" +
-                                        "If you want to remove a group, please remove the active students within it in \"Manage Student\" section before proceeding", "Error",
+                                        "If you want to remove a group, please remove the active students within it in " +
+                                        "\"Manage Student\" section before proceeding", "Error",
                             MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else
