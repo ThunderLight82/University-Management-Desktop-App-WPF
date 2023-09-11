@@ -28,6 +28,8 @@ public partial class MainWindow : Window
     {
         var courses = new List<Course>
         {
+            // VVV Hardcoded courses  below only for testings(showcase) purpose VVV
+            
             new() { CourseId = 1, CourseName = "System Engineer" },
             new() { CourseId = 2, CourseName = "Software Engineer" },
             new() { CourseId = 3, CourseName = "Data Science" },
@@ -35,12 +37,13 @@ public partial class MainWindow : Window
             new() { CourseId = 5, CourseName = "Cyber Security"}
         };
 
-        // VVV Hardcoded group and student below only for testing purpose VVV
+        // VVV Hardcoded group and student below only for testing(showcase) purpose VVV
         
         Group group = new Group
         {
             GroupId = 11,
-            GroupName = "Test Group"
+            GroupName = "Test Group",
+            GroupCuratorName = "Test Curator"
         };
 
         Student student1 = new Student
