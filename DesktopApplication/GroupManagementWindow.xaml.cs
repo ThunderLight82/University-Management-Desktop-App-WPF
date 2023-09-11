@@ -116,10 +116,19 @@ public partial class GroupManagementWindow : Window
                 
                 if (deleteGroup != null)
                 {
-                    selectedCourse.Groups.Remove(deleteGroup);
+                    if (deleteGroup.Students.Count > 0)
+                    {
+                        MessageBox.Show("Cannot delete this group because it contains students.\n" +
+                                        "If you want to remove a group, please remove the active students within it in \"Manage Student\" section before proceeding", "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        selectedCourse.Groups.Remove(deleteGroup);
 
-                    DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                    EditGroupNameComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
+                        DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
+                        EditGroupNameComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
+                    }
                 }
             }
             else
