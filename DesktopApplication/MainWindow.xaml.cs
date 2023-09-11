@@ -99,4 +99,11 @@ public partial class MainWindow : Window
             MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+    
+    private void RefreshData_Click(object sender, RoutedEventArgs e)
+    {
+        CourseListView.SelectedIndex = -1;
+        GroupListView.SelectedIndex = -1;
+        StudentListView.SelectedIndex = -1;
+    }
 }
