@@ -72,6 +72,9 @@ public partial class GroupManagementWindow : Window
                 if (selectedGroup != null)
                 {
                     selectedGroup.GroupCuratorName = selectedTeacher.TeacherFullName;
+                    
+                    SelectGroupToAddCuratorComboBox.SelectedIndex = -1;
+                    SelectCuratorNameComboBox.SelectedIndex = -1;
                 }
             }
             else
@@ -179,6 +182,26 @@ public partial class GroupManagementWindow : Window
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
+    private void SelectGroupToAddCuratorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        Group selectedGroup = GetSelectedGroupInfo();
+        if (selectedGroup != null)
+        {
+            if (!string.IsNullOrWhiteSpace(selectedGroup.GroupCuratorName))
+            {
+                CurationInfoTextBlock.Text = $"This group already has a curator named {selectedGroup.GroupCuratorName}]";
+            }
+            else
+            {
+                CurationInfoTextBlock.Text = "This group didn't have an assigned curator for now";
+            }
+        }
+        else
+        {
+            CurationInfoTextBlock.Text = string.Empty;
+        }
+    }
     
     private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -191,6 +214,19 @@ public partial class GroupManagementWindow : Window
             SelectGroupToAddCuratorComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
             SelectCuratorNameComboBox.SelectedItem = null;
         }
+    }
+
+    private Group GetSelectedGroupInfo()
+    {
+        string selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;
+        Course selectedCourse = CourseComboBox.SelectedItem as Course;
+
+        if (selectedCourse != null && !string.IsNullOrWhiteSpace(selectedGroupName))
+        {
+            return selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+        }
+
+        return null;
     }
 
     private void RefreshAllGroupComboBoxes()

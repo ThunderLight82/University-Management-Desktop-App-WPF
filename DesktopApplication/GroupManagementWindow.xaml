@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Groups Management" Height="500" Width="800">
+        Title="Groups Management" Height="600" Width="800">
     <Grid>
         <StackPanel Margin="10">
             <TextBlock Text="Select a course to change group within below" FontWeight="Bold" HorizontalAlignment="Center" />
@@ -48,7 +48,8 @@
 
             <TextBlock Text="Assign a curator\teacher for selected group in selected course" FontWeight="Bold" />
             <TextBlock Text="Select a existing group from list below, then select a curator by name from list and click 'Apply Curator Selection' button:" />
-            <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Margin="5"/>
+            <TextBlock x:Name="CurationInfoTextBlock" HorizontalAlignment="Center" Margin="0,5,0,0" FontStyle="Italic" />
+            <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Margin="5" SelectionChanged="SelectGroupToAddCuratorComboBox_SelectionChanged"/> 
             <TextBlock Text="Teachers list:" HorizontalAlignment="Center"/>
             <ComboBox Name="SelectCuratorNameComboBox" Width="200" DisplayMemberPath="TeacherFullName" Margin="5" />
             <Button Content="Apply Curator Selection" Click="SelectGroupCurator_Click" Margin="5" Width="200" />
