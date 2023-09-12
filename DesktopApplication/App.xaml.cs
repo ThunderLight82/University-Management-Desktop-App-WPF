@@ -4,5 +4,4 @@ namespace DesktopApplication;
 
 public partial class App : Application 
 {
-    
 }
