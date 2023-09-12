@@ -8,6 +8,7 @@ public class Group
     public string GroupName { get; set; }
     public List<Student> Students { get; set; }
     public string GroupCuratorName { get; set; }
+    public Teacher GroupCurator { get; set; }
     
     public Group()
     {

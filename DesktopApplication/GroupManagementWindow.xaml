@@ -47,9 +47,10 @@
             <Button Content="Edit Group Name" Click="EditGroupName_Click" Margin="5" Width="200" />
 
             <TextBlock Text="Assign a curator\teacher for selected group in selected course" FontWeight="Bold" />
-            <TextBlock Text="Select a existing group from list below, then select a curator name from list and click 'Change Group Curator' button:" />
-            <ComboBox Name="SelectGroupCuratorComboBox" Width="200" Margin="5"/>
-            <ComboBox Name="SelectCuratorComboBox" Width="200" Margin="5"/>
+            <TextBlock Text="Select a existing group from list below, then select a curator by name from list and click 'Change Group Curator' button:" />
+            <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Margin="5"/>
+            <TextBlock Text="Teachers list:" HorizontalAlignment="Center"/>
+            <ComboBox Name="SelectCuratorNameComboBox" Width="200" DisplayMemberPath="TeacherFullName" Margin="5" />
             <Button Content="Apply Curator Selection" Click="SelectGroupCurator_Click" Margin="5" Width="200" />
             
             <TextBlock Text="Create new group in selected course" FontWeight="Bold" />
