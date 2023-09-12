@@ -7,8 +7,8 @@
         Title="Groups Management" Height="500" Width="800">
     <Grid>
         <StackPanel Margin="10">
-            <TextBlock Text="Please, select a course to change group within below" FontWeight="Bold" HorizontalAlignment="Center" />
-            <ComboBox Name="CourseComboBox" Width="200" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5" />
+            <TextBlock Text="Select a course to change group within below" FontWeight="Bold" HorizontalAlignment="Center" />
+            <ComboBox Name="CourseComboBox" Width="200" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5" Height="30" />
             
             <TextBlock Text="Change group name in selected course" FontWeight="Bold" />
             <TextBlock Text="Select a existing group from list below, then enter a new name and click 'Change Group Name' button to apply new name:" />
@@ -47,13 +47,14 @@
             <Button Content="Edit Group Name" Click="EditGroupName_Click" Margin="5" Width="200" />
 
             <TextBlock Text="Assign a curator\teacher for selected group in selected course" FontWeight="Bold" />
-            <TextBlock Text="Select a existing group from list below, then select a curator by name from list and click 'Change Group Curator' button:" />
+            <TextBlock Text="Select a existing group from list below, then select a curator by name from list and click 'Apply Curator Selection' button:" />
             <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Margin="5"/>
             <TextBlock Text="Teachers list:" HorizontalAlignment="Center"/>
             <ComboBox Name="SelectCuratorNameComboBox" Width="200" DisplayMemberPath="TeacherFullName" Margin="5" />
             <Button Content="Apply Curator Selection" Click="SelectGroupCurator_Click" Margin="5" Width="200" />
             
             <TextBlock Text="Create new group in selected course" FontWeight="Bold" />
+            <TextBlock Text= "Enter a new group name in window below and then click 'Create Group' button to create new group in selected course:" />
             <TextBox Name="GroupNameTextBox" Width="200" Margin="5">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
@@ -88,6 +89,8 @@
             <Button Content="Create Group" Click="CreateGroup_Click" Width="200" />
             
             <TextBlock Text="Delete group in selected course" FontWeight="Bold" Margin="0,10,0,0" />
+            <TextBlock Text= "Select a group from list below and then click 'Delete Group' button to delete group from selected course:" />
+            <TextBlock Text= "(To perform deletion, make sure that the selected group doesn't have active students in it)" />
             <ComboBox Name="DeleteGroupComboBox" Width="200" Margin="5" />
             <Button Content="Delete Group" Click="DeleteGroup_Click" Width="200"/>
         </StackPanel>
