@@ -26,45 +26,12 @@ public partial class MainWindow : Window
 
     private void InitializeData()
     {
-        var courses = new List<Course>
-        {
-            // VVV Hardcoded courses  below only for testings(showcase) purpose VVV
-            
-            new() { CourseId = 1, CourseName = "System Engineer" },
-            new() { CourseId = 2, CourseName = "Software Engineer" },
-            new() { CourseId = 3, CourseName = "Data Science" },
-            new() { CourseId = 4, CourseName = "Data Analysis"},
-            new() { CourseId = 5, CourseName = "Cyber Security"}
-        };
-
-        // VVV Hardcoded group and student below only for testing(showcase) purpose VVV
-        
-        Group group = new Group
-        {
-            GroupId = 11,
-            GroupName = "Test Group",
-            GroupCuratorName = "Test Curator"
-        };
-
-        Student student1 = new Student
-        {
-            StudentId = 1,
-            StudentFullName = "Test Student 1",
-            isWorkingInDepartment = false
-        };
-        
-        group.Students.Add(student1);
-        
-        foreach (var course in courses)
-        {
-            course.Groups.Add(group);
-            _dataRepository.Courses.Add(course);
-        }
+        CourseListView.ItemsSource = _dataRepository.Courses;
     }
 
     private void CourseListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (CourseListView.SelectedItem != null)
+        if (CourseListView.SelectedItem != null) 
         {
             var selectedCourse = (Course)CourseListView.SelectedItem;
 
