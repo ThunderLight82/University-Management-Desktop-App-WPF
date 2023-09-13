@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -8,7 +9,7 @@ namespace DesktopApplication;
 public partial class MainWindow : Window
 {
     private DataRepository _dataRepository;
-    
+
     public MainWindow()
     {
         InitializeComponent();
@@ -61,8 +62,21 @@ public partial class MainWindow : Window
     {
         try
         {
-            GroupManagementWindow groupManagementWindow = new GroupManagementWindow(_dataRepository);
+            var groupManagementWindow = new GroupManagementWindow(_dataRepository);
             groupManagementWindow.ShowDialog();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+    
+    private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var studentManagementWindow = new StudentManagementWindow(_dataRepository);
+            studentManagementWindow.ShowDialog();
         }
         catch (Exception ex)
         {
