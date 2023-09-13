@@ -10,6 +10,7 @@ public class DataRepository
     public List<Course> Courses { get; set; }
     public List<Teacher> Teachers { get; set; }
     public List<Group> Groups { get; set; }
+    public List<Student> Students { get; set; }
 
     public DataRepository()
     {
@@ -37,6 +38,20 @@ public class DataRepository
             new() { TeacherId = 4, TeacherFullName = "Daniel Ostrowski", IsCorrespondence = true },
             new() { TeacherId = 5, TeacherFullName = "Ustam Yapir", IsCorrespondence = false },
             new() { TeacherId = 6, TeacherFullName = "Morar Krasnoportrko", IsCorrespondence = false }
+        };
+
+        Students = new List<Student>
+        {
+            new() {StudentId = 1, StudentFullName = "Oleg Nekrasov", isWorkingInDepartment = false},
+            new() {StudentId = 2, StudentFullName = "Sergiy Cnkira", isWorkingInDepartment = false},
+            new() {StudentId = 3, StudentFullName = "Rosa Maksymenko", isWorkingInDepartment = false},
+            new() {StudentId = 4, StudentFullName = "Ella Bliss", isWorkingInDepartment = false},
+            new() {StudentId = 5, StudentFullName = "Hryhoriy Mulan", isWorkingInDepartment = true},
+            new() {StudentId = 6, StudentFullName = "Olexander Doberman", isWorkingInDepartment = false},
+            new() {StudentId = 7, StudentFullName = "Olexandra Minushevich", isWorkingInDepartment = false},
+            new() {StudentId = 8, StudentFullName = "Anna Samoilenko", isWorkingInDepartment = false},
+            new() {StudentId = 9, StudentFullName = "Ornieda Saakashvili", isWorkingInDepartment = false},
+            new() {StudentId = 10, StudentFullName = "Maxym Rubin", isWorkingInDepartment = false}
         };
         
         // VVV Hardcoded groups list below only for testings(showcase) purpose. VVV
