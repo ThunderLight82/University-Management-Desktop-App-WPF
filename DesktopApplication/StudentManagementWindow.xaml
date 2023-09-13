@@ -3,36 +3,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:DesktopApplication"
         mc:Ignorable="d"
-        Title="StudentManagementPage" Height="450" Width="800">
+        Title="Students Management" Height="550" Width="1000">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="Select a group to operate within" FontWeight="Bold" HorizontalAlignment="Center" />
-            <ComboBox Name="GroupComboBox" Width="200" DisplayMemberPath="GroupName" SelectedValuePath="GroupId" Margin="5" Height="30"/>
-            
-            <ListView Name="StudentsListView" ItemsSource="{Binding Students}" Width="400" Margin="5">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Student ID" Width="60" DisplayMemberBinding="{Binding StudentId}" />
-                        <GridViewColumn Header="Student Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
-                        <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding isWorkingInDepartment}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            
-            <!--<ListView Name="StudentListView" Grid.Column="2" ItemsSource="{Binding SelectedItem.Students, ElementName=GroupListView}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Student ID" Width="60" DisplayMemberBinding="{Binding StudentId}" />
-                        <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
-                        <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding isWorkingInDepartment}" />
-                    </GridView>
-                </ListView.View>
-            </ListView>-->
-            
-            <Button Content="Add student to group" Click="AddStudentsToGroup_Click" Width="400" Margin="5" />
-            
+        
+        <StackPanel Margin="5">
+            <TextBlock Text="Select a group to add students to" FontWeight="Bold" HorizontalAlignment="Left" Margin="2" />
+            <TextBlock Text="Select a group from list below, then click on preferable students from list" />
+            <TextBlock Text="and press 'Add Student To Group' button below students list:" />
+            <ComboBox Name="GroupComboBox" Width="200" DisplayMemberPath="GroupName" SelectedValuePath="GroupId" HorizontalAlignment="Left" Margin="5" Height="25"/>
         </StackPanel>
+        
+        <ScrollViewer Grid.Row="0" Height="340" HorizontalAlignment="Left">
+            <ListView Name="StudentsListView" ItemsSource="{Binding Students}" Width="380" HorizontalAlignment="Left" Margin="20">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding StudentId}" />
+                            <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
+                            <GridViewColumn Header="Current Group" Width="120" DisplayMemberBinding="{Binding CurrentGroupName}" />
+                            <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding isWorkingInDepartment}" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+        </ScrollViewer>
+        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+            <Button Content="Add Student To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+            <Button Content="Remove Student From Group" Click="DeleteStudentsFromGroup_Click" Width="200" Height="35" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+        </StackPanel>
+        
     </Grid>
 </Window>
