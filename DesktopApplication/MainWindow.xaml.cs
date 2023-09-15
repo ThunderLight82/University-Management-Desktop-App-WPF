@@ -75,7 +75,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            var studentManagementWindow = new StudentManagementWindow(_dataRepository);
+            var studentManagementWindow = new StudentManagementWindow(_dataRepository, new HashSet<Student>());
             studentManagementWindow.ShowDialog();
         }
         catch (Exception ex)

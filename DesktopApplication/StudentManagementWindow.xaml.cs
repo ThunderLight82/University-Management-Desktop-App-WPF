@@ -1,24 +1,26 @@
 using System.Windows;
-using System.Windows.Controls;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DesktopApplication;
 
 public partial class StudentManagementWindow : Window
 {
     private DataRepository _dataRepository;
+    private HashSet<Student> _assignedStudents;
 
-    public StudentManagementWindow(DataRepository dataRepository)
+    public StudentManagementWindow(DataRepository dataRepository, HashSet<Student> assignedStudents)
     {
         InitializeComponent();
-        _dataRepository = dataRepository; 
+        _dataRepository = dataRepository;
+        this._assignedStudents = assignedStudents;
         GroupComboBox.ItemsSource = _dataRepository.Groups;
         StudentsListView.ItemsSource = _dataRepository.Students;
     }
 
     private void AddStudentsToGroup_Click(object sender, RoutedEventArgs e)
     {
-        Group selectedGroup = GroupComboBox.SelectedItem as Group;
+        var selectedGroup = GroupComboBox.SelectedItem as Group;
 
         if (selectedGroup != null)
         {
@@ -28,8 +30,18 @@ public partial class StudentManagementWindow : Window
             {
                 foreach (var student in selectedStudents)
                 {
-                    student.CurrentGroupName = selectedGroup.GroupName;
-                    selectedGroup.Students.Add(student);
+                    if (student.CurrentGroupName == null && !_assignedStudents.Contains(student))
+                    {
+                        student.CurrentGroupName = selectedGroup.GroupName;
+                        selectedGroup.Students.Add(student);
+
+                        _assignedStudents.Add(student);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Student '" + student.StudentFullName + "' is already assigned to a group '" + student.CurrentGroupName + "'", "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             
                 StudentsListView.Items.Refresh();
@@ -51,32 +63,35 @@ public partial class StudentManagementWindow : Window
 
     private void DeleteStudentsFromGroup_Click(object sender, RoutedEventArgs e)
     {
-        Group selectedGroup = GroupComboBox.SelectedItem as Group;
+        var selectedStudents = StudentsListView.SelectedItems.OfType<Student>().ToList();
 
-        if (selectedGroup != null)
+        if (selectedStudents.Count > 0)
         {
-            var selectedStudents = StudentsListView.SelectedItems.OfType<Student>().ToList();
-
-            if (selectedStudents.Count > 0)
+            foreach (var student in selectedStudents)
             {
-                foreach (var student in selectedStudents)
+                Group selectedGroup = _dataRepository.Groups.FirstOrDefault(group => group.Students.Contains(student));
+
+                if (selectedGroup != null)
                 {
                     selectedGroup.Students.Remove(student);
-                }
-            
-                StudentsListView.Items.Refresh();
+                    student.CurrentGroupName = null;
 
-                StudentsListView.SelectedItems.Clear();
+                    _assignedStudents.Remove(student);
+                }
+                else
+                {
+                    MessageBox.Show("This student is not assigned to any group", "Nothing to remove",
+                        MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
-            else
-            {
-                MessageBox.Show("Please, select a student from the list to remove it from the group", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            StudentsListView.Items.Refresh();
+
+            StudentsListView.SelectedItems.Clear();
         }
         else
         {
-            MessageBox.Show("Please, select a group to remove students from", "Error",
+            MessageBox.Show("Please, select a student from the list to remove it from the group", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
