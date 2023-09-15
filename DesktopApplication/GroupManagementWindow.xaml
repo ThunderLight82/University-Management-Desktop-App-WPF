@@ -4,8 +4,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Groups Management" Height="600" Width="800">
+        Title="Groups Management" Height="600" Width="800" ResizeMode="NoResize">
     <Grid>
+
         <StackPanel Margin="10">
             <TextBlock Text="Select a course to change group within below" FontWeight="Bold" HorizontalAlignment="Center" />
             <ComboBox Name="CourseComboBox" Width="200" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5" Height="30" />
@@ -94,6 +95,7 @@
             <TextBlock Text= "(To perform deletion, make sure that the selected group doesn't have active students in it)" />
             <ComboBox Name="DeleteGroupComboBox" Width="200" Margin="5" />
             <Button Content="Delete Group" Click="DeleteGroup_Click" Width="200"/>
+
         </StackPanel>
     </Grid>
 </Window>
