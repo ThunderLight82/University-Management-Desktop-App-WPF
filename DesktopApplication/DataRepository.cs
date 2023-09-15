@@ -40,6 +40,7 @@ public class DataRepository
             new() { TeacherId = 6, TeacherFullName = "Morar Krasnoportrko", IsCorrespondence = false }
         };
 
+        // VVV Hardcoded students list below only for testings(showcase) purpose. VVV
         Students = new List<Student>
         {
             new() {StudentId = 1, StudentFullName = "Oleg Nekrasov", isWorkingInDepartment = false},
@@ -51,7 +52,8 @@ public class DataRepository
             new() {StudentId = 7, StudentFullName = "Olexandra Minushevich", isWorkingInDepartment = false},
             new() {StudentId = 8, StudentFullName = "Anna Samoilenko", isWorkingInDepartment = false},
             new() {StudentId = 9, StudentFullName = "Ornieda Saakashvili", isWorkingInDepartment = false},
-            new() {StudentId = 10, StudentFullName = "Maxym Rubin", isWorkingInDepartment = false}
+            new() {StudentId = 10, StudentFullName = "Maxym Rubin", isWorkingInDepartment = false},
+            new() {StudentId = 11, StudentFullName = "Igor Kostin", isWorkingInDepartment = false}
         };
         
         // VVV Hardcoded groups list below only for testings(showcase) purpose. VVV
