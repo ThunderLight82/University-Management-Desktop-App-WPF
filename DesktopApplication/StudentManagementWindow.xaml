@@ -4,33 +4,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Students Management" Height="550" Width="1000">
-    <Grid>
-        
-        <StackPanel Margin="5">
-            <TextBlock Text="Select a group to add students to" FontWeight="Bold" HorizontalAlignment="Left" Margin="2" />
-            <TextBlock Text="Select a group from list below, then click on preferable students from list" />
-            <TextBlock Text="and press 'Add Student To Group' button below students list:" />
-            <ComboBox Name="GroupComboBox" Width="200" DisplayMemberPath="GroupName" SelectedValuePath="GroupId" HorizontalAlignment="Left" Margin="5" Height="25"/>
-        </StackPanel>
-        
-        <ScrollViewer Grid.Row="0" Height="340" HorizontalAlignment="Left">
-            <ListView Name="StudentsListView" ItemsSource="{Binding Students}" Width="380" HorizontalAlignment="Left" Margin="20">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding StudentId}" />
-                            <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
-                            <GridViewColumn Header="Current Group" Width="120" DisplayMemberBinding="{Binding CurrentGroupName}" />
-                            <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding isWorkingInDepartment}" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-        </ScrollViewer>
-        
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
-            <Button Content="Add Student To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-            <Button Content="Remove Student From Group" Click="DeleteStudentsFromGroup_Click" Width="200" Height="35" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-        </StackPanel>
-        
+        Title="Students Management" Height="610" Width="525" ResizeMode="NoResize">
+
+    <Grid Margin="0,-20,0,0">
+
+        <Frame x:Name="MainFrame" Margin="0,70,0,0" Grid.ColumnSpan="6" NavigationUIVisibility="Hidden" />
+
+        <Button Content="Manage Students Groups" Click="ManageStudentsGroupButton_Click" Margin="10,29,359, 0" Height="35" VerticalAlignment="Top"/>
+
+        <Button Content="Edit Students" Click="EditStudentsButton_Click" Margin="184,29,185,0" Height="35" VerticalAlignment="Top"/>
+
+        <Button Content="Change Students Data" Click=" ChangeStudentData_Click" Margin="359,29,10,0" Height="35" VerticalAlignment="Top" />
+
     </Grid>
 </Window>
