@@ -17,11 +17,12 @@ public partial class ManageStudentsGroupPage : Page
         _assignedStudents = assignedStudents;
         GroupComboBox.ItemsSource = _dataRepository.Groups;
         StudentsListView.ItemsSource = _dataRepository.Students;
+
     }
 
     private void AddStudentsToGroup_Click(object sender, RoutedEventArgs e)
     {
-        var selectedGroup = GroupComboBox.SelectedItem as Group;
+        Group selectedGroup = GroupComboBox.SelectedItem as Group;
 
         if (selectedGroup != null)
         {
