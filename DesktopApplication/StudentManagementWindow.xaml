@@ -6,15 +6,28 @@
         mc:Ignorable="d"
         Title="Students Management" Height="610" Width="525" ResizeMode="NoResize">
 
+    <Window.Resources>
+    <Style x:Key="HighlightedButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="LightSkyBlue"/>
+        <Setter Property="Foreground" Value="Black"/>
+    </Style>
+
+        <Style x:Key="NormalButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="LightGray"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+    </Window.Resources>
+
     <Grid Margin="0,-20,0,0">
 
         <Frame x:Name="MainFrame" Margin="0,70,0,0" Grid.ColumnSpan="6" NavigationUIVisibility="Hidden" />
 
-        <Button Content="Manage Students Groups" Click="ManageStudentsGroupButton_Click" Margin="10,29,359, 0" Height="35" VerticalAlignment="Top"/>
+        <Button x:Name="ManageStudentsGroupButton" Content="Manage Students Group" Click="ManageStudentsGroupButton_Click" Margin="10,29,359, 0" Height="35" VerticalAlignment="Top"/>
 
-        <Button Content="Edit Students" Click="EditStudentsButton_Click" Margin="184,29,185,0" Height="35" VerticalAlignment="Top"/>
+        <Button x:Name="EditStudentsButton" Content="Edit Students" Click="EditStudentsButton_Click" Margin="184,29,185,0" Height="35" VerticalAlignment="Top"/>
 
-        <Button Content="Change Students Data" Click=" ChangeStudentData_Click" Margin="359,29,10,0" Height="35" VerticalAlignment="Top" />
+        <Button x:Name="ChangeStudentDataButton" Content="Change Students Data" Click=" ChangeStudentData_Click" Margin="359,29,10,0" Height="35" VerticalAlignment="Top" />
 
     </Grid>
 </Window>

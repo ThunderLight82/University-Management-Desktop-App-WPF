@@ -18,17 +18,29 @@ public partial class StudentManagementWindow : Window
     private void ManageStudentsGroupButton_Click(object sender, RoutedEventArgs e)
     {
         var manageStudentsGroupPage = new ManageStudentsGroupPage(_dataRepository, _assignedStudents);
+
+        EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
+        ManageStudentsGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
+        ChangeStudentDataButton.Style = (Style)FindResource("NormalButtonStyle");
+
         MainFrame.Content = manageStudentsGroupPage;
     }
 
     private void EditStudentsButton_Click(object sender, RoutedEventArgs e)
     {
         var manageStudentsGroupPage = new EditStudentPage(_dataRepository);
+
+        EditStudentsButton.Style = (Style)FindResource("HighlightedButtonStyle");
+        ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
+        ChangeStudentDataButton.Style = (Style)FindResource("NormalButtonStyle");
+
         MainFrame.Content = manageStudentsGroupPage;
     }
 
     private void ChangeStudentData_Click(object sender, RoutedEventArgs e)
     {
-
+        EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
+        ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
+        ChangeStudentDataButton.Style = (Style)FindResource("HighlightedButtonStyle");
     }
 }
