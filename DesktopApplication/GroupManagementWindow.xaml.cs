@@ -21,7 +21,7 @@ public partial class GroupManagementWindow : Window
     private void EditGroupName_Click(object sender, RoutedEventArgs e)
     {
         string selectedGroupName = EditGroupNameComboBox.SelectedItem as string;
-        string newGroupName = EditGroupNameTextBox.Text;
+        string newGroupName = EditGroupNameTextBox.Text.Trim();
 
         if (!string.IsNullOrWhiteSpace(selectedGroupName) && !string.IsNullOrWhiteSpace(newGroupName))
         {
@@ -92,7 +92,7 @@ public partial class GroupManagementWindow : Window
     
     private void CreateGroup_Click(object sender, RoutedEventArgs e)
     {
-        string groupName = GroupNameTextBox.Text;
+        string groupName = GroupNameTextBox.Text.Trim();
 
         if (!string.IsNullOrWhiteSpace(groupName))
         {
@@ -106,7 +106,7 @@ public partial class GroupManagementWindow : Window
                 {
                     selectedCourse.LastUsedGroupId++;
 
-                    Group createNewGroup = new Group
+                    var createNewGroup = new Group
                     {
                         GroupId = selectedCourse.CourseId * 10 + selectedCourse.LastUsedGroupId,
                         GroupName = groupName
@@ -157,7 +157,7 @@ public partial class GroupManagementWindow : Window
                     {
                         MessageBox.Show("Cannot delete this group because it contains students.\n" +
                                         "If you want to remove a group, please remove the active students within it in " +
-                                        "\"Manage Student\" section before proceeding", "Error",
+                                        "\"Manage Students\" section before proceeding", "Error",
                             MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                     else
@@ -185,7 +185,7 @@ public partial class GroupManagementWindow : Window
 
     private void SelectGroupToAddCuratorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Group selectedGroup = GetSelectedGroupInfo();
+        Group selectedGroup = GetSelectedGroupCurationInfo();
         if (selectedGroup != null)
         {
             if (!string.IsNullOrWhiteSpace(selectedGroup.GroupCuratorName))
@@ -216,7 +216,7 @@ public partial class GroupManagementWindow : Window
         }
     }
 
-    private Group GetSelectedGroupInfo()
+    private Group GetSelectedGroupCurationInfo()
     {
         string selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;
         Course selectedCourse = CourseComboBox.SelectedItem as Course;
@@ -232,5 +232,10 @@ public partial class GroupManagementWindow : Window
     private void RefreshAllGroupComboBoxes()
     {
         // Need to add later a future realization of sorta refresher to all group combo boxes smth like "CourseComboBox_SelectionChanged"
+    }
+
+    private void EditGroupNameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+
     }
 }

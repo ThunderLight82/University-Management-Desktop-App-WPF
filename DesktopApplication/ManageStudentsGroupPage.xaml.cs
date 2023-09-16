@@ -81,8 +81,8 @@ public partial class ManageStudentsGroupPage : Page
                 }
                 else
                 {
-                    MessageBox.Show("This student is not assigned to any group", "Nothing to remove",
-                        MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    MessageBox.Show("This student is not assigned to any group", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
 

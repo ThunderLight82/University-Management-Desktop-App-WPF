@@ -13,7 +13,7 @@
             
             <TextBlock Text="Change group name in selected course" FontWeight="Bold" />
             <TextBlock Text="Select a existing group from list below, then enter a new name and click 'Change Group Name' button to apply new name:" />
-            <ComboBox Name="EditGroupNameComboBox" Width="200" Margin="5"/>
+            <ComboBox Name="EditGroupNameComboBox" Width="200" Margin="5" SelectionChanged="EditGroupNameComboBox_SelectionChanged"/>
             <TextBox Name="EditGroupNameTextBox" Width="200" Margin="5">
                  <TextBox.Style>
                     <Style TargetType="TextBox">
