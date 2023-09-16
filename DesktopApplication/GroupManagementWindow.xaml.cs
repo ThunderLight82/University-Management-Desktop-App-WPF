@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,7 +14,7 @@ public partial class GroupManagementWindow : Window
         _dataRepository = dataRepository;
         CourseComboBox.ItemsSource = _dataRepository.Courses;
         SelectCuratorNameComboBox.ItemsSource = _dataRepository.Teachers;
-        CourseComboBox.SelectionChanged += CourseComboBox_SelectionChanged;
+        CourseComboBox.SelectionChanged += ComboBoxRefreshAll;
     }
 
     private void EditGroupName_Click(object sender, RoutedEventArgs e)
@@ -23,37 +22,29 @@ public partial class GroupManagementWindow : Window
         string selectedGroupName = EditGroupNameComboBox.SelectedItem as string;
         string newGroupName = EditGroupNameTextBox.Text.Trim();
 
-        if (!string.IsNullOrWhiteSpace(selectedGroupName) && !string.IsNullOrWhiteSpace(newGroupName))
-        {
-            Course selectedCourse = CourseComboBox.SelectedItem as Course;
-           
-            if (selectedCourse != null)
-            {
-                Group editGroupName = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
-               
-                if (editGroupName != null)
-                {
-                    editGroupName.GroupName = newGroupName;
+        Course selectedCourse = CourseComboBox.SelectedItem as Course;
 
-                    EditGroupNameTextBox.Clear();
-                    
-                    DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                    EditGroupNameComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                    SelectGroupToAddCuratorComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please, select a group from list and provide a new group name", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        else
+        if (selectedCourse == null)
         {
-            MessageBox.Show("Please, select a course first to edit the group name within", "Error", 
+            MessageBox.Show("Please, select a course first to edit the group name within", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
         }
 
+        if (string.IsNullOrWhiteSpace(selectedGroupName) || string.IsNullOrWhiteSpace(newGroupName))
+        {
+            MessageBox.Show("Please, select a group from list and provide a new group name", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        Group editGroupName = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+
+        editGroupName.GroupName = newGroupName;
+
+        EditGroupNameTextBox.Clear();
+
+        ComboBoxRefreshAll(null, null);
     }
 
     private void SelectGroupCurator_Click(object sender, RoutedEventArgs e)
@@ -101,8 +92,8 @@ public partial class GroupManagementWindow : Window
             if (selectedCourse != null)
             {
                 bool groupNameExists = selectedCourse.Groups.Any(group => group.GroupName == groupName);
-                
-                if(!groupNameExists)
+
+                if (!groupNameExists)
                 {
                     selectedCourse.LastUsedGroupId++;
 
@@ -115,10 +106,8 @@ public partial class GroupManagementWindow : Window
                     selectedCourse.Groups.Add(createNewGroup);
                 
                     GroupNameTextBox.Clear();
-                
-                    DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                    EditGroupNameComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                    SelectGroupToAddCuratorComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
+
+                    ComboBoxRefreshAll(null, null);
                 }
                 else
                 {
@@ -164,9 +153,7 @@ public partial class GroupManagementWindow : Window
                     {
                         selectedCourse.Groups.Remove(deleteGroup);
 
-                        DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                        EditGroupNameComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-                        SelectGroupToAddCuratorComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
+                        ComboBoxRefreshAll(null, null);
                     }
                 }
             }
@@ -183,14 +170,14 @@ public partial class GroupManagementWindow : Window
         }
     }
 
-    private void SelectGroupToAddCuratorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void SelectGroupToAddCuratorInfoForComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         Group selectedGroup = GetSelectedGroupCurationInfo();
         if (selectedGroup != null)
         {
             if (!string.IsNullOrWhiteSpace(selectedGroup.GroupCuratorName))
             {
-                CurationInfoTextBlock.Text = $"This group already has a curator named {selectedGroup.GroupCuratorName}]";
+                CurationInfoTextBlock.Text = $"This group already has a curator named {selectedGroup.GroupCuratorName}";
             }
             else
             {
@@ -203,7 +190,7 @@ public partial class GroupManagementWindow : Window
         }
     }
     
-    private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ComboBoxRefreshAll(object sender, SelectionChangedEventArgs e)
     {
         Course selectedCourse = CourseComboBox.SelectedItem as Course;
 
@@ -227,15 +214,5 @@ public partial class GroupManagementWindow : Window
         }
 
         return null;
-    }
-
-    private void RefreshAllGroupComboBoxes()
-    {
-        // Need to add later a future realization of sorta refresher to all group combo boxes smth like "CourseComboBox_SelectionChanged"
-    }
-
-    private void EditGroupNameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-
     }
 }
