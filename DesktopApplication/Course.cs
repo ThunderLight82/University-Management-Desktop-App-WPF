@@ -18,7 +18,3 @@ public class Course
         LastUsedGroupId = 0;
     }
 }
-
-
-
-
