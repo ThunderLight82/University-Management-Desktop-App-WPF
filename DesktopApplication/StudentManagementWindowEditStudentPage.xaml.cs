@@ -5,11 +5,11 @@ using System.Windows.Controls;
 
 namespace DesktopApplication;
 
-public partial class EditStudentPage : Page
+public partial class StudentManagementWindowEditStudentPage : Page
 {
     private DataRepository _dataRepository;
 
-    public EditStudentPage(DataRepository dataRepository) 
+    public StudentManagementWindowEditStudentPage(DataRepository dataRepository) 
     { 
         InitializeComponent();
         _dataRepository = dataRepository;
@@ -45,7 +45,7 @@ public partial class EditStudentPage : Page
             {
                 StudentId = lastNewestStudentId + 1,
                 StudentFullName = newStudentFullName,
-                isWorkingInDepartment = false
+                IsWorkingInDepartment = false
             };
 
             _dataRepository.Students.Add(newStudent);
@@ -60,6 +60,7 @@ public partial class EditStudentPage : Page
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
     private void DeleteStudent_Click(object sender, RoutedEventArgs e)
     {
         Student selectedStudent = StudentsListView.SelectedItem as Student;
