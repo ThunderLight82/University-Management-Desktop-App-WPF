@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 namespace DesktopApplication;
 
 // Data repository represent a abstract DB or existing info about courses, groups, etc. when working with data in app.
-// It may change or modify when we need to to use a real DB. For now - it's just for showcase and testing.
+// It may heavily change or modify when we need to to use a real DB in practice. For now - it's just for showcase and testing.
 
 public class DataRepository
 {
@@ -44,17 +44,17 @@ public class DataRepository
         // VVV Hardcoded students list below only for testings(showcase) purpose. VVV
         Students = new List<Student>
         {
-            new() {StudentId = 1, StudentFullName = "Oleg Nekrasov", isWorkingInDepartment = false},
-            new() {StudentId = 2, StudentFullName = "Sergiy Cnkira", isWorkingInDepartment = false},
-            new() {StudentId = 3, StudentFullName = "Rosa Maksymenko", isWorkingInDepartment = false},
-            new() {StudentId = 4, StudentFullName = "Ella Bliss", isWorkingInDepartment = false},
-            new() {StudentId = 5, StudentFullName = "Hryhoriy Mulan", isWorkingInDepartment = true},
-            new() {StudentId = 6, StudentFullName = "Olexander Doberman", isWorkingInDepartment = false},
-            new() {StudentId = 7, StudentFullName = "Olexandra Minushevich", isWorkingInDepartment = false},
-            new() {StudentId = 8, StudentFullName = "Anna Samoilenko", isWorkingInDepartment = false},
-            new() {StudentId = 9, StudentFullName = "Ornieda Saakashvili", isWorkingInDepartment = false},
-            new() {StudentId = 10, StudentFullName = "Maxym Rubin", isWorkingInDepartment = false},
-            new() {StudentId = 11, StudentFullName = "Igor Kostin", isWorkingInDepartment = false}
+            new() {StudentId = 1, StudentFullName = "Oleg Nekrasov", IsWorkingInDepartment = false},
+            new() {StudentId = 2, StudentFullName = "Sergiy Cnkira", IsWorkingInDepartment = false},
+            new() {StudentId = 3, StudentFullName = "Rosa Maksymenko", IsWorkingInDepartment = false},
+            new() {StudentId = 4, StudentFullName = "Ella Bliss", IsWorkingInDepartment = false},
+            new() {StudentId = 5, StudentFullName = "Hryhoriy Mulan", IsWorkingInDepartment = true},
+            new() {StudentId = 6, StudentFullName = "Olexander Doberman", IsWorkingInDepartment = false},
+            new() {StudentId = 7, StudentFullName = "Olexandra Minushevich", IsWorkingInDepartment = false},
+            new() {StudentId = 8, StudentFullName = "Anna Samoilenko", IsWorkingInDepartment = false},
+            new() {StudentId = 9, StudentFullName = "Ornieda Saakashvili", IsWorkingInDepartment = false},
+            new() {StudentId = 10, StudentFullName = "Maxym Rubin", IsWorkingInDepartment = false},
+            new() {StudentId = 11, StudentFullName = "Igor Kostin", IsWorkingInDepartment = false}
         };
         
         // VVV Hardcoded groups list below only for testings(showcase) purpose. VVV
