@@ -7,7 +7,7 @@ namespace DesktopApplication;
 public partial class GroupManagementWindow : Window
 {
     private DataRepository _dataRepository;
-    
+
     public GroupManagementWindow(DataRepository dataRepository)
     {
         InitializeComponent();
@@ -104,7 +104,9 @@ public partial class GroupManagementWindow : Window
                     };
                         
                     selectedCourse.Groups.Add(createNewGroup);
-                
+
+                    _dataRepository.Groups.Add(createNewGroup);
+
                     GroupNameTextBox.Clear();
 
                     ComboBoxRefreshAll(null, null);
@@ -152,6 +154,8 @@ public partial class GroupManagementWindow : Window
                     else
                     {
                         selectedCourse.Groups.Remove(deleteGroup);
+
+                        _dataRepository.Groups.Remove(deleteGroup);
 
                         ComboBoxRefreshAll(null, null);
                     }
