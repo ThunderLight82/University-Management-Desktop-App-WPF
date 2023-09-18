@@ -7,26 +7,19 @@ namespace DesktopApplication;
 
 public partial class MainWindow : Window
 {
-    private DataRepository _dataRepository;
+    private DataRepository _dataRepository = App.DataRepository;
 
     public MainWindow()
     {
         InitializeComponent();
 
-        _dataRepository = new DataRepository();
-
-        InitializeData();
+        CourseListView.ItemsSource = _dataRepository.Courses;
 
         DataContext = _dataRepository.Courses;
 
         CourseListView.SelectionChanged += CourseListView_SelectionChanged;
         
         GroupListView.SelectionChanged += GroupListView_SelectionChanged;
-    }
-
-    private void InitializeData()
-    {
-        CourseListView.ItemsSource = _dataRepository.Courses;
     }
 
     private void CourseListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
