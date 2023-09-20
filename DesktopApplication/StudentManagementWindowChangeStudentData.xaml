@@ -46,7 +46,10 @@
                     </TextBox.Style>
                 </TextBox>
 
-                <ComboBox Text="Working?" Width="220" IsEditable="True" HorizontalAlignment="Left" Margin="5" />
+                <ComboBox Name="IsWorkingComboBox"  Text="Working?" Width="220" IsEditable="True" HorizontalAlignment="Left" Margin="5" SelectedItem="{Binding Path=isWorkingInDepartment, Mode=TwoWay}" >
+                    <ComboBoxItem Content="Yes" IsSelected="True" />
+                    <ComboBoxItem Content="No" />
+                </ComboBox>
 
             </StackPanel>
 
@@ -58,7 +61,7 @@
                     <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding StudentId}" />
                     <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
                     <GridViewColumn Header="Current Group" Width="120" DisplayMemberBinding="{Binding CurrentGroupName}" />
-                    <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding isWorkingInDepartment}" />
+                    <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding IsWorkingInDepartment}" />
                 </GridView>
             </ListView.View>
         </ListView>
