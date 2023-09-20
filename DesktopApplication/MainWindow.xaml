@@ -50,7 +50,7 @@
                         <GridView>
                             <GridViewColumn Header="Student ID" Width="60" DisplayMemberBinding="{Binding StudentId}" />
                             <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
-                            <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding isWorkingInDepartment}" />
+                            <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding IsWorkingInDepartment}" />
                         </GridView>
                     </ListView.View>
 
