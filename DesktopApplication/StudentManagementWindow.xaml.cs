@@ -39,7 +39,7 @@ public partial class StudentManagementWindow : Window
 
     private void ChangeStudentData_Click(object sender, RoutedEventArgs e)
     {
-        var changeStudentData = new StudentManagementWindowChangeStudentData(_dataRepository);
+        var changeStudentData = new StudentManagementWindowChangeStudentDataPage(_dataRepository);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");

@@ -50,7 +50,7 @@
             <TextBlock Text="Assign a curator\teacher for selected group in selected course" FontWeight="Bold" />
             <TextBlock Text="Select a existing group from list below, then select a curator by name from list and click 'Apply Curator Selection' button:" />
             <TextBlock x:Name="CurationInfoTextBlock" HorizontalAlignment="Center" Margin="0,5,0,0" FontStyle="Italic" />
-            <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Margin="5" SelectionChanged="SelectGroupToAddCuratorInfoForComboBox_SelectionChanged"/> 
+            <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Margin="5" SelectionChanged="SelectGroupToAddCuratorInfoForComboBox_SelectionChanged" /> 
             <TextBlock Text="Teachers list:" HorizontalAlignment="Center"/>
             <ComboBox Name="SelectCuratorNameComboBox" Width="200" DisplayMemberPath="TeacherFullName" Margin="5" />
             <Button Content="Apply Curator Selection" Click="SelectGroupCurator_Click" Margin="5" Width="200" />
