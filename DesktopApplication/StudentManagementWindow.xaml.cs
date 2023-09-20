@@ -10,9 +10,9 @@ public partial class StudentManagementWindow : Window
 
     public StudentManagementWindow(DataRepository dataRepository, HashSet<Student> assignedStudents)
     {
+        InitializeComponent();
         _dataRepository = dataRepository;
         _assignedStudents = assignedStudents;
-        InitializeComponent();
     }
 
     private void ManageStudentsGroupButton_Click(object sender, RoutedEventArgs e)

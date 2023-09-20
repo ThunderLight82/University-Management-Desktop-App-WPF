@@ -11,12 +11,15 @@
 
         <StackPanel Margin="5">
             <TextBlock Text="Select a course and group to add students to or remove" FontWeight="Bold" HorizontalAlignment="Left" Margin="5" />
+
             <TextBlock Text="Select a course first from list below and then group, then click on preferable students" Margin="5, 0, 0, 0" />
+
             <TextBlock Text="from list and press 'Add Student To Group' button below students list:" Margin="5, 0, 0, 0" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <ComboBox Name="CourseComboBox" IsEditable="True" Width="220" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" HorizontalAlignment="Left" Margin="5" Height="25" SelectionChanged="CourseComboBox_SelectionChanged" />
-                <ComboBox Name="GroupComboBox" IsEditable="True" Width="220" HorizontalAlignment="Left" Margin="5" Height="25" />
+                <ComboBox Name="CourseComboBox" Width="220" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" HorizontalAlignment="Left" Margin="5" Height="25" SelectionChanged="CourseComboBox_SelectionChanged" />
+
+                <ComboBox Name="GroupComboBox" Width="220" HorizontalAlignment="Left" Margin="5" Height="25" />
             </StackPanel>
 
         </StackPanel>
@@ -33,7 +36,8 @@
                 </ListView>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20">
-            <Button Content="Add Student To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+            <Button Content="Add Studet To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+
             <Button Content="Remove Student From Group" Click="DeleteStudentsFromGroup_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
         </StackPanel>
 
