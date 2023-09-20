@@ -1,0 +1,35 @@
+﻿<Page x:Class="DesktopApplication.GroupManagementWindowDeleteGroupPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d" 
+      d:DesignHeight="610" d:DesignWidth="525"
+      Title="GroupManagementWindowDeleteGroupPage">
+
+    <Grid>
+
+        <StackPanel Margin="10">
+            <TextBlock Text="Select a course to change group within below" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" />
+
+            <ComboBox Name="CourseComboBox" Width="200" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5" Height="30" />
+
+            <TextBlock Text="Delete group in selected course" FontWeight="Bold" HorizontalAlignment="Left" />
+
+            <TextBlock Text= "Select a group from list below and then click 'Delete Group' button "  HorizontalAlignment="Left" />
+
+            <TextBlock Text= "to delete group from selected course:"  HorizontalAlignment="Left" />
+
+            <TextBlock Text="(To perform deletion, make sure that the selected group doesn't have active students in it)" HorizontalAlignment="Left" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <ComboBox Name="DeleteGroupComboBox" Width="200" Height="30" />
+
+                <Button Content="Delete Group" Click="DeleteGroup_Click" Width="200" Height="30" Margin="15,5" />
+            </StackPanel>
+
+        </StackPanel>
+
+    </Grid>
+</Page>
+
