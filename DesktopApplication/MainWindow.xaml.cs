@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -52,30 +51,16 @@ public partial class MainWindow : Window
 
     private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            var groupManagementWindow = new GroupManagementWindow(_dataRepository);
-            groupManagementWindow.ShowDialog();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+        var groupManagementWindow = new GroupManagementWindow(_dataRepository);
+        groupManagementWindow.ShowDialog();
     }
     
     private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            var studentManagementWindow = new StudentManagementWindow(_dataRepository, new HashSet<Student>());
-            studentManagementWindow.ShowDialog();
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+        var studentManagementWindow = new StudentManagementWindow(_dataRepository, new HashSet<Student>());
+        studentManagementWindow.ShowDialog();
     }
-    
+
     private void RefreshData_Click(object sender, RoutedEventArgs e)
     {
         CourseListView.SelectedIndex = -1;
