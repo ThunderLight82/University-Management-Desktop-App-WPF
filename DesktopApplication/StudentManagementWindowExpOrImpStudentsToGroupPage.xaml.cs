@@ -38,7 +38,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
 
                 if (studentToExport.Any())
                 {
-                    var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                    var saveFileDialog = new SaveFileDialog
                     {
                         Filter = "CVS Files (*.csv)|*.csv"
                     };
@@ -159,31 +159,18 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
         }
     }
 
-    private void ClearCurrentGroup()
-        {
-            MessageBoxResult result = MessageBox.Show(
-                "Do you want to clear the current group for further students import? " +
-                "This will remove all students from the group at this time and rewrite it with new student list"
-                , "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-    
-            if (result == MessageBoxResult.Yes)
-            {
-    
-            }
-        }
 
-        private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Course selectedCourse = CourseComboBox.SelectedItem as Course;
+    private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        Course selectedCourse = CourseComboBox.SelectedItem as Course;
 
-            if (selectedCourse != null)
-            {
-                GroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-            }
-            else
-            {
-                GroupComboBox.ItemsSource = null;
-            }
+        if (selectedCourse != null)
+        {
+            GroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
         }
-    
+        else
+        {
+            GroupComboBox.ItemsSource = null;
+        }
+    }
 }
