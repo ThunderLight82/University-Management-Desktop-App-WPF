@@ -22,6 +22,7 @@ public partial class StudentManagementWindow : Window
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
         ChangeStudentDataButton.Style = (Style)FindResource("NormalButtonStyle");
+        ExpOrImpStudentsToGroupButton.Style = (Style)FindResource("NormalButtonStyle");
 
         MainFrame.Content = manageStudentGroupPage;
     }
@@ -33,6 +34,7 @@ public partial class StudentManagementWindow : Window
         EditStudentsButton.Style = (Style)FindResource("HighlightedButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
         ChangeStudentDataButton.Style = (Style)FindResource("NormalButtonStyle");
+        ExpOrImpStudentsToGroupButton.Style = (Style)FindResource("NormalButtonStyle");
 
         MainFrame.Content = editStudentPage;
     }
@@ -44,7 +46,20 @@ public partial class StudentManagementWindow : Window
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
         ChangeStudentDataButton.Style = (Style)FindResource("HighlightedButtonStyle");
+        ExpOrImpStudentsToGroupButton.Style = (Style)FindResource("NormalButtonStyle");
 
         MainFrame.Content = changeStudentData;
+    }
+
+    private void ExportOrImportStudentToGroup_Click(object sender, RoutedEventArgs e)
+    {
+        var expOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_dataRepository);
+
+        EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
+        ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
+        ChangeStudentDataButton.Style = (Style)FindResource("NormalButtonStyle");
+        ExpOrImpStudentsToGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
+
+        MainFrame.Content = expOrImportStudentsToGroup;
     }
 }
