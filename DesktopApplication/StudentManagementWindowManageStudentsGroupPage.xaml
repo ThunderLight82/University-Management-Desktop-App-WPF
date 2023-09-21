@@ -36,7 +36,7 @@
                 </ListView>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20">
-            <Button Content="Add Studet To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+            <Button Content="Add Student To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
 
             <Button Content="Remove Student From Group" Click="DeleteStudentsFromGroup_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
         </StackPanel>

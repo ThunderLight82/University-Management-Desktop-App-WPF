@@ -62,7 +62,7 @@ public partial class StudentManagementWindowManageStudentsGroupPage : Page
             }
             else
             {
-                MessageBox.Show("The selected group does not exist for the chosen course.", "Error",
+                MessageBox.Show("The selected group does not exist for the chosen course", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
