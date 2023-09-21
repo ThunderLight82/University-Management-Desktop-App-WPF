@@ -1,0 +1,37 @@
+﻿<Page x:Class="DesktopApplication.StudentManagementWindowExpOrImpStudentsToGroupPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d" 
+      d:DesignHeight="610" d:DesignWidth="525"
+      Title="StudentManagementWindowExpOrImpStudentsToGroupPage">
+
+    <Grid>
+
+        <StackPanel Margin="5">
+            <TextBlock Text="Select a course and group to export/import students list from/to it" FontWeight="Bold" HorizontalAlignment="Left" Margin="5" />
+
+            <TextBlock Text="Select a course first from list below and then group, then click on preferable action," Margin="5, 0, 0, 0" />
+
+            <TextBlock Text="After clicking buttons - that a pop-up window appear with option to save/open .csv file:" Margin="5, 0, 0, 0" />
+
+            <TextBlock Text="(Caution! Importing student list from .csv file will rewrite the existing student list that group holds)" Margin="5, 0, 0, 0" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <ComboBox Name="CourseComboBox" Width="220" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" HorizontalAlignment="Left" Margin="5" Height="25" SelectionChanged="CourseComboBox_SelectionChanged" />
+
+                <ComboBox Name="GroupComboBox" Width="220" HorizontalAlignment="Left" Margin="5" Height="25" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20">
+                <Button Content="Export Student List" Click="ExportStudents_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+
+                <Button Content="Import Student List" Click="ImportStudents_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+
+            </StackPanel>
+
+        </StackPanel>
+
+    </Grid>
+</Page>
