@@ -10,7 +10,7 @@ public class DataRepository
 {
     public List<Course> Courses { get; set; }
     public List<Teacher> Teachers { get; set; }
-    public ObservableCollection<Group> Groups { get; set; }
+    public List<Group> Groups { get; set; }
     public List<Student> Students { get; set; }
 
     public DataRepository()
@@ -58,7 +58,7 @@ public class DataRepository
         };
         
         // VVV Hardcoded groups list below only for testings(showcase) purpose. VVV
-        Groups = new ObservableCollection<Group>()
+        Groups = new List<Group>
         {
             new() { GroupId = 111, GroupName = "SSE-11" },
             new() { GroupId = 112, GroupName = "SSE-31" },
