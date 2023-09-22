@@ -4,15 +4,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
-      d:DesignHeight="610" d:DesignWidth="550"
+      d:DesignHeight="520" d:DesignWidth="550"
       Title="GroupManagementWindowCreateGroupPage">
 
     <Grid>
-        <StackPanel Margin="10">
+        <StackPanel Margin="10,0">
 
             <TextBlock Text="Select a course to change group within below" FontWeight="Bold" HorizontalAlignment="Center" Margin="5" />
 
-            <ComboBox Name="CourseComboBox" Width="200" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5" Height="30" />
+            <ComboBox Name="CourseComboBox" Width="200" Height="25"  DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5"/>
 
             <TextBlock Text="Create new group in selected course" FontWeight="Bold" HorizontalAlignment="Left"/>
 
@@ -20,8 +20,8 @@
 
             <TextBlock Text= "to create new group in selected course:"  HorizontalAlignment="Left" />
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBox Name="GroupNameTextBox" Width="200" Height="30">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <TextBox Name="GroupNameTextBox" Width="200" Height="25">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
                             <Setter Property="FontSize" Value="15" />

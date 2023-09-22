@@ -19,7 +19,8 @@ public partial class GroupManagementWindow : Window
         EditGroupInfoButton.Style = (Style)FindResource("HighlightedButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
         DeleteGroupButton.Style = (Style)FindResource("NormalButtonStyle");
-    
+        CreateFileWithGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
+
         MainFrame.Content = editGroupInfoPage;
     }
     
@@ -30,6 +31,7 @@ public partial class GroupManagementWindow : Window
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
         DeleteGroupButton.Style = (Style)FindResource("NormalButtonStyle");
+        CreateFileWithGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
 
         MainFrame.Content = createGroupPage;
     }
@@ -41,7 +43,20 @@ public partial class GroupManagementWindow : Window
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
         DeleteGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
+        CreateFileWithGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
 
         MainFrame.Content = deleteGroupPage;
+    }
+
+    private void CreateFileWithGroup_Click(object sender, RoutedEventArgs e)
+    {
+        var createFileWithGroupPage = new GroupManagementWindowCreateFileWithGroupInfoPage(_dataRepository);
+
+        EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
+        CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
+        DeleteGroupButton.Style = (Style)FindResource("NormalButtonStyle");
+        CreateFileWithGroupInfoButton.Style = (Style)FindResource("HighlightedButtonStyle");
+
+        MainFrame.Content = createFileWithGroupPage;
     }
 }

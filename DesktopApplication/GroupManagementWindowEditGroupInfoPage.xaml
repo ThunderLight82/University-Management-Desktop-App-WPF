@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
-      d:DesignHeight="610" d:DesignWidth="550"
+      d:DesignHeight="520" d:DesignWidth="550"
       Title="GroupManagementWindowEditGroupInfoPage">
 
     <Grid>
@@ -15,10 +15,10 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="10">
+        <StackPanel Grid.Row="0" Margin="10,0">
             <TextBlock Text="Select a course to change group within below" HorizontalAlignment="Center" Margin="5" FontWeight="Bold" />
 
-            <ComboBox Name="CourseComboBox" Width="200" Height="30" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5" />
+            <ComboBox Name="CourseComboBox" Width="200" Height="25" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" Margin="5" />
 
             <TextBlock Text="Assign a curator\teacher for selected group in selected course" FontWeight="Bold" HorizontalAlignment="Left" />
 
@@ -31,9 +31,9 @@
             <TextBlock Text="Teachers list:" HorizontalAlignment="Right" Width="185" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Height="30" SelectionChanged="SelectGroupToAddCuratorInfoForComboBox_SelectionChanged" />
+                <ComboBox Name="SelectGroupToAddCuratorComboBox" Width="200" Height="25" SelectionChanged="SelectGroupToAddCuratorInfoForComboBox_SelectionChanged" />
 
-                <ComboBox Name="SelectCuratorNameComboBox" Width="200" Height="30" Margin="5" DisplayMemberPath="TeacherFullName" />
+                <ComboBox Name="SelectCuratorNameComboBox" Width="200" Height="25" Margin="5" DisplayMemberPath="TeacherFullName" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -43,16 +43,16 @@
 
         <Border Grid.Row="1" Height="1" Margin="5" Background="Gray" />
 
-        <StackPanel Grid.Row="2" Margin="10">
+        <StackPanel Grid.Row="2" Margin="10,5">
             <TextBlock Text="Change group name in selected course" FontWeight="Bold" />
 
             <TextBlock Text="Select a existing group from list below, then enter a new name" />
 
             <TextBlock Text="and click 'Change Group Name' button to apply new name:" />
 
-            <ComboBox Name="EditGroupNameComboBox" Width="200" Height="30" Margin="5"/>
+            <ComboBox Name="EditGroupNameComboBox" Width="200" Height="25" Margin="0,10,0,5"/>
 
-            <TextBox Name="EditGroupNameTextBox" Width="200" Height="30" Margin="5">
+            <TextBox Name="EditGroupNameTextBox" Width="200" Height="25" Margin="5">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Setter Property="FontSize" Value="15" />
