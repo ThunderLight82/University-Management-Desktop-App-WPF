@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System;
 using System.Linq;
 using Microsoft.Win32;
+using System.Text;
 
 namespace DesktopApplication;
 
@@ -19,6 +20,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
         InitializeComponent();
         _dataRepository = dataRepository;
         CourseComboBox.ItemsSource = _dataRepository.Courses;
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
     private async void ExportStudents_Click(object sender, RoutedEventArgs e)
@@ -40,7 +42,9 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
                 {
                     var saveFileDialog = new SaveFileDialog
                     {
-                        Filter = "CVS Files (*.csv)|*.csv"
+                        Filter = "CVS Files (.csv)|*.csv",
+                        DefaultExt = ".csv",
+                        FileName = $"{selectedCourse.CourseName} {selectedGroupName} Students List"
                     };
 
                     if (saveFileDialog.ShowDialog() == true)
@@ -53,7 +57,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
                             await csv.WriteRecordsAsync(studentToExport);
                         }
 
-                        MessageBox.Show("Students have been successfully exported", "Success",
+                        MessageBox.Show("Students have been successfully exported from selected group!", "Success",
                             MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
@@ -77,7 +81,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
     }
     
 
-    private void ImportStudents_Click(Object sender, RoutedEventArgs e)
+    private void ImportStudents_Click(object sender, RoutedEventArgs e)
     {
         Course selectedCourse = CourseComboBox.SelectedItem as Course;
         string selectedGroupName = GroupComboBox.SelectedItem as string;
@@ -129,7 +133,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
                                 }
                             }
 
-                            MessageBox.Show("Students have been successfully imported to the selected group", "Success",
+                            MessageBox.Show("Students have been successfully imported to the selected group!", "Success",
                                 MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         catch (Exception ex)
@@ -158,7 +162,6 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-
 
     private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {

@@ -4,17 +4,19 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="650" d:DesignWidth="550"
       Title="StudentManagementWindowChangeStudentDataPage">
 
     <Grid>
 
         <StackPanel Margin="5">
             <TextBlock Text="Change existed student info" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"  />
+
             <TextBlock Text="Select student from list of students below, then modify student data in fields" HorizontalAlignment="Left" Margin="5,0" />
+
             <TextBlock Text="and then click 'Change Student Info' button below student list:" HorizontalAlignment="Left" Margin="5,0" />
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                 <TextBox Name="ChangeStudentFullNameTextBox" Width="220" HorizontalAlignment="Left" Margin="5,5" Height="25" Text="Select student to change name here" FontSize="13">
                     <TextBox.Style>
                         <Style TargetType="TextBox">
@@ -48,8 +50,8 @@
             </ListView.View>
         </ListView>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="20">
-            <Button Content="Change Student Info" Click="ChangeStudentNameAndWorkInfo_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30">
+            <Button Content="Change Student Info" Click="ChangeStudentNameAndWorkInfo_Click" Width="200" Height="35" Margin="15,0,15,-5" VerticalAlignment="Bottom" />
         </StackPanel>
 
     </Grid>

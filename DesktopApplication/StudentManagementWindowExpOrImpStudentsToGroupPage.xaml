@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
-      d:DesignHeight="610" d:DesignWidth="525"
+      d:DesignHeight="650" d:DesignWidth="550"
       Title="StudentManagementWindowExpOrImpStudentsToGroupPage">
 
     <Grid>
@@ -18,16 +18,16 @@
 
             <TextBlock Text="(Caution! Importing student list from .csv file will rewrite the existing student list that group holds)" Margin="5, 0, 0, 0" />
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
                 <ComboBox Name="CourseComboBox" Width="220" DisplayMemberPath="CourseName" SelectedValuePath="CourseId" HorizontalAlignment="Left" Margin="5" Height="25" SelectionChanged="CourseComboBox_SelectionChanged" />
 
                 <ComboBox Name="GroupComboBox" Width="220" HorizontalAlignment="Left" Margin="5" Height="25" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20">
-                <Button Content="Export Student List" Click="ExportStudents_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                <Button Content="Export Students List" Click="ExportStudents_Click" Width="200" Height="35" Margin="0,0,15,0" VerticalAlignment="Bottom" />
 
-                <Button Content="Import Student List" Click="ImportStudents_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                <Button Content="Import Students List" Click="ImportStudents_Click" Width="200" Height="35" VerticalAlignment="Bottom" />
 
             </StackPanel>
 

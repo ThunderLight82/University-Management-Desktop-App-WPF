@@ -4,15 +4,19 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="650" d:DesignWidth="550"
       Title="StudentManagementWindowEditStudentPage">
 
     <Grid>
 
         <StackPanel Margin="5">
             <TextBlock Text="Create a new student or remove" FontWeight="Bold" HorizontalAlignment="Left" Margin="5"  />
+
             <TextBlock Text="Enter a new student name in field below and then click 'Add Student' button:" HorizontalAlignment="Left" Margin="5,0" />
-            <TextBox Name="NewStudentFullNameTextBox" Width="250" HorizontalAlignment="Left" Margin="5,5" Height="25">
+
+            <TextBlock Text="For deletion: select preferable student from list and click 'Remove Student Student' button:" HorizontalAlignment="Left" Margin="5,0" />
+
+            <TextBox Name="NewStudentFullNameTextBox" Width="250" HorizontalAlignment="Center" Margin="0,10" Height="25">
                 <TextBox.Style>
                     <Style TargetType="TextBox">
                         <Setter Property="FontSize" Value="15" />
@@ -56,9 +60,10 @@
                 </ListView.View>
             </ListView>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="20">
-            <Button Content="Add Student" Click="AddStudent_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-            <Button Content="Remove Student" Click="DeleteStudent_Click" Width="200" Height="35" Margin="15,0,15,-5" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30">
+            <Button Content="Add Student" Click="AddStudent_Click" Width="200" Height="35" Margin="15,0,15,-5" VerticalAlignment="Bottom" />
+
+            <Button Content="Remove Student" Click="DeleteStudent_Click" Width="200" Height="35" Margin="15,0,15,-5" VerticalAlignment="Bottom" />
         </StackPanel>
 
     </Grid>
