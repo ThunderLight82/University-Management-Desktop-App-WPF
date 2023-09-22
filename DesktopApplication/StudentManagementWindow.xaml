@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Students Management" Height="610" Width="550" ResizeMode="NoResize">
+        Title="Students Management" Height="650" Width="550" ResizeMode="NoResize">
 
     <Window.Resources>
         <Style x:Key="HighlightedButtonStyle" TargetType="Button">
@@ -26,7 +26,7 @@
         <Button x:Name="ExpOrImpStudentsToGroupButton" Click="ExportOrImportStudentToGroup_Click" Margin="-5,30,390,0" Height="35"  Width="125" VerticalAlignment="Top">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock Text="Export/Import" TextAlignment="Center"/>
-                <TextBlock Text=" Student To Group" TextAlignment="Center"/>
+                <TextBlock Text=" Students To Group" TextAlignment="Center"/>
             </StackPanel>
         </Button>
 

@@ -41,14 +41,14 @@ public partial class StudentManagementWindow : Window
 
     private void ChangeStudentData_Click(object sender, RoutedEventArgs e)
     {
-        var changeStudentData = new StudentManagementWindowChangeStudentDataPage(_dataRepository);
+        var changeStudentDataPage = new StudentManagementWindowChangeStudentDataPage(_dataRepository);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
         ChangeStudentDataButton.Style = (Style)FindResource("HighlightedButtonStyle");
         ExpOrImpStudentsToGroupButton.Style = (Style)FindResource("NormalButtonStyle");
 
-        MainFrame.Content = changeStudentData;
+        MainFrame.Content = changeStudentDataPage;
     }
 
     private void ExportOrImportStudentToGroup_Click(object sender, RoutedEventArgs e)
