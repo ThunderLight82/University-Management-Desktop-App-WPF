@@ -41,7 +41,7 @@ public partial class StudentManagementWindowEditStudentPage : Page
 
             int lastNewestStudentId = _dataRepository.Students.Max(student => student.StudentId);
 
-            var newStudent = new Student()
+            var newStudent = new Student
             {
                 StudentId = lastNewestStudentId + 1,
                 StudentFullName = newStudentFullName,

@@ -53,13 +53,13 @@ public partial class StudentManagementWindow : Window
 
     private void ExportOrImportStudentToGroup_Click(object sender, RoutedEventArgs e)
     {
-        var expOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_dataRepository);
+        var exportOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_dataRepository);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
         ChangeStudentDataButton.Style = (Style)FindResource("NormalButtonStyle");
         ExpOrImpStudentsToGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
 
-        MainFrame.Content = expOrImportStudentsToGroup;
+        MainFrame.Content = exportOrImportStudentsToGroup;
     }
 }
