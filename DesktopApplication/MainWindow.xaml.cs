@@ -61,6 +61,12 @@ public partial class MainWindow : Window
         studentManagementWindow.ShowDialog();
     }
 
+    private void OpenTeacherManagementWindow_Click(object sender, RoutedEventArgs e)
+    {
+        var teacherManagementWindow = new TeacherManagementWindow(_dataRepository);
+        teacherManagementWindow.ShowDialog();
+    }
+
     private void RefreshData_Click(object sender, RoutedEventArgs e)
     {
         CourseListView.SelectedIndex = -1;
