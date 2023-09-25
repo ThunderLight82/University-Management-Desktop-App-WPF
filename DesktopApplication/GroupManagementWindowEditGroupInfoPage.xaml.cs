@@ -61,8 +61,8 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
     
                 if (selectedGroup != null)
                 {
-                    selectedGroup.GroupCuratorName = selectedTeacher.TeacherFullName;
-                    
+                    selectedGroup.GroupCurator.Add(selectedTeacher);
+
                     SelectGroupToAddCuratorComboBox.SelectedIndex = -1;
                     SelectCuratorNameComboBox.SelectedIndex = -1;
                 }
@@ -85,9 +85,10 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
         Group selectedGroup = GetSelectedGroupCurationInfo();
         if (selectedGroup != null)
         {
-            if (!string.IsNullOrWhiteSpace(selectedGroup.GroupCuratorName))
+            if (selectedGroup.GroupCurator.Any())
             {
-                CurationInfoTextBlock.Text = $"This group already has a curator named {selectedGroup.GroupCuratorName}";
+                string curatorName = string.Join(", ", selectedGroup.GroupCurator.Select(curator => curator.TeacherFullName));
+                CurationInfoTextBlock.Text = $"This group already has curators named: {curatorName}";
             }
             else
             {
