@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace DesktopApplication;
 
@@ -9,8 +8,11 @@ namespace DesktopApplication;
 public class DataRepository
 {
     public List<Course> Courses { get; set; }
+
     public List<Teacher> Teachers { get; set; }
+
     public List<Group> Groups { get; set; }
+
     public List<Student> Students { get; set; }
 
     public DataRepository()
