@@ -1,8 +1,6 @@
-﻿using System.Windows;
+﻿namespace DesktopApplication;
 
-namespace DesktopApplication;
-
-public partial class App : Application 
+public partial class App
 {
-    public static DataRepository DataRepository { get; } = new DataRepository();
+    public static DataRepository DataRepository { get; } = new();
 }

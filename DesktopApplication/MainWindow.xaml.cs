@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using DesktopApplication.Group_Management;
+using DesktopApplication.Student_Management;
+using DesktopApplication.Teacher_Management;
 
 namespace DesktopApplication;
 
-public partial class MainWindow : Window
+public partial class MainWindow
 {
     private DataRepository _dataRepository = App.DataRepository;
 

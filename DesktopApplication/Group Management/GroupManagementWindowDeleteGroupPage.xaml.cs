@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Group_Management;
 
-public partial class GroupManagementWindowDeleteGroupPage : Page
+public partial class GroupManagementWindowDeleteGroupPage
 {
     private DataRepository _dataRepository;
     public GroupManagementWindowDeleteGroupPage(DataRepository dataRepository)
@@ -18,15 +18,13 @@ public partial class GroupManagementWindowDeleteGroupPage : Page
     private void DeleteGroup_Click(object sender, RoutedEventArgs e)
     {
         string preferableGroupToDelete = DeleteGroupComboBox.SelectedItem as string;
-    
+
         if (!string.IsNullOrWhiteSpace(preferableGroupToDelete))
         {
-            Course selectedCourse = CourseComboBox.SelectedItem as Course;
-    
-            if (selectedCourse != null)
+            if (CourseComboBox.SelectedItem is Course selectedCourse)
             {
-                Group deleteGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == preferableGroupToDelete);
-                
+                var deleteGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == preferableGroupToDelete);
+
                 if (deleteGroup != null)
                 {
                     if (deleteGroup.Students.Count > 0)
@@ -39,7 +37,7 @@ public partial class GroupManagementWindowDeleteGroupPage : Page
                     else
                     {
                         selectedCourse.Groups.Remove(deleteGroup);
-    
+
                         _dataRepository.Groups.Remove(deleteGroup);
 
                         ComboBoxRefreshAll(null, null);
@@ -62,9 +60,7 @@ public partial class GroupManagementWindowDeleteGroupPage : Page
 
     private void ComboBoxRefreshAll(object sender, SelectionChangedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-    
-        if (selectedCourse != null)
+        if (CourseComboBox.SelectedItem is Course selectedCourse)
         {
             DeleteGroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
         }

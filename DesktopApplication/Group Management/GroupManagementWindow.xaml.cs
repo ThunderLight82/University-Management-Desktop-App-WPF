@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Group_Management;
 
-public partial class GroupManagementWindow : Window
+public partial class GroupManagementWindow
 {
     private DataRepository _dataRepository;
 
@@ -23,7 +23,7 @@ public partial class GroupManagementWindow : Window
 
         MainFrame.Content = editGroupInfoPage;
     }
-    
+
     private void CreateGroup_Click(object sender, RoutedEventArgs e)
     {
         var createGroupPage = new GroupManagementWindowCreateGroupPage(_dataRepository);
@@ -35,7 +35,7 @@ public partial class GroupManagementWindow : Window
 
         MainFrame.Content = createGroupPage;
     }
-    
+
     private void DeleteGroup_Click(object sender, RoutedEventArgs e)
     {
         var deleteGroupPage = new GroupManagementWindowDeleteGroupPage(_dataRepository);

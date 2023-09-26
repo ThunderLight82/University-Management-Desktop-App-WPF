@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Student_Management;
 
-public partial class StudentManagementWindowChangeStudentDataPage : Page
+public partial class StudentManagementWindowChangeStudentDataPage
 {
     private DataRepository _dataRepository;
 
@@ -24,11 +24,11 @@ public partial class StudentManagementWindowChangeStudentDataPage : Page
             {
                 selectedStudent.StudentFullName = changedStudentFullname;
 
-                ComboBoxItem selectedComboBoxItem = IsWorkingComboBox.SelectedItem as ComboBoxItem;
+                var selectedComboBoxItem = IsWorkingComboBox.SelectedItem as ComboBoxItem;
 
                 if (selectedComboBoxItem != null)
                 {
-                    string selectedItemContent = selectedComboBoxItem.Content.ToString();
+                    var selectedItemContent = selectedComboBoxItem.Content.ToString();
                     selectedStudent.IsWorkingInDepartment = selectedItemContent == "Yes";
                 }
 

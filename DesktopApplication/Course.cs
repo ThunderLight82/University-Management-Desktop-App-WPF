@@ -1,10 +1,9 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace DesktopApplication;
-    
+
 public class Course
-{ 
+{
     public int CourseId { get; set; }
 
     public string CourseName { get; set; }

@@ -17,10 +17,7 @@ public class Group
     {
         get
         {
-            if (GroupCurator == null || GroupCurator.Count == 0)
-            {
-                return "";
-            }
+            if (GroupCurator == null || GroupCurator.Count == 0) return "";
 
             return string.Join(", ", GroupCurator.Select(curator => curator.TeacherFullName));
         }

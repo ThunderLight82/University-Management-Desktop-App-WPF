@@ -1,19 +1,16 @@
-﻿using System.Windows;
-using Microsoft.Win32;
-using System.Windows.Controls;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using Microsoft.Win32;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
 
+namespace DesktopApplication.Group_Management;
 
-
-namespace DesktopApplication;
-
-
-public partial class GroupManagementWindowCreateFileWithGroupInfoPage : Page
+public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 {
     private DataRepository _dataRepository;
 
@@ -26,12 +23,11 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage : Page
 
     private void CreateGroupInfoDocxFile_Click(object sender, RoutedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-        string selectedGroupName = GroupComboBox.SelectedItem as string;
+        var selectedGroupName = GroupComboBox.SelectedItem as string;
 
-        if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
+        if (CourseComboBox.SelectedItem is Course selectedCourse && !string.IsNullOrEmpty(selectedGroupName))
         {
-            Group selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
@@ -85,12 +81,11 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage : Page
 
     private void CreateGroupInfoPdfFile_Click(object sender, RoutedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-        string selectedGroupName = GroupComboBox.SelectedItem as string;
+        var selectedGroupName = GroupComboBox.SelectedItem as string;
 
-        if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
+        if (CourseComboBox.SelectedItem is Course selectedCourse && !string.IsNullOrEmpty(selectedGroupName))
         {
-            Group selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
@@ -153,15 +148,8 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage : Page
 
     private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
 
-        if (selectedCourse != null)
-        {
-            GroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-        }
-        else
-        {
-            GroupComboBox.ItemsSource = null;
-        }
+        GroupComboBox.ItemsSource = selectedCourse?.Groups.Select(group => group.GroupName).ToList();
     }
 }

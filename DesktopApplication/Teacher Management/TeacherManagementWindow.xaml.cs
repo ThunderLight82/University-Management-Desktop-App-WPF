@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Teacher_Management;
 
-public partial class TeacherManagementWindow : Window
+public partial class TeacherManagementWindow
 {
     private DataRepository _dataRepository;
 

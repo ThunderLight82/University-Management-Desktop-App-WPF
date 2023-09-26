@@ -1,0 +1,55 @@
+﻿<Page x:Class="DesktopApplication.Student_Management.StudentManagementWindowManageStudentsGroupPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      d:DesignHeight="650" d:DesignWidth="550"
+      Title="StudentManagementWindowManageStudentsGroupPage">
+
+    <Grid>
+
+        <StackPanel Margin="5">
+            <TextBlock Text="Select a course and group to add students to or remove" FontWeight="Bold"
+                       HorizontalAlignment="Left" Margin="5" />
+
+            <TextBlock Text="Select a course first from list below and then group, then click on preferable students"
+                       Margin="5, 0, 0, 0" />
+
+            <TextBlock Text="from list and press 'Add Student To Group' button below students list:"
+                       Margin="5, 0, 0, 0" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <ComboBox Name="CourseComboBox" Width="220" DisplayMemberPath="CourseName" SelectedValuePath="CourseId"
+                          HorizontalAlignment="Left" Margin="5" Height="25"
+                          SelectionChanged="CourseComboBox_SelectionChanged" />
+
+                <ComboBox Name="GroupComboBox" Width="220" HorizontalAlignment="Left" Margin="5" Height="25" />
+            </StackPanel>
+
+        </StackPanel>
+
+        <ListView Name="StudentsListView" ItemsSource="{Binding Students}" Width="450" Height="350"
+                  HorizontalAlignment="Center" Margin="0,35,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding StudentId}" />
+                    <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
+                    <GridViewColumn Header="Current Group" Width="120"
+                                    DisplayMemberBinding="{Binding CurrentGroupName}" />
+                    <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding IsWorkingInDepartment}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30">
+            <Button Content="Add Student To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35"
+                    Margin="15,0,15,-5" VerticalAlignment="Bottom" />
+
+            <Button Content="Remove Student From Group" Click="DeleteStudentsFromGroup_Click" Width="200" Height="35"
+                    Margin="15,0,15,-5" VerticalAlignment="Bottom" />
+        </StackPanel>
+
+    </Grid>
+
+</Page>

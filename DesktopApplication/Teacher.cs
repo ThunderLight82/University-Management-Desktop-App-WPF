@@ -1,8 +1,8 @@
 namespace DesktopApplication;
 
 public class Teacher
-{ 
-    public int TeacherId { get; set; } 
+{
+    public int TeacherId { get; set; }
 
     public string TeacherFullName { get; set; }
 

@@ -1,17 +1,17 @@
-﻿using CsvHelper.Configuration;
-using CsvHelper;
+﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System;
-using System.Linq;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Microsoft.Win32;
-using System.Text;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Student_Management;
 
-public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
+public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 {
     private DataRepository _dataRepository;
 
@@ -25,12 +25,12 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
 
     private async void ExportStudents_Click(object sender, RoutedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-        string selectedGroupName = GroupComboBox.SelectedItem as string;
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
+        var selectedGroupName = GroupComboBox.SelectedItem as string;
 
         if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            Group selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
@@ -83,12 +83,12 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
 
     private void ImportStudents_Click(object sender, RoutedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-        string selectedGroupName = GroupComboBox.SelectedItem as string;
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
+        var selectedGroupName = GroupComboBox.SelectedItem as string;
 
         if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            Group selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
@@ -101,7 +101,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
                 {
                     string filePath = openFileDialog.FileName;
 
-                    MessageBoxResult userAnswerResult = MessageBox.Show("This action will overwrite the current group data. Do you want to continue?",
+                    var userAnswerResult = MessageBox.Show("This action will overwrite the current group data. Do you want to continue?",
                         "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
                     if (userAnswerResult == MessageBoxResult.Yes)
@@ -165,15 +165,8 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage : Page
 
     private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
 
-        if (selectedCourse != null)
-        {
-            GroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-        }
-        else
-        {
-            GroupComboBox.ItemsSource = null;
-        }
+        GroupComboBox.ItemsSource = selectedCourse?.Groups.Select(group => group.GroupName).ToList();
     }
 }

@@ -1,9 +1,9 @@
-using System.Windows;
 using System.Collections.Generic;
+using System.Windows;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Student_Management;
 
-public partial class StudentManagementWindow : Window
+public partial class StudentManagementWindow
 {
     private DataRepository _dataRepository;
     private HashSet<Student> _assignedStudents;

@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Group_Management;
 
-public partial class GroupManagementWindowEditGroupInfoPage : Page
+public partial class GroupManagementWindowEditGroupInfoPage
 {
     private DataRepository _dataRepository;
     public GroupManagementWindowEditGroupInfoPage(DataRepository dataRepository)
@@ -18,12 +18,10 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
 
     private void EditGroupName_Click(object sender, RoutedEventArgs e)
     {
-        string selectedGroupName = EditGroupNameComboBox.SelectedItem as string;
+        var selectedGroupName = EditGroupNameComboBox.SelectedItem as string;
         string newGroupName = EditGroupNameTextBox.Text.Trim();
-    
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-    
-        if (selectedCourse == null)
+
+        if (CourseComboBox.SelectedItem is not Course selectedCourse)
         {
             MessageBox.Show("Please, select a course first to edit the group name within", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
@@ -37,7 +35,7 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
             return;
         }
     
-        Group editGroupName = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+        var editGroupName = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
     
         editGroupName.GroupName = newGroupName;
     
@@ -48,16 +46,16 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
     
     private void SelectGroupCurator_Click(object sender, RoutedEventArgs e)
     {
-        Teacher selectedTeacher = SelectCuratorNameComboBox.SelectedItem as Teacher;
-        string selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;
+        var selectedTeacher = SelectCuratorNameComboBox.SelectedItem as Teacher;
+        var selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;
     
         if (string.IsNullOrWhiteSpace(selectedGroupName) || selectedTeacher != null)
         {
-            Course selectedCourse = CourseComboBox.SelectedItem as Course;
+            var selectedCourse = CourseComboBox.SelectedItem as Course;
             
             if (selectedCourse != null)
             {
-                Group selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+                var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
     
                 if (selectedGroup != null)
                 {
@@ -82,7 +80,8 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
     
     private void SelectGroupToAddCuratorInfoForComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Group selectedGroup = GetSelectedGroupCurationInfo();
+        var selectedGroup = GetSelectedGroupCurationInfo();
+
         if (selectedGroup != null)
         {
             if (selectedGroup.GroupCurator.Any())
@@ -103,8 +102,8 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
 
     private Group GetSelectedGroupCurationInfo()
     {
-        string selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
+        var selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
     
         if (selectedCourse != null && !string.IsNullOrWhiteSpace(selectedGroupName))
         {
@@ -116,9 +115,7 @@ public partial class GroupManagementWindowEditGroupInfoPage : Page
 
     private void ComboBoxRefreshAll(object sender, SelectionChangedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-    
-        if (selectedCourse != null)
+        if (CourseComboBox.SelectedItem is Course selectedCourse)
         {
             EditGroupNameComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
             SelectGroupToAddCuratorComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();

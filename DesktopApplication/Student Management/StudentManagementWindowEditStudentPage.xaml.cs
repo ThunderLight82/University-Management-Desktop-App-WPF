@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Student_Management;
 
-public partial class StudentManagementWindowEditStudentPage : Page
+public partial class StudentManagementWindowEditStudentPage
 {
     private DataRepository _dataRepository;
 
@@ -22,7 +21,7 @@ public partial class StudentManagementWindowEditStudentPage : Page
 
         if (!string.IsNullOrWhiteSpace(newStudentFullName))
         {
-            bool newStudentNameAlreadyExists = _dataRepository.Students.Any(student => 
+            var newStudentNameAlreadyExists = _dataRepository.Students.Any(student => 
                 student.StudentFullName.Equals(newStudentFullName, StringComparison.OrdinalIgnoreCase));
 
             if (newStudentNameAlreadyExists)
@@ -63,16 +62,13 @@ public partial class StudentManagementWindowEditStudentPage : Page
 
     private void DeleteStudent_Click(object sender, RoutedEventArgs e)
     {
-        Student selectedStudent = StudentsListView.SelectedItem as Student;
+        var selectedStudent = StudentsListView.SelectedItem as Student;
 
         if (selectedStudent != null)
         {
-            Group associatedGroup = _dataRepository.Groups.FirstOrDefault(group => group.Students.Contains(selectedStudent));
+            var associatedGroup = _dataRepository.Groups.FirstOrDefault(group => group.Students.Contains(selectedStudent));
 
-            if (associatedGroup != null)
-            {
-                associatedGroup.Students.Remove(selectedStudent);
-            }
+            associatedGroup?.Students.Remove(selectedStudent);
 
             selectedStudent.CurrentGroupName = null;
 

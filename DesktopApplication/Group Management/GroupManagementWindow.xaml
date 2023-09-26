@@ -1,4 +1,4 @@
-﻿<Window x:Class="DesktopApplication.GroupManagementWindow"
+﻿<Window x:Class="DesktopApplication.Group_Management.GroupManagementWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,13 +8,13 @@
 
     <Window.Resources>
         <Style x:Key="HighlightedButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="LightSkyBlue"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="LightSkyBlue" />
+            <Setter Property="Foreground" Value="Black" />
         </Style>
 
         <Style x:Key="NormalButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="LightGray"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="LightGray" />
+            <Setter Property="Foreground" Value="Black" />
         </Style>
     </Window.Resources>
 
@@ -22,18 +22,22 @@
 
         <Frame x:Name="MainFrame" Margin="0,70,0,0" Grid.ColumnSpan="6" NavigationUIVisibility="Hidden" />
 
-        <Button x:Name="EditGroupInfoButton" Content="Edit Group Info" Click="EditGroupInfo_Click" Margin="132,30,265,0" Height="35" Width="125" VerticalAlignment="Top"/>
+        <Button x:Name="EditGroupInfoButton" Content="Edit Group Info" Click="EditGroupInfo_Click"
+                Margin="132,30,265,0" Height="35" Width="125" VerticalAlignment="Top" />
 
-        <Button x:Name="CreateGroupButton" Content="Create Group" Click="CreateGroup_Click" Margin="268,30,137,0" Height="35" Width="125" VerticalAlignment="Top"/>
+        <Button x:Name="CreateGroupButton" Content="Create Group" Click="CreateGroup_Click" Margin="268,30,137,0"
+                Height="35" Width="125" VerticalAlignment="Top" />
 
-        <Button x:Name="DeleteGroupButton" Content="Delete Group" Click="DeleteGroup_Click" Margin="390,30,-5,0" Height="35" Width="125" VerticalAlignment="Top" />
+        <Button x:Name="DeleteGroupButton" Content="Delete Group" Click="DeleteGroup_Click" Margin="390,30,-5,0"
+                Height="35" Width="125" VerticalAlignment="Top" />
 
-        <Button x:Name="CreateFileWithGroupInfoButton" Click="CreateFileWithGroup_Click" Margin="-5,30,390,0" Height="35"  Width="125" VerticalAlignment="Top">
+        <Button x:Name="CreateFileWithGroupInfoButton" Click="CreateFileWithGroup_Click" Margin="-5,30,390,0"
+                Height="35" Width="125" VerticalAlignment="Top">
+
             <StackPanel VerticalAlignment="Center">
-                <TextBlock Text="Create docx/pdf" TextAlignment="Center"/>
-                <TextBlock Text="file with Group" TextAlignment="Center"/>
+                <TextBlock Text="Create docx/pdf" TextAlignment="Center" />
+                <TextBlock Text="file with Group" TextAlignment="Center" />
             </StackPanel>
         </Button>
-
     </Grid>
 </Window>

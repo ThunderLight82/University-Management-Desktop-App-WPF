@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Teacher_Management;
 
-public partial class TeacherManagementWindowChangeTeacherDataPage : Page
+public partial class TeacherManagementWindowChangeTeacherDataPage
 {
     private DataRepository _dataRepository;
     public TeacherManagementWindowChangeTeacherDataPage(DataRepository dataRepository)
@@ -23,11 +23,11 @@ public partial class TeacherManagementWindowChangeTeacherDataPage : Page
             {
                 selectedTeacher.TeacherFullName = changedTeacherFullname;
 
-                ComboBoxItem selectedComboBoxItem = IsCorrespondence.SelectedItem as ComboBoxItem;
+                var selectedComboBoxItem = IsCorrespondence.SelectedItem as ComboBoxItem;
 
                 if (selectedComboBoxItem != null)
                 {
-                    string selectedItemContent = selectedComboBoxItem.Content.ToString();
+                    var selectedItemContent = selectedComboBoxItem.Content.ToString();
                     selectedTeacher.IsCorrespondence = selectedItemContent == "Yes";
                 }
 

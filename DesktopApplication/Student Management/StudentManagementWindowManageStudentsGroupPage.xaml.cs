@@ -3,9 +3,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Student_Management;
 
-public partial class StudentManagementWindowManageStudentsGroupPage : Page
+public partial class StudentManagementWindowManageStudentsGroupPage
 {
     private DataRepository _dataRepository;
     private HashSet<Student> _assignedStudents;
@@ -21,12 +21,12 @@ public partial class StudentManagementWindowManageStudentsGroupPage : Page
 
     private void AddStudentsToGroup_Click(object sender, RoutedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
-        string selectedGroupName = GroupComboBox.SelectedItem as string;
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
+        var selectedGroupName = GroupComboBox.SelectedItem as string;
 
         if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            Group selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
@@ -82,7 +82,7 @@ public partial class StudentManagementWindowManageStudentsGroupPage : Page
         {
             foreach (var student in selectedStudents)
             {
-                Group selectedGroup = _dataRepository.Groups.FirstOrDefault(group => group.Students.Contains(student));
+                var selectedGroup = _dataRepository.Groups.FirstOrDefault(group => group.Students.Contains(student));
 
                 if (selectedGroup != null)
                 {
@@ -111,16 +111,9 @@ public partial class StudentManagementWindowManageStudentsGroupPage : Page
 
     private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        Course selectedCourse = CourseComboBox.SelectedItem as Course;
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
 
-        if (selectedCourse != null)
-        {
-            GroupComboBox.ItemsSource = selectedCourse.Groups.Select(group => group.GroupName).ToList();
-        }
-        else
-        {
-            GroupComboBox.ItemsSource = null;
-        }
+        GroupComboBox.ItemsSource = selectedCourse?.Groups.Select(group => group.GroupName).ToList();
     }
 }
 

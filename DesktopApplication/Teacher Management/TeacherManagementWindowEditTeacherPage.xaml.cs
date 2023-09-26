@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
-namespace DesktopApplication;
+namespace DesktopApplication.Teacher_Management;
 
-public partial class TeacherManagementWindowEditTeacherPage : Page
+public partial class TeacherManagementWindowEditTeacherPage
 {
     private DataRepository _dataRepository;
     public TeacherManagementWindowEditTeacherPage(DataRepository dataRepository)
@@ -21,7 +20,7 @@ public partial class TeacherManagementWindowEditTeacherPage : Page
 
         if (!string.IsNullOrWhiteSpace(newTeacherFullName))
         {
-            bool newTeacherNameAlreadyExists = _dataRepository.Teachers.Any(teacher =>
+            var newTeacherNameAlreadyExists = _dataRepository.Teachers.Any(teacher =>
                 teacher.TeacherFullName.Equals(newTeacherFullName, StringComparison.OrdinalIgnoreCase));
 
             if (newTeacherNameAlreadyExists)
@@ -62,11 +61,11 @@ public partial class TeacherManagementWindowEditTeacherPage : Page
 
     private void DeleteTeacher_Click(object sender, RoutedEventArgs e)
     {
-        Teacher selectedTeacher = TeachersListView.SelectedItem as Teacher;
+        var selectedTeacher = TeachersListView.SelectedItem as Teacher;
 
         if (selectedTeacher != null)
         {
-            Group associatedGroup = _dataRepository.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
+            var associatedGroup = _dataRepository.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
 
             if (associatedGroup != null)
             {
