@@ -9,4 +9,6 @@ public class Student
     public bool IsWorkingInDepartment { get; set; }
 
     public string CurrentGroupName { get; set; }
+
+    public int GroupId { get; set; }
 }

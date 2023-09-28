@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using DesktopApplication.Group_Management;
@@ -9,15 +10,16 @@ namespace DesktopApplication;
 
 public partial class MainWindow
 {
-    private DataRepository _dataRepository = App.DataRepository;
+    private UniversityDbContext _dbContext;
 
     public MainWindow()
     {
         InitializeComponent();
 
-        CourseListView.ItemsSource = _dataRepository.Courses;
+        _dbContext = (UniversityDbContext)Application.Current.Resources["UniversityDbContext"];
 
-        DataContext = _dataRepository.Courses;
+        var courses = _dbContext.Courses.Local.ToObservableCollection();
+        CourseListView.ItemsSource = courses;
 
         CourseListView.SelectionChanged += CourseListView_SelectionChanged;
         
@@ -30,7 +32,8 @@ public partial class MainWindow
         {
             var selectedCourse = (Course)CourseListView.SelectedItem;
 
-            GroupListView.ItemsSource = selectedCourse.Groups;
+            GroupListView.ItemsSource = _dbContext.Groups.Where(group =>
+                group.CourseId == selectedCourse.CourseId).ToList();
         }
         else
         {
@@ -44,7 +47,8 @@ public partial class MainWindow
         {
             var selectedGroup = (Group)GroupListView.SelectedItem;
 
-            StudentListView.ItemsSource = selectedGroup.Students;
+            StudentListView.ItemsSource = _dbContext.Students.Where(student =>
+                student.GroupId == selectedGroup.GroupId).ToList();
         }
         else
         {
@@ -52,28 +56,28 @@ public partial class MainWindow
         }
     }
 
-    private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
-    {
-        var groupManagementWindow = new GroupManagementWindow(_dataRepository);
-        groupManagementWindow.ShowDialog();
-    }
-    
-    private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
-    {
-        var studentManagementWindow = new StudentManagementWindow(_dataRepository, new HashSet<Student>());
-        studentManagementWindow.ShowDialog();
-    }
+    // private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
+    // {
+    //     var groupManagementWindow = new GroupManagementWindow(_dbContext);
+    //     groupManagementWindow.ShowDialog();
+    // }
+    //
+    // private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
+    // {
+    //     var studentManagementWindow = new StudentManagementWindow(_dbContext, new HashSet<Student>());
+    //     studentManagementWindow.ShowDialog();
+    // }
+    //
+    // private void OpenTeacherManagementWindow_Click(object sender, RoutedEventArgs e)
+    // {
+    //     var teacherManagementWindow = new TeacherManagementWindow(_dbContext);
+    //     teacherManagementWindow.ShowDialog();
+    // }
 
-    private void OpenTeacherManagementWindow_Click(object sender, RoutedEventArgs e)
-    {
-        var teacherManagementWindow = new TeacherManagementWindow(_dataRepository);
-        teacherManagementWindow.ShowDialog();
-    }
-
-    private void RefreshData_Click(object sender, RoutedEventArgs e)
-    {
-        CourseListView.SelectedIndex = -1;
-        GroupListView.SelectedIndex = -1;
-        StudentListView.SelectedIndex = -1;
-    }
+     // private void RefreshData_Click(object sender, RoutedEventArgs e)
+     // {
+     //     CourseListView.SelectedIndex = -1;
+     //     GroupListView.SelectedIndex = -1;
+     //     StudentListView.SelectedIndex = -1;
+     // }
 }
