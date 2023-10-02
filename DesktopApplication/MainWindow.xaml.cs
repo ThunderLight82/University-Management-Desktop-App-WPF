@@ -56,28 +56,28 @@ public partial class MainWindow
         }
     }
 
-    // private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
-    // {
-    //     var groupManagementWindow = new GroupManagementWindow(_dbContext);
-    //     groupManagementWindow.ShowDialog();
-    // }
-    //
-    // private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
-    // {
-    //     var studentManagementWindow = new StudentManagementWindow(_dbContext, new HashSet<Student>());
-    //     studentManagementWindow.ShowDialog();
-    // }
-    //
-    // private void OpenTeacherManagementWindow_Click(object sender, RoutedEventArgs e)
-    // {
-    //     var teacherManagementWindow = new TeacherManagementWindow(_dbContext);
-    //     teacherManagementWindow.ShowDialog();
-    // }
+    private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
+    {
+        var groupManagementWindow = new GroupManagementWindow(_dbContext);
+        groupManagementWindow.ShowDialog();
+    }
+    
+    private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
+    {
+        var studentManagementWindow = new StudentManagementWindow(_dbContext, new HashSet<Student>());
+        studentManagementWindow.ShowDialog();
+    }
+    
+    private void OpenTeacherManagementWindow_Click(object sender, RoutedEventArgs e)
+    {
+        var teacherManagementWindow = new TeacherManagementWindow(_dbContext);
+        teacherManagementWindow.ShowDialog();
+    }
 
-     // private void RefreshData_Click(object sender, RoutedEventArgs e)
-     // {
-     //     CourseListView.SelectedIndex = -1;
-     //     GroupListView.SelectedIndex = -1;
-     //     StudentListView.SelectedIndex = -1;
-     // }
+     private void RefreshData_Click(object sender, RoutedEventArgs e)
+     {
+         CourseListView.SelectedIndex = -1;
+         GroupListView.SelectedIndex = -1;
+         StudentListView.SelectedIndex = -1;
+     }
 }
