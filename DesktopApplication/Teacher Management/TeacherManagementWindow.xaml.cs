@@ -4,17 +4,17 @@ namespace DesktopApplication.Teacher_Management;
 
 public partial class TeacherManagementWindow
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
 
-    public TeacherManagementWindow(DataRepository dataRepository)
+    public TeacherManagementWindow(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
+        _dbContext = dbContext;
     }
 
     private void EditTeacher_Click(object sender, RoutedEventArgs e)
     {
-        var editTeacherPage = new TeacherManagementWindowEditTeacherPage(_dataRepository);
+        var editTeacherPage = new TeacherManagementWindowEditTeacherPage(_dbContext);
 
         EditTeacherButton.Style = (Style)FindResource("HighlightedButtonStyle");
         ChangeTeacherDataButton.Style = (Style)FindResource("NormalButtonStyle");
@@ -24,7 +24,7 @@ public partial class TeacherManagementWindow
 
     private void ChangeTeacherData_Click(object sender, RoutedEventArgs e)
     {
-        var changeTeacherDataPage = new TeacherManagementWindowChangeTeacherDataPage(_dataRepository);
+        var changeTeacherDataPage = new TeacherManagementWindowChangeTeacherDataPage(_dbContext);
 
         EditTeacherButton.Style = (Style)FindResource("NormalButtonStyle");
         ChangeTeacherDataButton.Style = (Style)FindResource("HighlightedButtonStyle");

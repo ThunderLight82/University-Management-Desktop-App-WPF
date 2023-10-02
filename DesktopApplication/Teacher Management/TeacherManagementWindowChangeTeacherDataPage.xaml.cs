@@ -5,12 +5,13 @@ namespace DesktopApplication.Teacher_Management;
 
 public partial class TeacherManagementWindowChangeTeacherDataPage
 {
-    private DataRepository _dataRepository;
-    public TeacherManagementWindowChangeTeacherDataPage(DataRepository dataRepository)
+    private UniversityDbContext _dbContext;
+    public TeacherManagementWindowChangeTeacherDataPage(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        TeachersListView.ItemsSource = _dataRepository.Teachers;
+        _dbContext = dbContext;
+        TeachersListView.ItemsSource = _dbContext.Teachers;
+        // Maybe use "TeachersListView.ItemsSource = _dbContext.Teachers.ToList()" instead???
     }
 
     private void ChangeTeacherNameAndWorkInfo_Click(object sender, RoutedEventArgs e)
@@ -30,6 +31,8 @@ public partial class TeacherManagementWindowChangeTeacherDataPage
                     var selectedItemContent = selectedComboBoxItem.Content.ToString();
                     selectedTeacher.IsCorrespondence = selectedItemContent == "Yes";
                 }
+
+                _dbContext.SaveChanges();
 
                 TeachersListView.Items.Refresh();
             }

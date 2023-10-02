@@ -6,12 +6,13 @@ namespace DesktopApplication.Teacher_Management;
 
 public partial class TeacherManagementWindowEditTeacherPage
 {
-    private DataRepository _dataRepository;
-    public TeacherManagementWindowEditTeacherPage(DataRepository dataRepository)
+    private UniversityDbContext _dbContext;
+    public TeacherManagementWindowEditTeacherPage(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        TeachersListView.ItemsSource = _dataRepository.Teachers;
+        _dbContext = dbContext;
+        TeachersListView.ItemsSource = _dbContext.Teachers;
+        // Maybe use "TeachersListView.ItemsSource = _dbContext.Teachers.ToList()" instead???
     }
 
     private void AddTeacher_Click(object sender, RoutedEventArgs e)
@@ -20,7 +21,7 @@ public partial class TeacherManagementWindowEditTeacherPage
 
         if (!string.IsNullOrWhiteSpace(newTeacherFullName))
         {
-            var newTeacherNameAlreadyExists = _dataRepository.Teachers.Any(teacher =>
+            var newTeacherNameAlreadyExists = _dbContext.Teachers.Any(teacher =>
                 teacher.TeacherFullName.Equals(newTeacherFullName, StringComparison.OrdinalIgnoreCase));
 
             if (newTeacherNameAlreadyExists)
@@ -37,7 +38,7 @@ public partial class TeacherManagementWindowEditTeacherPage
                 }
             }
 
-            int lastNewestTeacherId = _dataRepository.Teachers.Max(teacher => teacher.TeacherId);
+            int lastNewestTeacherId = _dbContext.Teachers.Max(teacher => teacher.TeacherId);
 
             var newTeacher = new Teacher
             {
@@ -46,7 +47,8 @@ public partial class TeacherManagementWindowEditTeacherPage
                 IsCorrespondence = false
             };
 
-            _dataRepository.Teachers.Add(newTeacher);
+            _dbContext.Teachers.Add(newTeacher);
+            _dbContext.SaveChanges();
 
             NewTeacherFullNameTextBox.Clear();
 
@@ -65,7 +67,7 @@ public partial class TeacherManagementWindowEditTeacherPage
 
         if (selectedTeacher != null)
         {
-            var associatedGroup = _dataRepository.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
+            var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
 
             if (associatedGroup != null)
             {
@@ -74,7 +76,8 @@ public partial class TeacherManagementWindowEditTeacherPage
 
             selectedTeacher.CurrentGroupCurationName = null;
 
-            _dataRepository.Teachers.Remove(selectedTeacher);
+            _dbContext.Teachers.Remove(selectedTeacher);
+            _dbContext.SaveChanges();
 
             TeachersListView.Items.Refresh();
         }
