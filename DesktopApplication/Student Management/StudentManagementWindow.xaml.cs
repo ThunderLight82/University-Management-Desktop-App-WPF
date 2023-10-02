@@ -5,19 +5,19 @@ namespace DesktopApplication.Student_Management;
 
 public partial class StudentManagementWindow
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
     private HashSet<Student> _assignedStudents;
 
-    public StudentManagementWindow(DataRepository dataRepository, HashSet<Student> assignedStudents)
+    public StudentManagementWindow(UniversityDbContext dbContext, HashSet<Student> assignedStudents)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
         _assignedStudents = assignedStudents;
+        _dbContext = dbContext;
     }
 
     private void ManageStudentsGroupButton_Click(object sender, RoutedEventArgs e)
     {
-        var manageStudentGroupPage = new StudentManagementWindowManageStudentsGroupPage(_dataRepository, _assignedStudents);
+        var manageStudentGroupPage = new StudentManagementWindowManageStudentsGroupPage(_dbContext, _assignedStudents);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
@@ -29,7 +29,7 @@ public partial class StudentManagementWindow
 
     private void EditStudentsButton_Click(object sender, RoutedEventArgs e)
     {
-        var editStudentPage = new StudentManagementWindowEditStudentPage(_dataRepository);
+        var editStudentPage = new StudentManagementWindowEditStudentPage(_dbContext);
 
         EditStudentsButton.Style = (Style)FindResource("HighlightedButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
@@ -41,7 +41,7 @@ public partial class StudentManagementWindow
 
     private void ChangeStudentData_Click(object sender, RoutedEventArgs e)
     {
-        var changeStudentDataPage = new StudentManagementWindowChangeStudentDataPage(_dataRepository);
+        var changeStudentDataPage = new StudentManagementWindowChangeStudentDataPage(_dbContext);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
@@ -53,7 +53,7 @@ public partial class StudentManagementWindow
 
     private void ExportOrImportStudentToGroup_Click(object sender, RoutedEventArgs e)
     {
-        var exportOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_dataRepository);
+        var exportOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_dbContext);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");

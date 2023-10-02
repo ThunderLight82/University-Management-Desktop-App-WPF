@@ -5,13 +5,14 @@ namespace DesktopApplication.Student_Management;
 
 public partial class StudentManagementWindowChangeStudentDataPage
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
 
-    public StudentManagementWindowChangeStudentDataPage(DataRepository dataRepository)
-    { 
+    public StudentManagementWindowChangeStudentDataPage(UniversityDbContext dbContext)
+    {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        StudentsListView.ItemsSource = _dataRepository.Students;
+        _dbContext = dbContext;
+        StudentsListView.ItemsSource = _dbContext.Students;
+        // Maybe use "StudentsListView.ItemsSource = _dbContext.Students.Local" instead???
     }
 
     private void ChangeStudentNameAndWorkInfo_Click (object sender, RoutedEventArgs e)
@@ -31,6 +32,8 @@ public partial class StudentManagementWindowChangeStudentDataPage
                     var selectedItemContent = selectedComboBoxItem.Content.ToString();
                     selectedStudent.IsWorkingInDepartment = selectedItemContent == "Yes";
                 }
+
+                _dbContext.SaveChanges();
 
                 StudentsListView.Items.Refresh();
             }

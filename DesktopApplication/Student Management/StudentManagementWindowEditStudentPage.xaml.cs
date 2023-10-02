@@ -6,13 +6,14 @@ namespace DesktopApplication.Student_Management;
 
 public partial class StudentManagementWindowEditStudentPage
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
 
-    public StudentManagementWindowEditStudentPage(DataRepository dataRepository) 
-    { 
+    public StudentManagementWindowEditStudentPage(UniversityDbContext dbContext) 
+    {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        StudentsListView.ItemsSource = _dataRepository.Students;
+        _dbContext = dbContext;
+        StudentsListView.ItemsSource = _dbContext.Students;
+        //Maybe use "StudentsListView.ItemsSource = _dbContext.Students.ToList()" instead???
     }
 
     private void AddStudent_Click(object sender, RoutedEventArgs e)
@@ -21,7 +22,7 @@ public partial class StudentManagementWindowEditStudentPage
 
         if (!string.IsNullOrWhiteSpace(newStudentFullName))
         {
-            var newStudentNameAlreadyExists = _dataRepository.Students.Any(student => 
+            var newStudentNameAlreadyExists = _dbContext.Students.Any(student => 
                 student.StudentFullName.Equals(newStudentFullName, StringComparison.OrdinalIgnoreCase));
 
             if (newStudentNameAlreadyExists)
@@ -38,7 +39,7 @@ public partial class StudentManagementWindowEditStudentPage
                 }
             }
 
-            int lastNewestStudentId = _dataRepository.Students.Max(student => student.StudentId);
+            int lastNewestStudentId = _dbContext.Students.Max(student => student.StudentId);
 
             var newStudent = new Student
             {
@@ -47,7 +48,8 @@ public partial class StudentManagementWindowEditStudentPage
                 IsWorkingInDepartment = false
             };
 
-            _dataRepository.Students.Add(newStudent);
+            _dbContext.Students.Add(newStudent);
+            _dbContext.SaveChanges();
 
             NewStudentFullNameTextBox.Clear();
 
@@ -66,13 +68,14 @@ public partial class StudentManagementWindowEditStudentPage
 
         if (selectedStudent != null)
         {
-            var associatedGroup = _dataRepository.Groups.FirstOrDefault(group => group.Students.Contains(selectedStudent));
+            var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.Students.Contains(selectedStudent));
 
             associatedGroup?.Students.Remove(selectedStudent);
 
             selectedStudent.CurrentGroupName = null;
 
-            _dataRepository.Students.Remove(selectedStudent);
+            _dbContext.Students.Remove(selectedStudent);
+            _dbContext.SaveChanges();
 
             StudentsListView.Items.Refresh();
         }

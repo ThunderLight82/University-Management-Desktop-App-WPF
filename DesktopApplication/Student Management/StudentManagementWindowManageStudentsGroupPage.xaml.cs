@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,16 +8,16 @@ namespace DesktopApplication.Student_Management;
 
 public partial class StudentManagementWindowManageStudentsGroupPage
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
     private HashSet<Student> _assignedStudents;
 
-    public StudentManagementWindowManageStudentsGroupPage(DataRepository dataRepository, HashSet<Student> assignedStudents)
+    public StudentManagementWindowManageStudentsGroupPage(UniversityDbContext dbContext, HashSet<Student> assignedStudents)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
         _assignedStudents = assignedStudents;
-        CourseComboBox.ItemsSource = _dataRepository.Courses;
-        StudentsListView.ItemsSource = _dataRepository.Students;
+        _dbContext = dbContext;
+        CourseComboBox.ItemsSource = _dbContext.Courses;
+        StudentsListView.ItemsSource = _dbContext.Students;
     }
 
     private void AddStudentsToGroup_Click(object sender, RoutedEventArgs e)
@@ -26,7 +27,9 @@ public partial class StudentManagementWindowManageStudentsGroupPage
 
         if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = _dbContext.Groups
+                .Include(group => group.Students)
+                .FirstOrDefault(group => group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
@@ -49,6 +52,8 @@ public partial class StudentManagementWindowManageStudentsGroupPage
                                 MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
+
+                    _dbContext.SaveChanges();
 
                     StudentsListView.Items.Refresh();
 
@@ -82,7 +87,9 @@ public partial class StudentManagementWindowManageStudentsGroupPage
         {
             foreach (var student in selectedStudents)
             {
-                var selectedGroup = _dataRepository.Groups.FirstOrDefault(group => group.Students.Contains(student));
+                var selectedGroup = _dbContext.Groups
+                    .Include(group => group.Students)
+                    .FirstOrDefault(group => group.Students.Contains(student));
 
                 if (selectedGroup != null)
                 {
@@ -116,4 +123,3 @@ public partial class StudentManagementWindowManageStudentsGroupPage
         GroupComboBox.ItemsSource = selectedCourse?.Groups.Select(group => group.GroupName).ToList();
     }
 }
-

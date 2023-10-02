@@ -13,13 +13,13 @@ namespace DesktopApplication.Student_Management;
 
 public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 {
-    private DataRepository _dataRepository;
-
-    public StudentManagementWindowExpOrImpStudentsToGroupPage(DataRepository dataRepository)
+    private UniversityDbContext _dbContext;
+    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        CourseComboBox.ItemsSource = _dataRepository.Courses;
+        _dbContext = dbContext;
+        CourseComboBox.ItemsSource = _dbContext.Courses;
+        // Maybe use " CourseComboBox.ItemsSource = _dbContext.Courses.ToList()" instead???
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
@@ -34,7 +34,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 
             if (selectedGroup != null)
             {
-                var studentToExport = _dataRepository.Students.Where(student =>
+                var studentToExport = _dbContext.Students.Where(student =>
                     !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
                     student.CurrentGroupName == selectedGroupName).ToList();
 
@@ -120,7 +120,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
                                 importedStudent.CurrentGroupName = selectedGroupName;
                                 selectedGroup.Students.Add(importedStudent);
 
-                                var existingStudent = _dataRepository.Students.FirstOrDefault(s =>
+                                var existingStudent = _dbContext.Students.FirstOrDefault(s =>
                                     s.StudentId == importedStudent.StudentId);
 
                                 if (existingStudent != null)
@@ -129,7 +129,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
                                 }
                                 else
                                 {
-                                    _dataRepository.Students.Add(importedStudent);
+                                    _dbContext.Students.Add(importedStudent);
                                 }
                             }
 
