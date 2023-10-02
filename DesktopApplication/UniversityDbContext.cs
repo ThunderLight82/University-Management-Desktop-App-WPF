@@ -11,10 +11,7 @@ public class UniversityDbContext : DbContext
 
     public UniversityDbContext(DbContextOptions<UniversityDbContext> options) : base(options)
     {
-        this.Courses.Load();
-        this.Groups.Load();
-        this.Teachers.Load();
-        this.Students.Load();
+
     }
     public UniversityDbContext()
     {
