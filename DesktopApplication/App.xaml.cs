@@ -7,8 +7,6 @@ public partial class App
 {
     private UniversityDbContext _dbContext;
 
-    // public static DataRepository DataRepository { get; } = new();
-
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -16,7 +14,10 @@ public partial class App
         // Hardcoded Server initialization instead of using it in appsettings.json(I add it later)
 
         var optionsBuilder = new DbContextOptionsBuilder<UniversityDbContext>();
-        optionsBuilder.UseSqlServer("Data Source=THUNDERLIGHT;Integrated Security=True;TrustServerCertificate=true;");
+        optionsBuilder.UseSqlServer("Data Source=THUNDERLIGHT;" +
+                                    " Initial Catalog=UniversityServerDB;" +
+                                    " Integrated Security=True;TrustServerCertificate=true;");
+
         _dbContext = new UniversityDbContext(optionsBuilder.Options);
 
         var mainWindow = new MainWindow();
