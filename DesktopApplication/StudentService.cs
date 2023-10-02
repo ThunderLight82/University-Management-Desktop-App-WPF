@@ -1,42 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-
-namespace DesktopApplication;
-
+﻿// using System.Collections.Generic;
+// using Microsoft.EntityFrameworkCore;
+//
+// namespace DesktopApplication;
+//
 // public class StudentService
 // {
-//     private DataRepository _dataRepository;
+//     private UniversityDbContext _dbContext;
 //
-//     public StudentService(DataRepository dataRepository)
+//     public StudentService(UniversityDbContext dbContext)
 //     {
-//         _dataRepository = dataRepository;
+//         _dbContext = dbContext;
 //     }
 //
-//     public List<Student> GetAllStudents()
+//     public DbSet<Student> GetAllStudents()
 //     {
-//         return _dataRepository.Students;
+//         return _dbContext.Students;
 //     }
 //
 //     public void AddStudent(string studentFullName)
 //     {
-//
+//     
 //     }
-//
-//     // public void UpdateStudent(Student student)
-//     // {
-//     //     _dataRepository.Entry(student).State = EntityState.Modified;
-//     //     _dataRepository.SaveChanges();
-//     // }
-//
-//     // public void DeleteStudent(int studentId)
-//     // {
-//     //     var student = _dataRepository.Students.Find(studentId);
-//     //     if (student != null)
-//     //     {
-//     //         _dataRepository.Students.Remove(student);
-//     //         _dataRepository.SaveChanges();
-//     //     }
-//     // }
+//     
+//     public void UpdateStudent(Student student)
+//     {
+//         _dbContext.Entry(student).State = EntityState.Modified;
+//         _dbContext.SaveChanges();
+//     }
+//     
+//     public void DeleteStudent(int studentId)
+//     {
+//         var student = _dbContext.Students.Find(studentId);
+//         if (student != null)
+//         {
+//             _dbContext.Students.Remove(student);
+//             _dbContext.SaveChanges();
+//         }
+//     }
 // }
