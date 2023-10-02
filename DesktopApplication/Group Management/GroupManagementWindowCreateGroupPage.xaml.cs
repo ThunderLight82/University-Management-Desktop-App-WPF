@@ -5,13 +5,14 @@ namespace DesktopApplication.Group_Management;
 
 public partial class GroupManagementWindowCreateGroupPage
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
 
-    public GroupManagementWindowCreateGroupPage(DataRepository dataRepository)
+    public GroupManagementWindowCreateGroupPage(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        CourseComboBox.ItemsSource = _dataRepository.Courses;
+        _dbContext = dbContext;
+        CourseComboBox.ItemsSource = _dbContext.Courses;
+        // Maybe use "CourseComboBox.ItemsSource = _dbContext.Courses.Local" instead???
     }
 
     private void CreateGroup_Click(object sender, RoutedEventArgs e)
@@ -36,7 +37,7 @@ public partial class GroupManagementWindowCreateGroupPage
 
                     selectedCourse.Groups.Add(createNewGroup);
 
-                    _dataRepository.Groups.Add(createNewGroup);
+                    _dbContext.Groups.Add(createNewGroup);
 
                     GroupNameTextBox.Clear();
                 }

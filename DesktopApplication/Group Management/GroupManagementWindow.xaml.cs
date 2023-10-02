@@ -4,17 +4,17 @@ namespace DesktopApplication.Group_Management;
 
 public partial class GroupManagementWindow
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
 
-    public GroupManagementWindow(DataRepository dataRepository)
+    public GroupManagementWindow(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
+        _dbContext = dbContext;
     }
 
     private void EditGroupInfo_Click(object sender, RoutedEventArgs e)
     {
-        var editGroupInfoPage = new GroupManagementWindowEditGroupInfoPage(_dataRepository);
+        var editGroupInfoPage = new GroupManagementWindowEditGroupInfoPage(_dbContext);
 
         EditGroupInfoButton.Style = (Style)FindResource("HighlightedButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
@@ -26,7 +26,7 @@ public partial class GroupManagementWindow
 
     private void CreateGroup_Click(object sender, RoutedEventArgs e)
     {
-        var createGroupPage = new GroupManagementWindowCreateGroupPage(_dataRepository);
+        var createGroupPage = new GroupManagementWindowCreateGroupPage(_dbContext);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
@@ -38,7 +38,7 @@ public partial class GroupManagementWindow
 
     private void DeleteGroup_Click(object sender, RoutedEventArgs e)
     {
-        var deleteGroupPage = new GroupManagementWindowDeleteGroupPage(_dataRepository);
+        var deleteGroupPage = new GroupManagementWindowDeleteGroupPage(_dbContext);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
@@ -50,7 +50,7 @@ public partial class GroupManagementWindow
 
     private void CreateFileWithGroup_Click(object sender, RoutedEventArgs e)
     {
-        var createFileWithGroupPage = new GroupManagementWindowCreateFileWithGroupInfoPage(_dataRepository);
+        var createFileWithGroupPage = new GroupManagementWindowCreateFileWithGroupInfoPage(_dbContext);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");

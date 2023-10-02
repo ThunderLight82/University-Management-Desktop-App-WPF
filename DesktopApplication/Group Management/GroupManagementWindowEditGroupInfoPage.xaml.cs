@@ -6,13 +6,16 @@ namespace DesktopApplication.Group_Management;
 
 public partial class GroupManagementWindowEditGroupInfoPage
 {
-    private DataRepository _dataRepository;
-    public GroupManagementWindowEditGroupInfoPage(DataRepository dataRepository)
+    private UniversityDbContext _dbContext;
+
+    public GroupManagementWindowEditGroupInfoPage(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        CourseComboBox.ItemsSource = _dataRepository.Courses;
-        SelectCuratorNameComboBox.ItemsSource = _dataRepository.Teachers;
+        _dbContext = dbContext;
+        CourseComboBox.ItemsSource = _dbContext.Courses;
+        // Maybe use "CourseComboBox.ItemsSource = _dbContext.Courses.Local" instead???
+        SelectCuratorNameComboBox.ItemsSource = _dbContext.Teachers;
+        // Maybe use "CourseComboBox.ItemsSource = _dbContext.Teachers.Local" instead???
         CourseComboBox.SelectionChanged += ComboBoxRefreshAll;
     }
 
@@ -38,7 +41,9 @@ public partial class GroupManagementWindowEditGroupInfoPage
         var editGroupName = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
     
         editGroupName.GroupName = newGroupName;
-    
+
+        _dbContext.SaveChanges();
+
         EditGroupNameTextBox.Clear();
 
         ComboBoxRefreshAll(null, null);
@@ -60,6 +65,8 @@ public partial class GroupManagementWindowEditGroupInfoPage
                 if (selectedGroup != null)
                 {
                     selectedGroup.GroupCurator.Add(selectedTeacher);
+
+                    _dbContext.SaveChanges();
 
                     SelectGroupToAddCuratorComboBox.SelectedIndex = -1;
                     SelectCuratorNameComboBox.SelectedIndex = -1;

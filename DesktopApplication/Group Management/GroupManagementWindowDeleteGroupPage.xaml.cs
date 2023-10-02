@@ -6,12 +6,13 @@ namespace DesktopApplication.Group_Management;
 
 public partial class GroupManagementWindowDeleteGroupPage
 {
-    private DataRepository _dataRepository;
-    public GroupManagementWindowDeleteGroupPage(DataRepository dataRepository)
+    private UniversityDbContext _dbContext;
+    public GroupManagementWindowDeleteGroupPage(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        CourseComboBox.ItemsSource = _dataRepository.Courses;
+        _dbContext = dbContext;
+        CourseComboBox.ItemsSource = _dbContext.Courses;
+        // Maybe use "CourseComboBox.ItemsSource = _dbContext.Courses.Local" instead???
         CourseComboBox.SelectionChanged += ComboBoxRefreshAll;
     }
 
@@ -38,7 +39,7 @@ public partial class GroupManagementWindowDeleteGroupPage
                     {
                         selectedCourse.Groups.Remove(deleteGroup);
 
-                        _dataRepository.Groups.Remove(deleteGroup);
+                        _dbContext.Groups.Remove(deleteGroup);
 
                         ComboBoxRefreshAll(null, null);
                     }

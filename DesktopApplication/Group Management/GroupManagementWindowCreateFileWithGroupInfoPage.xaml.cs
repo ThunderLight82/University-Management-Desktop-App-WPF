@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using Microsoft.EntityFrameworkCore;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using Xceed.Document.NET;
@@ -12,13 +13,14 @@ namespace DesktopApplication.Group_Management;
 
 public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 {
-    private DataRepository _dataRepository;
+    private UniversityDbContext _dbContext;
 
-    public GroupManagementWindowCreateFileWithGroupInfoPage(DataRepository dataRepository)
+    public GroupManagementWindowCreateFileWithGroupInfoPage(UniversityDbContext dbContext)
     {
         InitializeComponent();
-        _dataRepository = dataRepository;
-        CourseComboBox.ItemsSource = _dataRepository.Courses;
+        _dbContext = dbContext;
+        CourseComboBox.ItemsSource = _dbContext.Courses;
+        //Maybe use "CourseComboBox.ItemsSource = _dbContext.Courses" instead???
     }
 
     private void CreateGroupInfoDocxFile_Click(object sender, RoutedEventArgs e)
@@ -27,7 +29,9 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 
         if (CourseComboBox.SelectedItem is Course selectedCourse && !string.IsNullOrEmpty(selectedGroupName))
         {
-            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = _dbContext.Groups
+                .Include(group => group.Students)
+                .FirstOrDefault(group => group.CourseId == selectedCourse.CourseId && group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
@@ -85,7 +89,9 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 
         if (CourseComboBox.SelectedItem is Course selectedCourse && !string.IsNullOrEmpty(selectedGroupName))
         {
-            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+            var selectedGroup = _dbContext.Groups
+                .Include(group => group.Students)
+                .FirstOrDefault(group => group.CourseId == selectedCourse.CourseId && group.GroupName == selectedGroupName);
 
             if (selectedGroup != null)
             {
