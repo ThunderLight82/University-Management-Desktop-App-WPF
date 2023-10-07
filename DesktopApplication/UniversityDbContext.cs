@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DesktopApplication.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DesktopApplication;
 
@@ -11,10 +12,5 @@ public class UniversityDbContext : DbContext
 
     public UniversityDbContext(DbContextOptions<UniversityDbContext> options) : base(options)
     {
-
-    }
-    public UniversityDbContext()
-    {
-
     }
 }

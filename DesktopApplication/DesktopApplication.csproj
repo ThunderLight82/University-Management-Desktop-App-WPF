@@ -5,6 +5,8 @@
         <TargetFramework>net7.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+        <StartupObject>DesktopApplication.App</StartupObject>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,6 +19,7 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
       <PackageReference Include="PdfSharp" Version="1.50.5147" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     </ItemGroup>

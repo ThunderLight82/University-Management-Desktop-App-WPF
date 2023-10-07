@@ -30,7 +30,7 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <ListView Name="CourseListView" Grid.Column="0" ItemsSource="{Binding}">
+                <ListView Name="CourseListView" Grid.Column="0">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Course ID" Width="60" DisplayMemberBinding="{Binding CourseId}" />

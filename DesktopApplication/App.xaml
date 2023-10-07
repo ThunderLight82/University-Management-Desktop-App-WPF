@@ -1,9 +1,4 @@
 ﻿<Application x:Class="DesktopApplication.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:desktopApplication="clr-namespace:DesktopApplication"
-             StartupUri="MainWindow.xaml">
-    <Application.Resources>
-        <desktopApplication:UniversityDbContext x:Key="UniversityDbContext" />
-    </Application.Resources>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 </Application>

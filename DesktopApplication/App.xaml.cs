@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.IO;
+using Microsoft.EntityFrameworkCore;
 using System.Windows;
+using Microsoft.Extensions.Configuration;
 
 namespace DesktopApplication;
 
@@ -11,17 +13,19 @@ public partial class App
     {
         base.OnStartup(e);
 
-        // Hardcoded Server initialization instead of using it in appsettings.json(I add it later)
+        // We use server connection string from "appsettings.json" file.
 
-        var optionsBuilder = new DbContextOptionsBuilder<UniversityDbContext>();
-        optionsBuilder.UseSqlServer("Data Source=THUNDERLIGHT;" +
-                                    " Initial Catalog=UniversityServerDB;" +
-                                    " Integrated Security=True;TrustServerCertificate=true;");
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json")
+            .Build();
 
-        _dbContext = new UniversityDbContext(optionsBuilder.Options);
+        var optionBuilder = new DbContextOptionsBuilder<UniversityDbContext>();
+        optionBuilder.UseSqlServer(configuration.GetConnectionString("UniversityDbContextConnection"));
 
-        var mainWindow = new MainWindow();
-        mainWindow.DataContext = _dbContext;
+        _dbContext = new UniversityDbContext(optionBuilder.Options);
+
+        var mainWindow = new MainWindow(_dbContext);
 
         mainWindow.Show();
     }

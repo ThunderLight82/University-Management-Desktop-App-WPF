@@ -2,24 +2,28 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using DesktopApplication.Group_Management;
-using DesktopApplication.Student_Management;
-using DesktopApplication.Teacher_Management;
+using DesktopApplication.Entities;
+using DesktopApplication.GroupManagementService;
+using DesktopApplication.StudentManagementService;
+using DesktopApplication.TeacherManagementService;
+using Microsoft.EntityFrameworkCore;
 
 namespace DesktopApplication;
 
 public partial class MainWindow
 {
     private UniversityDbContext _dbContext;
-
-    public MainWindow()
+    private GroupService _groupService;
+    public MainWindow(UniversityDbContext dbContext)
     {
         InitializeComponent();
 
-        _dbContext = (UniversityDbContext)Application.Current.Resources["UniversityDbContext"];
+        _dbContext = dbContext;
+        _groupService = new GroupService(_dbContext);
 
-        var courses = _dbContext.Courses.Local.ToObservableCollection();
-        CourseListView.ItemsSource = courses;
+        LoadEntitiesData();
+
+        CourseListView.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
 
         CourseListView.SelectionChanged += CourseListView_SelectionChanged;
         
@@ -28,12 +32,13 @@ public partial class MainWindow
 
     private void CourseListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (CourseListView.SelectedItem != null) 
+        if (CourseListView.SelectedItem != null)
         {
             var selectedCourse = (Course)CourseListView.SelectedItem;
 
-            GroupListView.ItemsSource = _dbContext.Groups.Where(group =>
-                group.CourseId == selectedCourse.CourseId).ToList();
+            _dbContext.Entry(selectedCourse).Collection(col => col.Groups).Load();
+
+            GroupListView.ItemsSource = selectedCourse.Groups.ToList();
         }
         else
         {
@@ -47,8 +52,9 @@ public partial class MainWindow
         {
             var selectedGroup = (Group)GroupListView.SelectedItem;
 
-            StudentListView.ItemsSource = _dbContext.Students.Where(student =>
-                student.GroupId == selectedGroup.GroupId).ToList();
+            _dbContext.Entry(selectedGroup).Collection(col => col.Students).Load();
+
+            StudentListView.ItemsSource = selectedGroup.Students.ToList();
         }
         else
         {
@@ -58,7 +64,7 @@ public partial class MainWindow
 
     private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var groupManagementWindow = new GroupManagementWindow(_dbContext);
+        var groupManagementWindow = new GroupManagementWindow(_dbContext, _groupService);
         groupManagementWindow.ShowDialog();
     }
     
@@ -79,5 +85,14 @@ public partial class MainWindow
          CourseListView.SelectedIndex = -1;
          GroupListView.SelectedIndex = -1;
          StudentListView.SelectedIndex = -1;
+         LoadEntitiesData();
+     }
+
+     private void LoadEntitiesData()
+     {
+         _dbContext.Courses.Load();
+         _dbContext.Groups.Load();
+         _dbContext.Students.Load();
+         _dbContext.Teachers.Load();
      }
 }
