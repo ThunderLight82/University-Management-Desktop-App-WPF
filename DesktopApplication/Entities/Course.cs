@@ -14,6 +14,7 @@ public class Course
 
     public int LastUsedGroupId { get; set; }
 
+    // VV Need to delete that from table bcs it's have no real use VV
     public Course()
     {
         Groups = new List<Group>();

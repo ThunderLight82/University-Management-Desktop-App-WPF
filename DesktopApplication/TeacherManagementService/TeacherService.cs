@@ -42,7 +42,8 @@ public class TeacherService
         var newTeacher = new Teacher
         {
             TeacherFullName = teacherFullName,
-            IsCorrespondence = false
+            IsCorrespondence = false,
+            CurrentGroupCurationName = ""
         };
 
         _dbContext.Teachers.Add(newTeacher);

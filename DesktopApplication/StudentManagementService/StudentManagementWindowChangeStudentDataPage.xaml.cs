@@ -7,47 +7,32 @@ namespace DesktopApplication.StudentManagementService;
 public partial class StudentManagementWindowChangeStudentDataPage
 {
     private UniversityDbContext _dbContext;
+    private StudentService _studentService;
 
-    public StudentManagementWindowChangeStudentDataPage(UniversityDbContext dbContext)
+    public StudentManagementWindowChangeStudentDataPage(UniversityDbContext dbContext, StudentService studentService)
     {
         InitializeComponent();
+
         _dbContext = dbContext;
-        StudentsListView.ItemsSource = _dbContext.Students;
-        // Maybe use "StudentsListView.ItemsSource = _dbContext.Students.Local" instead???
+        _studentService = studentService;
+
+        StudentsListView.ItemsSource = _dbContext.Students.Local.ToObservableCollection();
     }
 
     private void ChangeStudentNameAndWorkInfo_Click (object sender, RoutedEventArgs e)
     {
-        if (StudentsListView.SelectedItem is Student selectedStudent)
+        var selectedStudent = StudentsListView.SelectedItem as Student;
+
+        string changedStudentFullName = ChangeStudentFullNameTextBox.Text.Trim();
+
+        if (IsWorkingComboBox.SelectedItem is ComboBoxItem selectedItem)
         {
-            string changedStudentFullname = ChangeStudentFullNameTextBox.Text.Trim();
+            bool isWorkingInDepartment = selectedItem.Content.ToString() == "Yes";
 
-            if (!string.IsNullOrWhiteSpace(changedStudentFullname))
+            if (_studentService.ChangeStudentNameAndWorkInfo(selectedStudent, changedStudentFullName, isWorkingInDepartment))
             {
-                selectedStudent.StudentFullName = changedStudentFullname;
-
-                var selectedComboBoxItem = IsWorkingComboBox.SelectedItem as ComboBoxItem;
-
-                if (selectedComboBoxItem != null)
-                {
-                    var selectedItemContent = selectedComboBoxItem.Content.ToString();
-                    selectedStudent.IsWorkingInDepartment = selectedItemContent == "Yes";
-                }
-
-                _dbContext.SaveChanges();
-
                 StudentsListView.Items.Refresh();
             }
-            else
-            {
-                MessageBox.Show("Please, enter a valid student name", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        else
-        {
-            MessageBox.Show("Please, select student from list first to update info", "Error", 
-                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

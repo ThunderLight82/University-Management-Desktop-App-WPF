@@ -10,5 +10,5 @@ public class Student
 
     public string CurrentGroupName { get; set; }
 
-    public int GroupId { get; set; }
+    public int GroupId {get; set; }
 }

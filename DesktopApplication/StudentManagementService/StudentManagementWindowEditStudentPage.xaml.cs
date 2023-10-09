@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using DesktopApplication.Entities;
 
 namespace DesktopApplication.StudentManagementService;
@@ -8,58 +6,27 @@ namespace DesktopApplication.StudentManagementService;
 public partial class StudentManagementWindowEditStudentPage
 {
     private UniversityDbContext _dbContext;
+    private StudentService _studentService;
 
-    public StudentManagementWindowEditStudentPage(UniversityDbContext dbContext) 
+    public StudentManagementWindowEditStudentPage(UniversityDbContext dbContext, StudentService studentService) 
     {
         InitializeComponent();
+
         _dbContext = dbContext;
-        StudentsListView.ItemsSource = _dbContext.Students;
-        //Maybe use "StudentsListView.ItemsSource = _dbContext.Students.ToList()" instead???
+        _studentService = studentService;
+
+        StudentsListView.ItemsSource = _dbContext.Students.Local.ToObservableCollection();
     }
 
     private void AddStudent_Click(object sender, RoutedEventArgs e)
     {
         string newStudentFullName = NewStudentFullNameTextBox.Text.Trim();
 
-        if (!string.IsNullOrWhiteSpace(newStudentFullName))
+        if (_studentService.AddStudent(newStudentFullName))
         {
-            var newStudentNameAlreadyExists = _dbContext.Students.Any(student => 
-                student.StudentFullName.Equals(newStudentFullName, StringComparison.OrdinalIgnoreCase));
-
-            if (newStudentNameAlreadyExists)
-            {
-                var duplicateStudentQuestion = MessageBox.Show(
-                    "A student with the same name already exists. Do you want to add this student anyway?",
-                    "Duplication name",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
-                if (duplicateStudentQuestion == MessageBoxResult.No)
-                {
-                    return;
-                }
-            }
-
-            int lastNewestStudentId = _dbContext.Students.Max(student => student.StudentId);
-
-            var newStudent = new Student
-            {
-                StudentId = lastNewestStudentId + 1,
-                StudentFullName = newStudentFullName,
-                IsWorkingInDepartment = false
-            };
-
-            _dbContext.Students.Add(newStudent);
-            _dbContext.SaveChanges();
-
             NewStudentFullNameTextBox.Clear();
 
             StudentsListView.Items.Refresh();
-        }
-        else
-        {
-            MessageBox.Show("Please, enter a valid student name", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -67,23 +34,9 @@ public partial class StudentManagementWindowEditStudentPage
     {
         var selectedStudent = StudentsListView.SelectedItem as Student;
 
-        if (selectedStudent != null)
+        if (_studentService.DeleteStudent(selectedStudent))
         {
-            var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.Students.Contains(selectedStudent));
-
-            associatedGroup?.Students.Remove(selectedStudent);
-
-            selectedStudent.CurrentGroupName = null;
-
-            _dbContext.Students.Remove(selectedStudent);
-            _dbContext.SaveChanges();
-
             StudentsListView.Items.Refresh();
-        }
-        else
-        {
-            MessageBox.Show("Please, select a student from the list below to remove", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

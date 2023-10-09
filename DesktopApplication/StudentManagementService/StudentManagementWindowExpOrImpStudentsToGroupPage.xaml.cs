@@ -15,12 +15,17 @@ namespace DesktopApplication.StudentManagementService;
 public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 {
     private UniversityDbContext _dbContext;
-    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext)
+    private StudentService _studentService;
+
+    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext, StudentService studentService)
     {
         InitializeComponent();
+
         _dbContext = dbContext;
-        CourseComboBox.ItemsSource = _dbContext.Courses;
-        // Maybe use " CourseComboBox.ItemsSource = _dbContext.Courses.ToList()" instead???
+        _studentService = studentService;
+
+        CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
+
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 

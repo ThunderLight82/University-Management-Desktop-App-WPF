@@ -15,6 +15,7 @@ public partial class MainWindow
     private UniversityDbContext _dbContext;
     private GroupService _groupService;
     private TeacherService _teacherService;
+    private StudentService _studentService;
 
     public MainWindow(UniversityDbContext dbContext)
     {
@@ -23,6 +24,8 @@ public partial class MainWindow
         _dbContext = dbContext;
         _groupService = new GroupService(_dbContext);
         _teacherService = new TeacherService(_dbContext);
+        _studentService = new StudentService(_dbContext);
+
 
         LoadEntitiesData();
 
@@ -69,7 +72,7 @@ public partial class MainWindow
     
     private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var studentManagementWindow = new StudentManagementWindow(_dbContext, new HashSet<Student>());
+        var studentManagementWindow = new StudentManagementWindow(_dbContext, _studentService);
         studentManagementWindow.ShowDialog();
     }
     
