@@ -7,46 +7,32 @@ namespace DesktopApplication.TeacherManagementService;
 public partial class TeacherManagementWindowChangeTeacherDataPage
 {
     private UniversityDbContext _dbContext;
-    public TeacherManagementWindowChangeTeacherDataPage(UniversityDbContext dbContext)
+    private TeacherService _teacherService;
+
+    public TeacherManagementWindowChangeTeacherDataPage(UniversityDbContext dbContext, TeacherService teacherService)
     {
         InitializeComponent();
+
         _dbContext = dbContext;
-        TeachersListView.ItemsSource = _dbContext.Teachers;
-        // Maybe use "TeachersListView.ItemsSource = _dbContext.Teachers.ToList()" instead???
+        _teacherService = teacherService;
+
+        TeachersListView.ItemsSource = _dbContext.Teachers.Local.ToObservableCollection();
     }
 
     private void ChangeTeacherNameAndWorkInfo_Click(object sender, RoutedEventArgs e)
     {
-        if (TeachersListView.SelectedItem is Teacher selectedTeacher)
+        var selectedTeacher = TeachersListView.SelectedItem as Teacher;
+
+        string changedTeacherFullName = ChangeTeacherFullNameTextBox.Text.Trim();
+
+        if (IsCorrespondence.SelectedItem is ComboBoxItem selectedItem)
         {
-            string changedTeacherFullname = ChangeTeacherFullNameTextBox.Text.Trim();
+            bool isCorrespondence = selectedItem.Content.ToString() == "Yes";
 
-            if (!string.IsNullOrWhiteSpace(changedTeacherFullname))
+            if (_teacherService.ChangeTeacherNameAndWorkInfo(selectedTeacher, changedTeacherFullName, isCorrespondence))
             {
-                selectedTeacher.TeacherFullName = changedTeacherFullname;
-
-                var selectedComboBoxItem = IsCorrespondence.SelectedItem as ComboBoxItem;
-
-                if (selectedComboBoxItem != null)
-                {
-                    var selectedItemContent = selectedComboBoxItem.Content.ToString();
-                    selectedTeacher.IsCorrespondence = selectedItemContent == "Yes";
-                }
-
-                _dbContext.SaveChanges();
-
                 TeachersListView.Items.Refresh();
             }
-            else
-            {
-                MessageBox.Show("Please, enter a valid teacher name", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        else
-        {
-            MessageBox.Show("Please, select teacher from list first to update info", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

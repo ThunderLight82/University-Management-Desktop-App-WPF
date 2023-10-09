@@ -8,5 +8,5 @@ public class Teacher
 
     public bool IsCorrespondence { get; set; }
 
-    public string CurrentGroupCurationName { get; set; }
+    public string CurrentGroupCurationName { get; set; } = "";
 }

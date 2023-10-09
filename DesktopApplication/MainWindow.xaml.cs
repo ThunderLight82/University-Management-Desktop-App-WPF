@@ -14,12 +14,15 @@ public partial class MainWindow
 {
     private UniversityDbContext _dbContext;
     private GroupService _groupService;
+    private TeacherService _teacherService;
+
     public MainWindow(UniversityDbContext dbContext)
     {
         InitializeComponent();
 
         _dbContext = dbContext;
         _groupService = new GroupService(_dbContext);
+        _teacherService = new TeacherService(_dbContext);
 
         LoadEntitiesData();
 
@@ -36,8 +39,6 @@ public partial class MainWindow
         {
             var selectedCourse = (Course)CourseListView.SelectedItem;
 
-            _dbContext.Entry(selectedCourse).Collection(col => col.Groups).Load();
-
             GroupListView.ItemsSource = selectedCourse.Groups.ToList();
         }
         else
@@ -51,8 +52,6 @@ public partial class MainWindow
         if (GroupListView.SelectedItem != null)
         {
             var selectedGroup = (Group)GroupListView.SelectedItem;
-
-            _dbContext.Entry(selectedGroup).Collection(col => col.Students).Load();
 
             StudentListView.ItemsSource = selectedGroup.Students.ToList();
         }
@@ -76,7 +75,7 @@ public partial class MainWindow
     
     private void OpenTeacherManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var teacherManagementWindow = new TeacherManagementWindow(_dbContext);
+        var teacherManagementWindow = new TeacherManagementWindow(_dbContext, _teacherService);
         teacherManagementWindow.ShowDialog();
     }
 
@@ -85,6 +84,7 @@ public partial class MainWindow
          CourseListView.SelectedIndex = -1;
          GroupListView.SelectedIndex = -1;
          StudentListView.SelectedIndex = -1;
+
          LoadEntitiesData();
      }
 

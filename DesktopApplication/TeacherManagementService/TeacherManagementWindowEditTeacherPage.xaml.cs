@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using DesktopApplication.Entities;
 
 namespace DesktopApplication.TeacherManagementService;
@@ -8,57 +6,27 @@ namespace DesktopApplication.TeacherManagementService;
 public partial class TeacherManagementWindowEditTeacherPage
 {
     private UniversityDbContext _dbContext;
-    public TeacherManagementWindowEditTeacherPage(UniversityDbContext dbContext)
+    private TeacherService _teacherService;
+
+    public TeacherManagementWindowEditTeacherPage(UniversityDbContext dbContext, TeacherService teacherService)
     {
         InitializeComponent();
+
         _dbContext = dbContext;
-        TeachersListView.ItemsSource = _dbContext.Teachers;
-        // Maybe use "TeachersListView.ItemsSource = _dbContext.Teachers.ToList()" instead???
+        _teacherService = teacherService;
+
+        TeachersListView.ItemsSource = _dbContext.Teachers.Local.ToObservableCollection();
     }
 
-    private void AddTeacher_Click(object sender, RoutedEventArgs e)
+    private void CreateTeacher_Click(object sender, RoutedEventArgs e)
     {
         string newTeacherFullName = NewTeacherFullNameTextBox.Text.Trim();
 
-        if (!string.IsNullOrWhiteSpace(newTeacherFullName))
+        if (_teacherService.CreateTeacher(newTeacherFullName))
         {
-            var newTeacherNameAlreadyExists = _dbContext.Teachers.Any(teacher =>
-                teacher.TeacherFullName.Equals(newTeacherFullName, StringComparison.OrdinalIgnoreCase));
-
-            if (newTeacherNameAlreadyExists)
-            {
-                var duplicateTeacherQuestion = MessageBox.Show(
-                    "A teacher with the same name already exists. Do you want to add this teacher anyway?",
-                    "Duplication name",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Question);
-
-                if (duplicateTeacherQuestion == MessageBoxResult.No)
-                {
-                    return;
-                }
-            }
-
-            int lastNewestTeacherId = _dbContext.Teachers.Max(teacher => teacher.TeacherId);
-
-            var newTeacher = new Teacher
-            {
-                TeacherId = lastNewestTeacherId + 1,
-                TeacherFullName = newTeacherFullName,
-                IsCorrespondence = false
-            };
-
-            _dbContext.Teachers.Add(newTeacher);
-            _dbContext.SaveChanges();
-
             NewTeacherFullNameTextBox.Clear();
 
             TeachersListView.Items.Refresh();
-        }
-        else
-        {
-            MessageBox.Show("Please, enter a valid teacher name", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -66,26 +34,9 @@ public partial class TeacherManagementWindowEditTeacherPage
     {
         var selectedTeacher = TeachersListView.SelectedItem as Teacher;
 
-        if (selectedTeacher != null)
+        if (_teacherService.DeleteTeacher(selectedTeacher))
         {
-            var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
-
-            if (associatedGroup != null)
-            {
-                associatedGroup.GroupCurator.Remove(selectedTeacher);
-            }
-
-            selectedTeacher.CurrentGroupCurationName = null;
-
-            _dbContext.Teachers.Remove(selectedTeacher);
-            _dbContext.SaveChanges();
-
             TeachersListView.Items.Refresh();
-        }
-        else
-        {
-            MessageBox.Show("Please, select a teacher from the list below to remove", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

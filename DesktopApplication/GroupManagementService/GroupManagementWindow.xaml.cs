@@ -10,6 +10,7 @@ public partial class GroupManagementWindow
     public GroupManagementWindow(UniversityDbContext dbContext, GroupService groupService)
     {
         InitializeComponent();
+
         _dbContext = dbContext;
         _groupService = groupService;
     }

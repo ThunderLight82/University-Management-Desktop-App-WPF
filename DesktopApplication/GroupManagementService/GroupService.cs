@@ -30,8 +30,6 @@ public class GroupService
             return false;
         }
 
-        selectedCourse.LastUsedGroupId++;
-
         var createNewGroup = new Group { GroupName = groupName };
 
         selectedCourse.Groups.Add(createNewGroup);
@@ -108,7 +106,8 @@ public class GroupService
         return true;
     }
 
-    // public bool CreateFileWithGroupInfo(Course course, string groupName)
-    // {
-    // }
+    public bool CreateFileWithGroupInfo(Course course, string groupName)
+    {
+        return true;
+    }
 }
