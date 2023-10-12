@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesktopApplication.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    [Migration("20231006113035_SeedData")]
-    partial class SeedData
+    [Migration("20231010151312_ReverseChanges")]
+    partial class ReverseChanges
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace DesktopApplication.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DesktopApplication.Course", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Course", b =>
                 {
                     b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace DesktopApplication.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("DesktopApplication.Group", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Group", b =>
                 {
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace DesktopApplication.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("DesktopApplication.Student", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Student", b =>
                 {
                     b.Property<int>("StudentId")
                         .ValueGeneratedOnAdd()
@@ -96,7 +96,7 @@ namespace DesktopApplication.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("DesktopApplication.Teacher", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Teacher", b =>
                 {
                     b.Property<int>("TeacherId")
                         .ValueGeneratedOnAdd()
@@ -130,9 +130,9 @@ namespace DesktopApplication.Migrations
                     b.ToTable("Teachers");
                 });
 
-            modelBuilder.Entity("DesktopApplication.Group", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Group", b =>
                 {
-                    b.HasOne("DesktopApplication.Course", "Course")
+                    b.HasOne("DesktopApplication.Entities.Course", "Course")
                         .WithMany("Groups")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -141,34 +141,34 @@ namespace DesktopApplication.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("DesktopApplication.Student", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Student", b =>
                 {
-                    b.HasOne("DesktopApplication.Group", null)
+                    b.HasOne("DesktopApplication.Entities.Group", null)
                         .WithMany("Students")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DesktopApplication.Teacher", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Teacher", b =>
                 {
-                    b.HasOne("DesktopApplication.Course", null)
+                    b.HasOne("DesktopApplication.Entities.Course", null)
                         .WithMany("Teachers")
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("DesktopApplication.Group", null)
+                    b.HasOne("DesktopApplication.Entities.Group", null)
                         .WithMany("GroupCurator")
                         .HasForeignKey("GroupId");
                 });
 
-            modelBuilder.Entity("DesktopApplication.Course", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Course", b =>
                 {
                     b.Navigation("Groups");
 
                     b.Navigation("Teachers");
                 });
 
-            modelBuilder.Entity("DesktopApplication.Group", b =>
+            modelBuilder.Entity("DesktopApplication.Entities.Group", b =>
                 {
                     b.Navigation("GroupCurator");
 

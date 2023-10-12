@@ -4,6 +4,7 @@ using DesktopApplication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesktopApplication.Migrations
 {
     [DbContext(typeof(UniversityDbContext))]
-    partial class UniversityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231010145918_NewSeedWithInitialDataAndAlterTables")]
+    partial class NewSeedWithInitialDataAndAlterTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +42,7 @@ namespace DesktopApplication.Migrations
 
                     b.HasKey("CourseId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("DesktopApplication.Entities.Group", b =>
@@ -61,7 +64,7 @@ namespace DesktopApplication.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Groups", (string)null);
+                    b.ToTable("Groups");
                 });
 
             modelBuilder.Entity("DesktopApplication.Entities.Student", b =>
@@ -73,10 +76,9 @@ namespace DesktopApplication.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StudentId"));
 
                     b.Property<string>("CurrentGroupName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsWorkingInDepartment")
@@ -90,7 +92,7 @@ namespace DesktopApplication.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("DesktopApplication.Entities.Teacher", b =>
@@ -105,7 +107,6 @@ namespace DesktopApplication.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("CurrentGroupCurationName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("GroupId")
@@ -124,7 +125,7 @@ namespace DesktopApplication.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("Teachers", (string)null);
+                    b.ToTable("Teachers");
                 });
 
             modelBuilder.Entity("DesktopApplication.Entities.Group", b =>
@@ -142,9 +143,7 @@ namespace DesktopApplication.Migrations
                 {
                     b.HasOne("DesktopApplication.Entities.Group", null)
                         .WithMany("Students")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
                 });
 
             modelBuilder.Entity("DesktopApplication.Entities.Teacher", b =>

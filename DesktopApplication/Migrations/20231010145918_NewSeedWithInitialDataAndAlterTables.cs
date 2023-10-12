@@ -5,7 +5,7 @@
 namespace DesktopApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedData : Migration
+    public partial class NewSeedWithInitialDataAndAlterTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,7 @@ namespace DesktopApplication.Migrations
 
             migrationBuilder.InsertData(
                 table: "Courses",
-                columns: new[] {"CourseId", "CourseName", "LastUsedGroupId"},
+                columns: new[] { "CourseId", "CourseName", "LastUsedGroupId" },
                 values: new object[,]
                 {
                     { 1, "System Engineer", 0 },
@@ -66,8 +66,8 @@ namespace DesktopApplication.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentFullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsWorkingInDepartment = table.Column<bool>(type: "bit", nullable: false),
-                    CurrentGroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false)
+                    CurrentGroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GroupId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,8 +76,7 @@ namespace DesktopApplication.Migrations
                         name: "FK_Students_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "GroupId");
                 });
 
             migrationBuilder.CreateTable(
@@ -88,7 +87,7 @@ namespace DesktopApplication.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TeacherFullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCorrespondence = table.Column<bool>(type: "bit", nullable: false),
-                    CurrentGroupCurationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CurrentGroupCurationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CourseId = table.Column<int>(type: "int", nullable: true),
                     GroupId = table.Column<int>(type: "int", nullable: true)
                 },
