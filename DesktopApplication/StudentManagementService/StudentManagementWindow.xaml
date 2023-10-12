@@ -27,7 +27,7 @@
                 Height="35" Width="125" VerticalAlignment="Top">
             <StackPanel VerticalAlignment="Center">
                 <TextBlock Text="Export/Import" TextAlignment="Center" />
-                <TextBlock Text=" Students To Group" TextAlignment="Center" />
+                <TextBlock Text=" Students Group" TextAlignment="Center" />
             </StackPanel>
         </Button>
 

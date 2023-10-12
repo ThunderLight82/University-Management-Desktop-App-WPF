@@ -21,7 +21,24 @@
 
             <TextBlock
                 Text="(Caution! Importing student list from .csv file will rewrite the existing student list that group holds)"
+                Margin="5, 5, 0, 0" />
+
+            <TextBlock
+                Text="(Hint: Feel free to import student list(.csv file) without some student parameters, they will auto"
                 Margin="5, 0, 0, 0" />
+
+            <TextBlock
+                Text="apply to selected group)"
+                Margin="5, 0, 0, 0" />
+
+            <TextBlock
+                Text="(Import file template: Use 'StudentFullName,IsWorkingInDepartment,CurrentGroupName,GroupId'"
+                Margin="5, 0, 0, 0" />
+
+            <TextBlock
+                Text="In first string to add new student into the group\app\DB if they didn't exist in database or app)"
+                Margin="5, 0, 0, 0" />
+
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
                 <ComboBox Name="CourseComboBox" Width="220" DisplayMemberPath="CourseName" SelectedValuePath="CourseId"

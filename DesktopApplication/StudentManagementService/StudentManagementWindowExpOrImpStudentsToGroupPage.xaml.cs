@@ -1,12 +1,7 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using CsvHelper;
-using CsvHelper.Configuration;
 using DesktopApplication.Entities;
 using Microsoft.Win32;
 
@@ -17,7 +12,8 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
     private UniversityDbContext _dbContext;
     private StudentService _studentService;
 
-    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext, StudentService studentService)
+    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext,
+        StudentService studentService)
     {
         InitializeComponent();
 
@@ -36,47 +32,29 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 
         if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
-
-            if (selectedGroup != null)
+            var saveFileDialog = new SaveFileDialog
             {
-                var studentToExport = _dbContext.Students.Where(student =>
-                    !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
-                    student.CurrentGroupName == selectedGroupName).ToList();
+                Filter = "CVS Files (.csv)|*.csv",
+                DefaultExt = ".csv",
+                FileName = $"{selectedCourse.CourseName} {selectedGroupName} Students List"
+            };
 
-                if (studentToExport.Any())
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                bool exportResult = await _studentService.ExportStudentsAsync(selectedCourse, selectedGroupName, filePath);
+
+                if (exportResult)
                 {
-                    var saveFileDialog = new SaveFileDialog
-                    {
-                        Filter = "CVS Files (.csv)|*.csv",
-                        DefaultExt = ".csv",
-                        FileName = $"{selectedCourse.CourseName} {selectedGroupName} Students List"
-                    };
-
-                    if (saveFileDialog.ShowDialog() == true)
-                    {
-                        string filePath = saveFileDialog.FileName;
-
-                        await using var streamWriter = new StreamWriter(filePath);
-                        await using var csv = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture));
-                        {
-                            await csv.WriteRecordsAsync(studentToExport);
-                        }
-
-                        MessageBox.Show("Students have been successfully exported from selected group!", "Success",
-                            MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
+                    MessageBox.Show("Students have been successfully exported!", "Success",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    MessageBox.Show("No students found in the selected group", "Error",
+                    MessageBox.Show("An error occurred during export. Please, try again", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-            else
-            {
-                MessageBox.Show("The selected group does not exist for the chosen course", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else
@@ -85,7 +63,6 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-    
 
     private void ImportStudents_Click(object sender, RoutedEventArgs e)
     {
@@ -94,72 +71,27 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 
         if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
-
-            if (selectedGroup != null)
+            var openFileDialog = new OpenFileDialog
             {
-                var openFileDialog = new OpenFileDialog
+                Filter = "CSV Files (*.csv)|*.csv"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string importFilePath = openFileDialog.FileName;
+
+                bool importResult = _studentService.ImportStudents(selectedCourse, selectedGroupName, importFilePath);
+
+                if (importResult)
                 {
-                    Filter = "CVS Files (*.csv)|*.csv"
-                };
-
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    string filePath = openFileDialog.FileName;
-
-                    var userAnswerResult = MessageBox.Show("This action will overwrite the current group data. Do you want to continue?",
-                        "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-                    if (userAnswerResult == MessageBoxResult.Yes)
-                    {
-                        try
-                        {
-                            using var streamReader = new StreamReader(filePath);
-                            using var csv = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture));
-
-                            var studentsToImport =  csv.GetRecords<Student>().ToList();
-
-                            selectedGroup.Students.Clear();
-
-                            foreach (var importedStudent in studentsToImport)
-                            {
-                                importedStudent.CurrentGroupName = selectedGroupName;
-                                selectedGroup.Students.Add(importedStudent);
-
-                                var existingStudent = _dbContext.Students.FirstOrDefault(s =>
-                                    s.StudentId == importedStudent.StudentId);
-
-                                if (existingStudent != null)
-                                {
-                                    existingStudent.CurrentGroupName = selectedGroupName;
-                                }
-                                else
-                                {
-                                    _dbContext.Students.Add(importedStudent);
-                                }
-                            }
-
-                            MessageBox.Show("Students have been successfully imported to the selected group!", "Success",
-                                MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"An error occurred while importing students list from group: {ex.Message}", "Error",
-                                MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
-                    }
-
+                    MessageBox.Show("Students have been successfully imported to the selected group!", "Success",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
                 {
-                    MessageBox.Show("No students found in the selected group", "Error",
+                    MessageBox.Show("Failed to import students to the selected group. Please, try again", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-            else
-            {
-                MessageBox.Show("The selected group does not exist for the chosen course", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else

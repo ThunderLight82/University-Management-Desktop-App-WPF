@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using CsvHelper.Configuration;
+using CsvHelper;
 using DesktopApplication.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +26,7 @@ public class StudentService
         {
             MessageBox.Show("Please, enter a valid student name", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -45,8 +51,8 @@ public class StudentService
         {
             StudentFullName = studentFullName,
             IsWorkingInDepartment = false,
-            CurrentGroupName = "",
-            GroupId = 0
+            CurrentGroupName = null,
+            GroupId = null
         };
 
         _dbContext.Students.Add(newStudent);
@@ -62,6 +68,7 @@ public class StudentService
         {
             MessageBox.Show("Please, select a student from the list below to remove", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -71,9 +78,6 @@ public class StudentService
         {
             associatedGroup.Students.Remove(selectedStudent);
         }
-
-        selectedStudent.CurrentGroupName = "";
-        selectedStudent.GroupId = 0;
 
         _dbContext.Students.Remove(selectedStudent);
 
@@ -88,6 +92,7 @@ public class StudentService
         {
             MessageBox.Show("Please, select student from list first to update info", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -95,6 +100,7 @@ public class StudentService
         {
             MessageBox.Show("Please, enter a valid student name", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -112,6 +118,7 @@ public class StudentService
         {
             MessageBox.Show("Please, select both a course and a group to add students to", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -122,6 +129,7 @@ public class StudentService
         {
             MessageBox.Show("The selected group does not exist for the chosen course", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -132,12 +140,13 @@ public class StudentService
                 if (string.IsNullOrWhiteSpace(student.CurrentGroupName))
                 {
                     student.CurrentGroupName = selectedGroup.GroupName;
-                    selectedGroup.Students.Add(student);
+                    student.GroupId = selectedGroup.GroupId;
                 }
                 else
                 {
                     MessageBox.Show("Student '" + student.StudentFullName + "' is already assigned to a group '" + student.CurrentGroupName + "'", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
+
                     return false;
                 }
             }
@@ -162,12 +171,14 @@ public class StudentService
             {
                 if (!string.IsNullOrWhiteSpace(student.CurrentGroupName))
                 {
-                    student.CurrentGroupName = "";
+                    student.CurrentGroupName = null;
+                    student.GroupId = null;
                 }
                 else
                 {
                     MessageBox.Show("This student is not assigned to any group", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
+
                     return false;
                 }
             }
@@ -176,6 +187,7 @@ public class StudentService
         {
             MessageBox.Show("Please, select a student from the list to remove from the group", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -184,13 +196,103 @@ public class StudentService
         return true;
     }
 
-    public bool ImportStudents(Student student)
+    public async Task<bool> ExportStudentsAsync(Course selectedCourse, string selectedGroupName, string filePath)
     {
+        var selectedGroup = selectedCourse.Groups.FirstOrDefault(group =>
+            group.GroupName == selectedGroupName);
+
+        if (selectedGroup == null)
+        {
+            MessageBox.Show("The selected group does not exist for the chosen course", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return false;
+        }
+
+        var studentsToExport = _dbContext.Students.Where(student =>
+            !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
+            student.CurrentGroupName == selectedGroupName).ToList();
+
+        if (!studentsToExport.Any())
+        {
+            MessageBox.Show("No students found in the selected group", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return false;
+        }
+
+        await using var streamWriter = new StreamWriter(filePath);
+        await using var csv = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture));
+        {
+            await csv.WriteRecordsAsync(studentsToExport);
+        }
+
         return true;
     }
 
-    public bool ExportStudents(Student student)
+    public bool ImportStudents(Course selectedCourse, string selectedGroupName, string filePath)
     {
-        return true;
+        var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
+
+        if (selectedGroup == null)
+        {
+            MessageBox.Show("The selected group does not exist for the chosen course", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return false;
+        }
+
+        var userAnswerResult = MessageBox.Show(
+            "This action will overwrite the current group student list. Do you want to continue?",
+            "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+        if (userAnswerResult == MessageBoxResult.Yes)
+        {
+            using var streamReader = new StreamReader(filePath);
+            using var csv = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HeaderValidated = null,
+                MissingFieldFound = null
+            });
+
+            var studentsToRemove = selectedGroup.Students.ToList();
+
+            foreach (var student in studentsToRemove)
+            {
+                student.GroupId = null;
+                student.CurrentGroupName = null;
+            }
+
+            _dbContext.SaveChanges();
+
+            var studentsToImport = csv.GetRecords<Student>().ToList();
+
+            foreach (var importedStudent in studentsToImport)
+            {
+                var existingStudent = _dbContext.Students.FirstOrDefault(s =>
+                    s.StudentId == importedStudent.StudentId);
+
+                if (existingStudent != null)
+                {
+                    existingStudent.CurrentGroupName = selectedGroup.GroupName;
+                    existingStudent.GroupId = selectedGroup.GroupId;
+                }
+                else
+                {
+                    _dbContext.Students.Add(importedStudent);
+
+                    importedStudent.CurrentGroupName = selectedGroup.GroupName;
+                    importedStudent.GroupId = selectedGroup.GroupId;
+                }
+
+                _dbContext.SaveChanges();
+            }
+
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+
+        return false;
     }
 }
