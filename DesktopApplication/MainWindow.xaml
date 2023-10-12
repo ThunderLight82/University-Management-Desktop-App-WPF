@@ -19,7 +19,7 @@
         
         <Button Grid.Row="0" Content="Manage Students" Click="OpenStudentManagementWindow_Click" Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5" />
         
-        <Button Grid.Row="0" Content="Manage Teachers" Click="OpenTeacherManagementWindow_Click" Width="100" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="580,0,0,0" />
+        <Button Grid.Row="0" Content="Manage Teachers" Click="OpenTeacherManagementWindow_Click" Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="110, 5" />
 
         <Grid Grid.Row="1">
             <Grid>

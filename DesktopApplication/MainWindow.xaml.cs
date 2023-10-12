@@ -26,7 +26,6 @@ public partial class MainWindow
         _teacherService = new TeacherService(_dbContext);
         _studentService = new StudentService(_dbContext);
 
-
         LoadEntitiesData();
 
         CourseListView.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
