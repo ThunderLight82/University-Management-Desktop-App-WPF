@@ -13,7 +13,7 @@ public partial class App
     {
         base.OnStartup(e);
 
-        // We use server connection string from "appsettings.json" file.
+        // We use server connection string from "appsettings.json" file within "bin" folder.
 
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
