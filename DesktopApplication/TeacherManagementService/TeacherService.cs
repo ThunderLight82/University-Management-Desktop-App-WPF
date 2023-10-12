@@ -19,6 +19,7 @@ public class TeacherService
         {
             MessageBox.Show("Please, enter a valid teacher name", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -42,8 +43,7 @@ public class TeacherService
         var newTeacher = new Teacher
         {
             TeacherFullName = teacherFullName,
-            IsCorrespondence = false,
-            CurrentGroupCurationName = ""
+            IsCorrespondence = false
         };
 
         _dbContext.Teachers.Add(newTeacher);
@@ -59,6 +59,7 @@ public class TeacherService
         {
             MessageBox.Show("Please, select a teacher from the list below to remove", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -69,7 +70,7 @@ public class TeacherService
             associatedGroup.GroupCurator.Remove(selectedTeacher);
         }
 
-        selectedTeacher.CurrentGroupCurationName = "";
+        selectedTeacher.CurrentGroupCurationName = null;
 
         _dbContext.Teachers.Remove(selectedTeacher);
 
@@ -84,6 +85,7 @@ public class TeacherService
         {
             MessageBox.Show("Please, select teacher from list first to update info", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -91,6 +93,7 @@ public class TeacherService
         {
             MessageBox.Show("Please, enter a valid teacher name", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
