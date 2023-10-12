@@ -18,6 +18,7 @@ public class GroupService
         if (string.IsNullOrWhiteSpace(groupName))
         {
             MessageBox.Show("Please, enter a valid group name", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -27,6 +28,7 @@ public class GroupService
         {
             MessageBox.Show("A group with the same name already exists. Please, use another name for the new group.", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
             return false;
         }
 
@@ -53,6 +55,8 @@ public class GroupService
                             "If you want to remove a group, please remove the active students within it in " +
                             "\"Manage Students\" section before proceeding", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return false;
         }
 
         selectedCourse.Groups.Remove(deleteGroup);
