@@ -1,0 +1,40 @@
+﻿<Page x:Class="UniversityManagement.GroupManagementService.GroupManagementWindowCreateFileWithGroupInfoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      d:DesignHeight="520" d:DesignWidth="550"
+      Title="GroupManagementWindowCreateFileWithGroupInfoPage">
+
+    <Grid>
+
+        <StackPanel Margin="10,0">
+            <TextBlock Text="Select a course and group to create file with students list of that group"
+                       FontWeight="Bold" HorizontalAlignment="Left" Margin="5" />
+
+            <TextBlock Text="Select a course first from list below and then group, then click on preferable action,"
+                       Margin="5, 0, 0, 0" />
+
+            <TextBlock
+                Text="After clicking buttons - that a pop-up window appear with option to save (.docx) or (.pdf) file:"
+                Margin="5, 0, 0, 0" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <ComboBox Name="CourseComboBox" Width="220" DisplayMemberPath="CourseName" SelectedValuePath="CourseId"
+                          HorizontalAlignment="Left" Margin="5" Height="25"
+                          SelectionChanged="CourseComboBox_SelectionChanged" />
+
+                <ComboBox Name="GroupComboBox" Width="220" HorizontalAlignment="Left" Margin="5" Height="25" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
+                <Button Content="Save Group Info as (.docx) file" Click="CreateGroupInfoDocxFile_Click" Width="200"
+                        Height="35" Margin="0,0,15,0" VerticalAlignment="Bottom" />
+
+                <Button Content="Save Group Info as (.pdf) file" Click="CreateGroupInfoPdfFile_Click" Width="200"
+                        Height="35" VerticalAlignment="Bottom" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>
