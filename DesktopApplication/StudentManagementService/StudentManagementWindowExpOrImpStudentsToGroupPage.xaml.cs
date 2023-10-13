@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using DesktopApplication.Entities;
@@ -64,7 +65,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
         }
     }
 
-    private void ImportStudents_Click(object sender, RoutedEventArgs e)
+    private async void ImportStudents_Click(object sender, RoutedEventArgs e)
     {
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
@@ -80,7 +81,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
             {
                 string importFilePath = openFileDialog.FileName;
 
-                bool importResult = _studentService.ImportStudents(selectedCourse, selectedGroupName, importFilePath);
+                bool importResult = await _studentService.ImportStudents(selectedCourse, selectedGroupName, importFilePath);
 
                 if (importResult)
                 {

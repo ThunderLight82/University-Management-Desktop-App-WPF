@@ -230,7 +230,7 @@ public class StudentService
         return true;
     }
 
-    public bool ImportStudents(Course selectedCourse, string selectedGroupName, string filePath)
+    public async Task<bool> ImportStudents(Course selectedCourse, string selectedGroupName, string filePath)
     {
         var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
 
@@ -263,7 +263,7 @@ public class StudentService
                 student.CurrentGroupName = null;
             }
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             var studentsToImport = csv.GetRecords<Student>().ToList();
 
@@ -285,10 +285,10 @@ public class StudentService
                     importedStudent.GroupId = selectedGroup.GroupId;
                 }
 
-                _dbContext.SaveChanges();
+                await _dbContext.SaveChangesAsync();
             }
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
