@@ -1,81 +1,56 @@
 ﻿using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using DesktopApplication.Entities;
 using Microsoft.Win32;
-using Microsoft.EntityFrameworkCore;
-using PdfSharp.Drawing;
-using PdfSharp.Pdf;
-using Xceed.Document.NET;
-using Xceed.Words.NET;
 
 namespace DesktopApplication.GroupManagementService;
 
 public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 {
     private UniversityDbContext _dbContext;
+    private GroupService _groupService;
 
-    public GroupManagementWindowCreateFileWithGroupInfoPage(UniversityDbContext dbContext)
+    public GroupManagementWindowCreateFileWithGroupInfoPage(UniversityDbContext dbContext, GroupService groupService)
     {
         InitializeComponent();
 
         _dbContext = dbContext;
+        _groupService = groupService;
 
         CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
     }
 
     private void CreateGroupInfoDocxFile_Click(object sender, RoutedEventArgs e)
     {
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
 
-        if (CourseComboBox.SelectedItem is Course selectedCourse && !string.IsNullOrEmpty(selectedGroupName))
+        if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            var selectedGroup = _dbContext.Groups
-                .Include(group => group.Students)
-                .FirstOrDefault(group => group.CourseId == selectedCourse.CourseId && group.GroupName == selectedGroupName);
-
-            if (selectedGroup != null)
+            var saveFileDialog = new SaveFileDialog
             {
-                if (!selectedGroup.Students.Any())
+                Filter = "Word Documents (.docx)|*.docx",
+                DefaultExt = ".docx",
+                FileName = $"{selectedCourse.CourseName} {selectedGroupName} Students List"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                bool exportResult = _groupService.CreateGroupInfoDocxFile(selectedCourse, selectedGroupName, filePath);
+
+                if (exportResult)
                 {
-                    MessageBox.Show("The selected group is empty. There are no students to include in the document", "Empty Group",
+                    MessageBox.Show("(.docx) file with selected group successfully created!", "Success",
                         MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
                 }
-
-                var saveNewFileDialog = new SaveFileDialog
+                else
                 {
-                    Filter = "Word Documents (.docx)|*.docx",
-                    DefaultExt = ".docx",
-                    FileName = $"{selectedCourse.CourseName} {selectedGroupName} Students List"
-                };
-
-                if (saveNewFileDialog.ShowDialog() == true)
-                {
-                    string filePath = saveNewFileDialog.FileName;
-
-                    using var doc = DocX.Create(filePath);
-
-                    doc.InsertParagraph(selectedCourse.CourseName).Bold().FontSize(18).Alignment = Alignment.center;
-                    doc.InsertParagraph(selectedGroup.GroupName).Bold().FontSize(14).Alignment = Alignment.center;
-
-                    var students = selectedGroup.Students.Select(student => student.StudentFullName).ToList();
-
-                    for (int i = 0; i < students.Count; i++)
-                    {
-                        doc.InsertParagraph($"{i + 1}. {students[i]}");
-                    }
-
-                    doc.Save();
-
-                    MessageBox.Show("(.docx) file with selected group successfully generated!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("An error occurred during export. Please, try again", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-            else
-            {
-                MessageBox.Show("The selected group does not exist for the chosen course", "Error", 
-                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else
@@ -87,64 +62,34 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 
     private void CreateGroupInfoPdfFile_Click(object sender, RoutedEventArgs e)
     {
+        var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
 
-        if (CourseComboBox.SelectedItem is Course selectedCourse && !string.IsNullOrEmpty(selectedGroupName))
+        if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
         {
-            var selectedGroup = _dbContext.Groups
-                .Include(group => group.Students)
-                .FirstOrDefault(group => group.CourseId == selectedCourse.CourseId && group.GroupName == selectedGroupName);
-
-            if (selectedGroup != null)
+            var saveFileDialog = new SaveFileDialog
             {
-                if (!selectedGroup.Students.Any())
+                Filter = "PDF Files (.pdf)|*.pdf",
+                DefaultExt = ".pdf",
+                FileName = $"{selectedCourse.CourseName} {selectedGroupName} Students List"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                bool exportResult = _groupService.CreateGroupInfoPdfFile(selectedCourse, selectedGroupName, filePath);
+
+                if (exportResult)
                 {
-                    MessageBox.Show("The selected group is empty. There are no students to include in the document", "Empty Group",
+                    MessageBox.Show("(.pdf) file with selected group successfully created!", "Success",
                         MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
                 }
-
-                var saveNewFileDialog = new SaveFileDialog
+                else
                 {
-                    Filter = "PDF Files (.pdf)|*.pdf",
-                    DefaultExt = ".pdf",
-                    FileName = $"{selectedCourse.CourseName} {selectedGroupName} Students List"
-                };
-
-                if (saveNewFileDialog.ShowDialog() == true)
-                {
-                    string filePath = saveNewFileDialog.FileName;
-
-                    var document = new PdfDocument();
-                    var page = document.AddPage();
-                    var gfx = XGraphics.FromPdfPage(page);
-
-                    var courseTitleFont = new XFont("Arial", 18, XFontStyle.Bold);
-                    var groupTitleFont = new XFont("Arial", 14, XFontStyle.Bold);
-                    var textFont = new XFont("Arial", 12, XFontStyle.Regular);
-
-                    gfx.DrawString(selectedCourse.CourseName, courseTitleFont, XBrushes.Black, new XRect(0, 40, page.Width, 0), XStringFormats.TopCenter);
-                    gfx.DrawString(selectedGroup.GroupName, groupTitleFont, XBrushes.Black, new XRect(0, 70, page.Width, 0), XStringFormats.TopCenter);
-
-                    var students = selectedGroup.Students.Select(student => student.StudentFullName).ToList();
-
-                    for (int i = 0; i < students.Count; i++)
-                    {
-                        byte[] utf8BytesConvert = Encoding.UTF8.GetBytes($"{i + 1}. {students[i]}");
-                        string utf8Text = Encoding.UTF8.GetString(utf8BytesConvert);
-
-                        gfx.DrawString(utf8Text, textFont, XBrushes.Black, new XRect(50, 100 + i * 20, page.Width - 100, 0));
-                    }
-
-                    document.Save(filePath);
-
-                    MessageBox.Show("(.pdf) file with selected group successfully generated!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("An error occurred during export. Please, try again", "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            }
-            else
-            {
-                MessageBox.Show("The selected group does not exist for the chosen course", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else

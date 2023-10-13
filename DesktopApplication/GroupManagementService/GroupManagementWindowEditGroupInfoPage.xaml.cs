@@ -102,6 +102,15 @@ public partial class GroupManagementWindowEditGroupInfoPage
         }
     }
 
+    private void EditGroupNameComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (EditGroupNameComboBox.SelectedItem is string selectedGroupName)
+        {
+            EditGroupNameTextBox.Text = selectedGroupName;
+        }
+    }
+
+
     private Group GetSelectedGroupCurationInfo()
     {
         var selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;

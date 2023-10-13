@@ -53,7 +53,7 @@ public partial class GroupManagementWindow
 
     private void CreateFileWithGroup_Click(object sender, RoutedEventArgs e)
     {
-        var createFileWithGroupPage = new GroupManagementWindowCreateFileWithGroupInfoPage(_dbContext);
+        var createFileWithGroupPage = new GroupManagementWindowCreateFileWithGroupInfoPage(_dbContext, _groupService);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
