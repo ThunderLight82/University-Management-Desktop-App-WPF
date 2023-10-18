@@ -98,7 +98,7 @@ public class GroupService
 
     public bool SelectGroupCurator(Course selectedCourse, Teacher teacherToAssign, string groupName)
     {
-        if (teacherToAssign == null || groupName == null)
+        if (teacherToAssign == null || string.IsNullOrWhiteSpace(groupName))
         {
             MessageBox.Show("Please, select a both teacher and group from a list to apply curation", "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
