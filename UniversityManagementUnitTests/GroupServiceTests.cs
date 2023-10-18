@@ -162,6 +162,7 @@ public class GroupServiceTests
         // Arrange
         FillGroupsTestsWithAbstractData(_selectedCourse);
 
+        //Act
         var pdfCreationResult =
             _groupService.CreateGroupInfoPdfFile(_selectedCourse, "Group With Students In It", "test.pdf");
 
@@ -192,12 +193,13 @@ public class GroupServiceTests
     {
         var groups = new List<Group>
         {
+            // cases for [CreateGroup] tests.
+            new() { GroupName = "GroupNameDuplicationTest", CourseId = selectedCourse.CourseId },
             // cases for [DeleteGroup] tests.
             new() { GroupName = "Delete Test Group 1", CourseId = selectedCourse.CourseId },
             new() { GroupName = "    1-20-2-Delete New Test Group 2", CourseId = selectedCourse.CourseId },
             new() { GroupName = "Group With Students In It", CourseId = selectedCourse.CourseId },
             new() { GroupName = "", CourseId = selectedCourse.CourseId },
-            new() { GroupName = "GroupNameDuplicationTest", CourseId = selectedCourse.CourseId },
             // cases for [EditGroupName] tests.
             new() { GroupName = "GroupToRename", CourseId = selectedCourse.CourseId },
             new() { GroupName = "TrimCheck", CourseId = selectedCourse.CourseId },
