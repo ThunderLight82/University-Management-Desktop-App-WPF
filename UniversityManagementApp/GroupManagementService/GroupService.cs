@@ -66,6 +66,11 @@ public class GroupService
             return false;
         }
 
+        foreach (var teacher in deleteGroup.GroupCurator)
+        {
+            teacher.CurrentGroupCurationName = null;
+        }
+
         selectedCourse.Groups.Remove(deleteGroup);
 
         _dbContext.Groups.Remove(deleteGroup);
@@ -91,6 +96,20 @@ public class GroupService
 
         editGroupName.GroupName = newGroupName;
 
+        var studentsToUpdate = _dbContext.Students.Where(s => s.CurrentGroupName == currentGroupName);
+
+        foreach (var student in studentsToUpdate)
+        {
+            student.CurrentGroupName = newGroupName;
+        }
+
+        var teachersToUpdate = _dbContext.Teachers.Where(t => t.CurrentGroupCurationName == currentGroupName);
+
+        foreach (var teacher in teachersToUpdate)
+        {
+            teacher.CurrentGroupCurationName = newGroupName;
+        }
+
         _dbContext.SaveChanges();
 
         return true;
@@ -111,6 +130,8 @@ public class GroupService
         if (selectedGroup == null) return false;
 
         selectedGroup.GroupCurator.Add(teacherToAssign);
+
+        teacherToAssign.CurrentGroupCurationName = groupName;
 
         _dbContext.SaveChanges();
 
