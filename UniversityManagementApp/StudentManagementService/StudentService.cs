@@ -31,7 +31,7 @@ public class StudentService
             return false;
         }
 
-        var newStudentNameAlreadyExists = _dbContext.Students.Any(student => 
+        var newStudentNameAlreadyExists = _dbContext.Students.Any(student =>
             student.StudentFullName == studentFullName);
 
         if (newStudentNameAlreadyExists)
@@ -79,6 +79,8 @@ public class StudentService
         {
             associatedGroup.Students.Remove(selectedStudent);
         }
+
+        selectedStudent.CurrentGroupName = null;
 
         _dbContext.Students.Remove(selectedStudent);
 
@@ -138,6 +140,15 @@ public class StudentService
         {
             foreach (var student in selectedStudents)
             {
+                if (string.IsNullOrWhiteSpace(student.StudentFullName))
+                {
+                    MessageBox.Show(
+                        "Selected student have no name or whitespace in name field. Please, provide a valid name for students",
+                        "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+
                 if (string.IsNullOrWhiteSpace(student.CurrentGroupName))
                 {
                     student.CurrentGroupName = selectedGroup.GroupName;
@@ -145,7 +156,9 @@ public class StudentService
                 }
                 else
                 {
-                    MessageBox.Show("Student '" + student.StudentFullName + "' is already assigned to a group '" + student.CurrentGroupName + "'", "Error",
+                    MessageBox.Show(
+                        "Student '" + student.StudentFullName + "' is already assigned to a group '" +
+                        student.CurrentGroupName + "'", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
 
                     return false;
@@ -163,13 +176,22 @@ public class StudentService
 
         return true;
     }
-    
+
     public bool DeleteStudentsFromGroup(List<Student> selectedStudents)
     {
         if (selectedStudents.Count > 0)
         {
             foreach (var student in selectedStudents)
             {
+                if (string.IsNullOrWhiteSpace(student.StudentFullName))
+                {
+                    MessageBox.Show(
+                        "Selected student have no name or whitespace in name field. Please, provide a valid name for students",
+                        "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+
                 if (!string.IsNullOrWhiteSpace(student.CurrentGroupName))
                 {
                     student.CurrentGroupName = null;
@@ -231,7 +253,7 @@ public class StudentService
         return true;
     }
 
-    public async Task<bool> ImportStudents(Course selectedCourse, string selectedGroupName, string filePath)
+    public async Task<bool> ImportStudentsAsync(Course selectedCourse, string selectedGroupName, string filePath)
     {
         var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
 

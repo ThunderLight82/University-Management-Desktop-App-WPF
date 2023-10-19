@@ -81,7 +81,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
             {
                 string importFilePath = openFileDialog.FileName;
 
-                bool importResult = await _studentService.ImportStudents(selectedCourse, selectedGroupName, importFilePath);
+                bool importResult = await _studentService.ImportStudentsAsync(selectedCourse, selectedGroupName, importFilePath);
 
                 if (importResult)
                 {
