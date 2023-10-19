@@ -35,7 +35,7 @@ public class GroupServiceTests
     }
 
     [Theory]
-    [InlineData("New Test Group 1", true)]
+    [InlineData("New TestGroup1", true)]
     [InlineData("1!NewTestGroup1", true)]
     [InlineData("якезещиієєєєц3532а23н", true)]
     [InlineData("фзфвз2*    ^%__+-_+&*#$:{  gfr><><><< 4SSsініеіуіди", true)]
@@ -44,7 +44,9 @@ public class GroupServiceTests
     [InlineData("   ", false)]
     [InlineData(null, false)]
     [InlineData("GroupNameDuplicationTest", false)]
-    public void CreateGroup_DifferentNamesInputs_ShowExpectedResult(string groupName, bool expectedGroupCreationResult)
+    public void CreateGroup_DifferentNamesInputs_ShowExpectedResult(
+        string groupName,
+        bool expectedGroupCreationResult)
     {
         //Arrange
         FillGroupsTestsWithAbstractData(_selectedCourse);
@@ -57,12 +59,13 @@ public class GroupServiceTests
     }
 
     [Theory]
-    [InlineData("Delete Test Group 1", true)]
+    [InlineData("DeleteTestGroup1", true)]
     [InlineData("    1-20-2-Delete New Test Group 2", true)]
-    [InlineData("Group With Students In It", false)]
+    [InlineData("GroupWithStudentsInIt", false)]
     [InlineData("", true)]
     [InlineData(null, false)]
-    public void DeleteGroup_DifferentDeletionsVariants_ShowExpectedResult(string groupToDeleteName,
+    public void DeleteGroup_DifferentDeletionsVariants_ShowExpectedResult(
+        string groupToDeleteName,
         bool expectedGroupDeletionResult)
     {
         //Arrange
@@ -83,8 +86,10 @@ public class GroupServiceTests
     [InlineData("", "", false)]
     [InlineData("NullTest", null, false)]
     [InlineData(null, null, false)]
-    public void EditGroupName_DifferentNewNamesVariants_ShowExpectedResult(string currentGroupName,
-        string newGroupName, bool expectedGroupRenameResult)
+    public void EditGroupName_DifferentNewNamesVariants_ShowExpectedResult(
+        string currentGroupName,
+        string newGroupName,
+        bool expectedGroupRenameResult)
     {
         //Arrange
         FillGroupsTestsWithAbstractData(_selectedCourse);
@@ -105,8 +110,10 @@ public class GroupServiceTests
     [InlineData(null, "TeacherExistButNotGroup", false)]
     [InlineData("GroupExistButNotTeacher", null, false)]
     [InlineData(null, null, false)]
-    public void SelectGroupCurator_DifferentCurationVariants_ShowExpectedResult(string groupName,
-        string teacherFullName, bool expectedGroupCurationAssignResult)
+    public void SelectGroupCurator_DifferentCurationVariants_ShowExpectedResult(
+        string groupName,
+        string teacherFullName,
+        bool expectedGroupCurationAssignResult)
     {
         //Arrange
         FillGroupsTestsWithAbstractData(_selectedCourse);
@@ -127,7 +134,7 @@ public class GroupServiceTests
         FillGroupsTestsWithAbstractData(_selectedCourse);
 
         // Act
-        var docxCreationResult = _groupService.CreateGroupInfoDocxFile(_selectedCourse, "Group With Students In It", "test.docx");
+        var docxCreationResult = _groupService.CreateGroupInfoDocxFile(_selectedCourse, "GroupWithStudentsInIt", "test.docx");
 
         using var doc = DocX.Load("test.docx");
         var text = doc.Text;
@@ -164,7 +171,7 @@ public class GroupServiceTests
 
         //Act
         var pdfCreationResult =
-            _groupService.CreateGroupInfoPdfFile(_selectedCourse, "Group With Students In It", "test.pdf");
+            _groupService.CreateGroupInfoPdfFile(_selectedCourse, "GroupWithStudentsInIt", "test.pdf");
 
         // Assert
         Assert.True(pdfCreationResult);
@@ -193,12 +200,12 @@ public class GroupServiceTests
     {
         var groups = new List<Group>
         {
-            // cases for [CreateGroup] tests.
+            // case for [CreateGroup] test.
             new() { GroupName = "GroupNameDuplicationTest", CourseId = selectedCourse.CourseId },
             // cases for [DeleteGroup] tests.
-            new() { GroupName = "Delete Test Group 1", CourseId = selectedCourse.CourseId },
+            new() { GroupName = "DeleteTestGroup1", CourseId = selectedCourse.CourseId },
             new() { GroupName = "    1-20-2-Delete New Test Group 2", CourseId = selectedCourse.CourseId },
-            new() { GroupName = "Group With Students In It", CourseId = selectedCourse.CourseId },
+            new() { GroupName = "GroupWithStudentsInIt", CourseId = selectedCourse.CourseId },
             new() { GroupName = "", CourseId = selectedCourse.CourseId },
             // cases for [EditGroupName] tests.
             new() { GroupName = "GroupToRename", CourseId = selectedCourse.CourseId },
@@ -215,6 +222,7 @@ public class GroupServiceTests
             new() { GroupName = "EmptyGroup", CourseId = selectedCourse.CourseId }
 
         };
+
         _dbContext.Groups.AddRange(groups);
         _dbContext.SaveChanges();
 
@@ -223,9 +231,10 @@ public class GroupServiceTests
         var newStudentInGroup = new Student
         {
             StudentFullName = "TestStudent",
-            CurrentGroupName = "Group With Students In It",
-            GroupId = groups.First(g => g.GroupName == "Group With Students In It").GroupId
+            CurrentGroupName = "GroupWithStudentsInIt",
+            GroupId = groups.First(g => g.GroupName == "GroupWithStudentsInIt").GroupId
         };
+
         _dbContext.Students.Add(newStudentInGroup);
         _dbContext.SaveChanges();
 
@@ -239,6 +248,7 @@ public class GroupServiceTests
             new() { TeacherFullName = "SecondGroupTeacher" },
             new() { TeacherFullName = "TeacherExistButNotGroup" },
         };
+
         _dbContext.Teachers.AddRange(teachersToAssign);
         _dbContext.SaveChanges();
     }

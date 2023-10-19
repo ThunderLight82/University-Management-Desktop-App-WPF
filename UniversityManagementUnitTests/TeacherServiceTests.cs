@@ -32,7 +32,9 @@ public class TeacherServiceTests
     [InlineData(null, false)]
     // Need to refuse teacher duplication name in pop-up window to pass this test case.
     [InlineData("TeacherNameDuplicationTest", false)]
-    public void CreateTeacher_DifferentNamesInputs_ShowExpectedResult(string newTeacherName, bool expectedTeacherCreationResult)
+    public void CreateTeacher_DifferentNamesInputs_ShowExpectedResult(
+        string newTeacherName, 
+        bool expectedTeacherCreationResult)
     {
         //Arrange
         FillTeachersTestsWithAbstractData();
@@ -51,7 +53,8 @@ public class TeacherServiceTests
     [InlineData(" ", true)]
     [InlineData("", true)]
     [InlineData(null, false)]
-    public void DeleteTeacher_DifferentDeletionsVariants_ShowExpectedResult(string teacherToDeleteFullName, 
+    public void DeleteTeacher_DifferentDeletionsVariants_ShowExpectedResult(
+        string teacherToDeleteFullName, 
         bool expectedTeacherDeletionResult)
     {
         //Arrange
@@ -86,7 +89,10 @@ public class TeacherServiceTests
     [InlineData(null, null, true, false, false)]
     [InlineData("ChangeToNull", null,false, false, false)]
     public void ChangeTeacherNameAndWorkInfo_DifferentChangesInNameAndWorkInfo_ShowExpectedResult(
-        string currentTeacherFullName, string newTeacherFullName, bool? currentCorrespondence, bool newCorrespondence,
+        string currentTeacherFullName,
+        string newTeacherFullName,
+        bool? currentCorrespondence, 
+        bool newCorrespondence,
         bool expectedTeacherChangesResult)
     {
         //Arrange
@@ -119,6 +125,7 @@ public class TeacherServiceTests
             new() { TeacherFullName = "fw     34gTeacherToChange       ><>?", IsCorrespondence = false},
             new() { TeacherFullName = "ChangeToNull", IsCorrespondence = false}
         };
+
         _dbContext.Teachers.AddRange(teachers);
         _dbContext.SaveChanges();
     }
