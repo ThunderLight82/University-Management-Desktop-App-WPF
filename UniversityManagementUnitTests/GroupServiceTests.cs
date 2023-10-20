@@ -142,7 +142,7 @@ public class GroupServiceTests
         // Assert
         Assert.True(docxCreationResult);
         Assert.Contains("TestCourse1", text);
-        Assert.Contains("Group With Students In It", text);
+        Assert.Contains("GroupWithStudentsInIt", text);
         Assert.Contains("TestStudent", text);
 
         File.Delete("test.docx");

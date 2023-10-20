@@ -1,5 +1,4 @@
-﻿using CsvHelper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Text;
 using UniversityManagement.Data;
 using UniversityManagement.Entities;
@@ -125,7 +124,7 @@ public class StudentServiceTests
     [InlineData("GroupWithSomeStudent", "StudentToAdd2", true)]
     [InlineData("GroupWithSomeStudent", "StudentWithNullInGroup", true)]
     [InlineData(",   Gro  upW  ithSo   meS    tudent   .", "ervwevberb Syrgb kbnm 4;", true)]
-    //Student already exist in group case.
+    //Student already exist in group case need to refuse to pass test.
     [InlineData("GroupWithSomeStudent", "StudentWithinGroupTest", false)]
     [InlineData("drhe e45g w yW$YU4e3g $~!!~#", "", false)]
     [InlineData(" ", "WhiteSpaceGroup", false)]
