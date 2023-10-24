@@ -1,0 +1,87 @@
+﻿<Page x:Class="UniversityManagement.WPF.StudentManagementService.StudentManagementWindowEditStudentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      d:DesignHeight="650" d:DesignWidth="550"
+      Title="StudentManagementWindowEditStudentPage">
+
+    <Grid>
+
+        <StackPanel Margin="5">
+            <TextBlock Text="Create a new student or remove" FontWeight="Bold" HorizontalAlignment="Left" Margin="5" />
+
+            <TextBlock Text="Enter a new student name in field below and then click 'Add Student' button:"
+                       HorizontalAlignment="Left" Margin="5,0" />
+
+            <TextBlock
+                Text="For deletion: select preferable student from list and click 'Remove Student Student' button:"
+                HorizontalAlignment="Left" Margin="5,0" />
+
+            <TextBox Name="NewStudentFullNameTextBox" Width="250" HorizontalAlignment="Center" Margin="0,10"
+                     Height="25">
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="FontSize" Value="15" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="TextBox">
+                                    <Grid>
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}" />
+                                        <ScrollViewer x:Name="PART_ContentHost" />
+                                        <TextBlock Name="PlaceholderForFutureName" Text="Enter a new student name here"
+                                                   Foreground="Gray" Margin="2,0,0,0" />
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <DataTrigger
+                                            Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Value="">
+                                            <Setter TargetName="PlaceholderForFutureName" Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger
+                                            Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Value="{x:Null}">
+                                            <Setter TargetName="PlaceholderForFutureName" Property="Visibility"
+                                                    Value="Visible" />
+                                        </DataTrigger>
+                                        <Trigger Property="IsFocused" Value="True">
+                                            <Setter TargetName="PlaceholderForFutureName" Property="Visibility"
+                                                    Value="Collapsed" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+        </StackPanel>
+
+        <ListView Name="StudentsListView" ItemsSource="{Binding Students}" Width="450" Height="350"
+                  HorizontalAlignment="Center" Margin="0,35,0,0">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding StudentId}" />
+                    <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
+                    <GridViewColumn Header="Current Group" Width="120"
+                                    DisplayMemberBinding="{Binding CurrentGroupName}" />
+                    <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding IsWorkingInDepartment}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30">
+            <Button Content="Add Student" Click="AddStudent_Click" Width="200" Height="35" Margin="15,0,15,-5"
+                    VerticalAlignment="Bottom" />
+
+            <Button Content="Remove Student" Click="DeleteStudent_Click" Width="200" Height="35" Margin="15,0,15,-5"
+                    VerticalAlignment="Bottom" />
+        </StackPanel>
+
+    </Grid>
+
+</Page>

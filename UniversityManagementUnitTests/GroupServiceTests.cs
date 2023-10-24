@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
-using UniversityManagement.Data;
+using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
-using UniversityManagement.GroupManagementService;
+using UniversityManagement.Services;
 using Xceed.Words.NET;
 
 namespace UniversityManagement.UnitTests;

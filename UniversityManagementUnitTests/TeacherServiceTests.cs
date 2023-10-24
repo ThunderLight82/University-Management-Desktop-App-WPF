@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using UniversityManagement.Data;
+using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
-using UniversityManagement.TeacherManagementService;
+using UniversityManagement.Services;
 using Xunit;
 
 namespace UniversityManagement.UnitTests;

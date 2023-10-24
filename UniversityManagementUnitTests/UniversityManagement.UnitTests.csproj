@@ -28,7 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UniversityManagementApp\UniversityManagement.csproj" />
+    <ProjectReference Include="..\UniversityManagementApp\UniversityManagement.WPF.csproj" />
+    <ProjectReference Include="..\UniversityManagementDataAccess\UniversityManagement.DataAccess.csproj" />
+    <ProjectReference Include="..\UniversityManagementEntites\UniversityManagement.Entities.csproj" />
   </ItemGroup>
 
 </Project>
