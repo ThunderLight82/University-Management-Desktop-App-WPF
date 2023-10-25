@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
 
@@ -7,38 +6,63 @@ namespace UniversityManagement.WPF.TeacherManagementService;
 
 public partial class TeacherManagementWindowEditTeacherPage
 {
-    private UniversityDbContext _dbContext;
     private TeacherService _teacherService;
 
-    public TeacherManagementWindowEditTeacherPage(UniversityDbContext dbContext, TeacherService teacherService)
+    public TeacherManagementWindowEditTeacherPage(TeacherService teacherService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _teacherService = teacherService;
 
-        TeachersListView.ItemsSource = _dbContext.Teachers.Local.ToObservableCollection();
+        TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
     }
 
     private void CreateTeacher_Click(object sender, RoutedEventArgs e)
     {
         string newTeacherFullName = NewTeacherFullNameTextBox.Text.Trim();
 
-        if (_teacherService.CreateTeacher(newTeacherFullName))
+        if (string.IsNullOrWhiteSpace(newTeacherFullName))
         {
-            NewTeacherFullNameTextBox.Clear();
+            MessageBox.Show("Please, enter a valid teacher name", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
 
-            TeachersListView.Items.Refresh();
+            return;
         }
+
+        if (_teacherService.CheckIfTeacherExists(newTeacherFullName))
+        {
+            var duplicateTeacherQuestion = MessageBox.Show(
+                "A teacher with the same name already exists. Do you want to add this teacher anyway?",
+                "Duplication name",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (duplicateTeacherQuestion == MessageBoxResult.No)
+            {
+                return;
+            }
+        }
+
+        _teacherService.CreateTeacher(newTeacherFullName);
+        
+        NewTeacherFullNameTextBox.Clear();
+        TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
     }
 
     private void DeleteTeacher_Click(object sender, RoutedEventArgs e)
     {
         var selectedTeacher = TeachersListView.SelectedItem as Teacher;
 
-        if (_teacherService.DeleteTeacher(selectedTeacher))
+        if (selectedTeacher == null)
         {
-            TeachersListView.Items.Refresh();
+            MessageBox.Show("Please, select a teacher from the list below to remove", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return;
         }
+
+        _teacherService.DeleteTeacher(selectedTeacher);
+        
+        TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
     }
 }
