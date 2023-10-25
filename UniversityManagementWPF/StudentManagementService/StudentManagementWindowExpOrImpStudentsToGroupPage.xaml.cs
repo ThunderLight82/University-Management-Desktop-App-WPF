@@ -12,15 +12,14 @@ namespace UniversityManagement.WPF.StudentManagementService;
 public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 {
     private UniversityDbContext _dbContext;
-    private StudentService _studentService;
+    private CsvService _csvService;
 
-    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext,
-        StudentService studentService)
+    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext, CsvService csvService)
     {
         InitializeComponent();
 
         _dbContext = dbContext;
-        _studentService = studentService;
+        _csvService = csvService;
 
         CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
 
@@ -45,7 +44,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
             {
                 string filePath = saveFileDialog.FileName;
 
-                bool exportResult = await _studentService.ExportStudentsAsync(selectedCourse, selectedGroupName, filePath);
+                bool exportResult = await _csvService.ExportStudentsAsync(selectedCourse, selectedGroupName, filePath);
 
                 if (exportResult)
                 {
@@ -82,7 +81,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
             {
                 string importFilePath = openFileDialog.FileName;
 
-                bool importResult = await _studentService.ImportStudentsAsync(selectedCourse, selectedGroupName, importFilePath);
+                bool importResult = await _csvService.ImportStudentsAsync(selectedCourse, selectedGroupName, importFilePath);
 
                 if (importResult)
                 {

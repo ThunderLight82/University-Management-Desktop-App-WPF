@@ -11,14 +11,16 @@ namespace UniversityManagement.WPF.GroupManagementService;
 public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 {
     private UniversityDbContext _dbContext;
-    private GroupService _groupService;
+    private DocxService _docxService;
+    private PdfService _pdfService;
 
-    public GroupManagementWindowCreateFileWithGroupInfoPage(UniversityDbContext dbContext, GroupService groupService)
+    public GroupManagementWindowCreateFileWithGroupInfoPage(UniversityDbContext dbContext, PdfService pdfService, DocxService docxService)
     {
         InitializeComponent();
 
         _dbContext = dbContext;
-        _groupService = groupService;
+        _pdfService = pdfService;
+        _docxService = docxService;
 
         CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
     }
@@ -41,7 +43,7 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
             {
                 string filePath = saveFileDialog.FileName;
 
-                bool exportResult = _groupService.CreateGroupInfoDocxFile(selectedCourse, selectedGroupName, filePath);
+                bool exportResult = _docxService.CreateGroupInfoDocxFile(selectedCourse, selectedGroupName, filePath);
 
                 if (exportResult)
                 {
@@ -80,7 +82,7 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
             {
                 string filePath = saveFileDialog.FileName;
 
-                bool exportResult = _groupService.CreateGroupInfoPdfFile(selectedCourse, selectedGroupName, filePath);
+                bool exportResult = _pdfService.CreateGroupInfoPdfFile(selectedCourse, selectedGroupName, filePath);
 
                 if (exportResult)
                 {

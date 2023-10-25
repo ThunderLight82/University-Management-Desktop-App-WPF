@@ -8,13 +8,15 @@ public partial class StudentManagementWindow
 {
     private UniversityDbContext _dbContext;
     private StudentService _studentService;
+    private CsvService _csvService;
 
-    public StudentManagementWindow(UniversityDbContext dbContext, StudentService studentService)
+    public StudentManagementWindow(UniversityDbContext dbContext, StudentService studentService, CsvService csvService)
     {
         InitializeComponent();
 
         _dbContext = dbContext;
         _studentService = studentService;
+        _csvService = csvService;
     }
 
     private void ManageStudentsGroupButton_Click(object sender, RoutedEventArgs e)
@@ -55,7 +57,7 @@ public partial class StudentManagementWindow
 
     private void ExportOrImportStudentToGroup_Click(object sender, RoutedEventArgs e)
     {
-        var exportOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_dbContext, _studentService);
+        var exportOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_dbContext, _csvService);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");

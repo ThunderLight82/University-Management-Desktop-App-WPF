@@ -8,13 +8,17 @@ public partial class GroupManagementWindow
 {
     private UniversityDbContext _dbContext;
     private GroupService _groupService;
+    private DocxService _docxService;
+    private PdfService _pdfService;
 
-    public GroupManagementWindow(UniversityDbContext dbContext, GroupService groupService)
+    public GroupManagementWindow(UniversityDbContext dbContext, GroupService groupService, DocxService docxService, PdfService pdfService)
     {
         InitializeComponent();
 
         _dbContext = dbContext;
         _groupService = groupService;
+        _docxService = docxService;
+        _pdfService = pdfService;
     }
 
     private void EditGroupInfo_Click(object sender, RoutedEventArgs e)
@@ -55,7 +59,8 @@ public partial class GroupManagementWindow
 
     private void CreateFileWithGroup_Click(object sender, RoutedEventArgs e)
     {
-        var createFileWithGroupPage = new GroupManagementWindowCreateFileWithGroupInfoPage(_dbContext, _groupService);
+        var createFileWithGroupPage =
+            new GroupManagementWindowCreateFileWithGroupInfoPage(_dbContext, _pdfService, _docxService);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
