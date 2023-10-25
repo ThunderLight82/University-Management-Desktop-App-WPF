@@ -30,7 +30,6 @@ public class TeacherServiceTests
     [InlineData("", false)]
     [InlineData("   ", false)]
     [InlineData(null, false)]
-    // Need to refuse teacher duplication name in pop-up window to pass this test case.
     [InlineData("TeacherNameDuplicationTest", false)]
     public void CreateTeacher_DifferentNamesInputs_ShowExpectedResult(
         string newTeacherName, 
