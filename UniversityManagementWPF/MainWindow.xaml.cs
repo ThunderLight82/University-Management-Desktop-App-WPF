@@ -17,6 +17,9 @@ public partial class MainWindow
     private GroupService _groupService;
     private TeacherService _teacherService;
     private StudentService _studentService;
+    private DocxService _docxService;
+    private PdfService _pdfService;
+    private CsvService _csvService;
 
     public MainWindow(UniversityDbContext dbContext)
     {
@@ -26,6 +29,9 @@ public partial class MainWindow
         _groupService = new GroupService(_dbContext);
         _teacherService = new TeacherService(_dbContext);
         _studentService = new StudentService(_dbContext);
+        _docxService = new DocxService(_dbContext);
+        _pdfService = new PdfService(_dbContext);
+        _csvService = new CsvService(_dbContext);
 
         LoadEntitiesData();
 
@@ -66,13 +72,13 @@ public partial class MainWindow
 
     private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var groupManagementWindow = new GroupManagementWindow(_dbContext, _groupService);
+        var groupManagementWindow = new GroupManagementWindow(_dbContext, _groupService, _docxService, _pdfService);
         groupManagementWindow.ShowDialog();
     }
     
     private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var studentManagementWindow = new StudentManagementWindow(_dbContext, _studentService);
+        var studentManagementWindow = new StudentManagementWindow(_dbContext, _studentService, _csvService);
         studentManagementWindow.ShowDialog();
     }
     
