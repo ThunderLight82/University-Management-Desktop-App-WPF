@@ -1,5 +1,8 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Linq;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 
@@ -14,95 +17,92 @@ public class TeacherService
         _dbContext = dbContext;
     }
 
+    public IEnumerable<Teacher> PopulateTeacherList()
+    {
+        return new ObservableCollection<Teacher>(_dbContext.Teachers.ToList());
+    }
+
     public bool CreateTeacher(string teacherFullName)
     {
-        if (string.IsNullOrWhiteSpace(teacherFullName))
+        try
         {
-            MessageBox.Show("Please, enter a valid teacher name", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            if (string.IsNullOrWhiteSpace(teacherFullName))
+                throw new ArgumentException();
 
+            if (_dbContext.Teachers.Any(teacher => teacher.TeacherFullName == teacherFullName))
+                throw new DuplicateNameException();
+
+            var newTeacher = new Teacher
+            {
+                TeacherFullName = teacherFullName,
+                IsCorrespondence = false
+            };
+
+            _dbContext.Teachers.Add(newTeacher);
+
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+        catch
+        {
             return false;
         }
+    }
 
-        var newTeacherNameAlreadyExists = _dbContext.Teachers.Any(teacher => 
-            teacher.TeacherFullName == teacherFullName);
-
-        if (newTeacherNameAlreadyExists)
-        {
-            var duplicateTeacherQuestion = MessageBox.Show(
-                "A teacher with the same name already exists. Do you want to add this teacher anyway?",
-                "Duplication name",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            if (duplicateTeacherQuestion == MessageBoxResult.No)
-            {
-                return false;
-            }
-        }
-
-        var newTeacher = new Teacher
-        {
-            TeacherFullName = teacherFullName,
-            IsCorrespondence = false
-        };
-
-        _dbContext.Teachers.Add(newTeacher);
-
-        _dbContext.SaveChanges();
-
-        return true;
+    public bool CheckIfTeacherExists(string teacherFullName)
+    {
+        return _dbContext.Teachers.Any(teacher => teacher.TeacherFullName == teacherFullName);
     }
 
     public bool DeleteTeacher(Teacher selectedTeacher)
     {
-        if (selectedTeacher == null)
+        try
         {
-            MessageBox.Show("Please, select a teacher from the list below to remove", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            if (selectedTeacher == null)
+                throw new ArgumentNullException();
 
+            var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
+
+            if (associatedGroup != null)
+            {
+                associatedGroup.GroupCurator.Remove(selectedTeacher);
+            }
+
+            selectedTeacher.CurrentGroupCurationName = null;
+
+            _dbContext.Teachers.Remove(selectedTeacher);
+
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+        catch
+        {
             return false;
         }
-
-        var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
-
-        if (associatedGroup != null)
-        {
-            associatedGroup.GroupCurator.Remove(selectedTeacher);
-        }
-
-        selectedTeacher.CurrentGroupCurationName = null;
-
-        _dbContext.Teachers.Remove(selectedTeacher);
-
-        _dbContext.SaveChanges();
-
-        return true;
     }
 
     public bool ChangeTeacherNameAndWorkInfo(Teacher selectedTeacher, string newFullName, bool isCorrespondence)
     {
-        if (selectedTeacher == null)
+        try
         {
-            MessageBox.Show("Please, select teacher from list first to update info", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            if (selectedTeacher == null)
+                throw new ArgumentNullException();
 
+            if (string.IsNullOrWhiteSpace(newFullName)) 
+                throw new ArgumentException();
+
+            selectedTeacher.TeacherFullName = newFullName;
+            selectedTeacher.IsCorrespondence = isCorrespondence;
+
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+        catch
+        {
             return false;
         }
-
-        if (string.IsNullOrWhiteSpace(newFullName))
-        {
-            MessageBox.Show("Please, enter a valid teacher name", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
-
-            return false;
-        }
-
-        selectedTeacher.TeacherFullName = newFullName;
-        selectedTeacher.IsCorrespondence = isCorrespondence;
-
-        _dbContext.SaveChanges();
-
-        return true;
     }
 }
