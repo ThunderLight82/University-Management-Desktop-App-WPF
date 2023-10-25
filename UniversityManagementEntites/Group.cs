@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace UniversityManagement.Entities;
 
@@ -17,15 +16,15 @@ public class Group
 
     public List<Teacher> GroupCurator { get; set; }
 
-    public string GroupCuratorDisplay
-    {
-        get
-        {
-            if (GroupCurator == null || GroupCurator.Count == 0) return "";
-
-            return string.Join(", ", GroupCurator.Select(curator => curator.TeacherFullName));
-        }
-    }
+    // public string GroupCuratorDisplay
+    // {
+    //     get
+    //     {
+    //         if (GroupCurator == null || GroupCurator.Count == 0) return "";
+    //
+    //         return string.Join(", ", GroupCurator.Select(curator => curator.TeacherFullName));
+    //     }
+    // }
 
     public Group()
     {
