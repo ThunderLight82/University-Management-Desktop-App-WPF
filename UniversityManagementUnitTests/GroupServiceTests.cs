@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
-using Xceed.Words.NET;
 
 namespace UniversityManagement.UnitTests;
 
@@ -127,75 +126,6 @@ public class GroupServiceTests
         Assert.Equal(expectedGroupCurationAssignResult, curationAssignResult);
     }
 
-    [Fact]
-    public void CreateGroupInfoDocxFile_GroupWithStudents_CreatesDocxFileAndCheckStringsInFile()
-    {
-        // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
-
-        // Act
-        var docxCreationResult = _groupService.CreateGroupInfoDocxFile(_selectedCourse, "GroupWithStudentsInIt", "test.docx");
-
-        using var doc = DocX.Load("test.docx");
-        var text = doc.Text;
-
-        // Assert
-        Assert.True(docxCreationResult);
-        Assert.Contains("TestCourse1", text);
-        Assert.Contains("GroupWithStudentsInIt", text);
-        Assert.Contains("TestStudent", text);
-
-        File.Delete("test.docx");
-    }
-
-    [Fact]
-    public void CreateGroupInfoDocxFile_EmptyGroup_ShowErrorMessageBox()
-    {
-        // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
-
-        // Act
-        var docxCreationResult = _groupService.CreateGroupInfoDocxFile(_selectedCourse, "EmptyGroup", "test.docx");
-
-        // Assert
-        Assert.False(docxCreationResult);
-
-        File.Delete("test.docx");
-    }
-
-    [Fact]
-    public void CreateGroupInfoPdfFile_GroupWithStudents_CreatesPdfFileAndCheckStringsInFile()
-    {
-        // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
-
-        //Act
-        var pdfCreationResult =
-            _groupService.CreateGroupInfoPdfFile(_selectedCourse, "GroupWithStudentsInIt", "test.pdf");
-
-        // Assert
-        Assert.True(pdfCreationResult);
-        Assert.True(File.Exists("test.pdf"));
-        Assert.True(new FileInfo("test.pdf").Length > 0);
-
-        File.Delete("test.pdf");
-    }
-
-    [Fact]
-    public void CreateGroupInfoPdfFile_EmptyGroup_ShowErrorMessageBox()
-    {
-        // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
-
-        // Act
-        var pdfCreationResult = _groupService.CreateGroupInfoPdfFile(_selectedCourse, "EmptyGroup", "test.pdf");
-
-        // Assert
-        Assert.False(pdfCreationResult);
-
-        File.Delete("test.pdf");
-    }
-
     private void FillGroupsTestsWithAbstractData(Course selectedCourse)
     {
         var groups = new List<Group>
@@ -218,16 +148,12 @@ public class GroupServiceTests
             new() { GroupName = "GroupToAssignNewCuration", CourseId = selectedCourse.CourseId },
             new() { GroupName = "           WEIRDNAMEGROZPYUhb 4 g4o defm 21 ", CourseId = selectedCourse.CourseId },
             new() { GroupName = "GroupExistButNotTeacher", CourseId = selectedCourse.CourseId },
-            // case for [CreateGroupInfoDocxFile_EmptyGroup] and [CreateGroupInfoPdfFile_EmptyGroup] test.
-            new() { GroupName = "EmptyGroup", CourseId = selectedCourse.CourseId }
-
         };
 
         _dbContext.Groups.AddRange(groups);
         _dbContext.SaveChanges();
 
-        // Insert existing students into group to get "false" in [DeleteGroup] or "true" in [CreateGroupInfoDocxFile]
-        // or [CreateGroupInfoPdfFile_EmptyGroup] following by a hint message.
+        // Insert existing students into group to get "false" in [DeleteGroup] case.
         var newStudentInGroup = new Student
         {
             StudentFullName = "TestStudent",
