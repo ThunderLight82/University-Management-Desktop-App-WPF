@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
+using Novacode;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
@@ -35,7 +38,7 @@ public partial class MainWindow
 
         LoadEntitiesData();
 
-        CourseListView.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
+        CourseListView.ItemsSource = _dbContext.Courses.ToList();
 
         CourseListView.SelectionChanged += CourseListView_SelectionChanged;
         
@@ -84,7 +87,7 @@ public partial class MainWindow
     
     private void OpenTeacherManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var teacherManagementWindow = new TeacherManagementWindow(_dbContext, _teacherService);
+        var teacherManagementWindow = new TeacherManagementWindow(_teacherService);
         teacherManagementWindow.ShowDialog();
     }
 
