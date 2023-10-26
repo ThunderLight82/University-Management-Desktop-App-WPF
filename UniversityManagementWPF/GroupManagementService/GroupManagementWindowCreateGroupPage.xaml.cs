@@ -1,5 +1,5 @@
-﻿using System.Windows;
-using UniversityManagement.DataAccess;
+﻿using System.Linq;
+using System.Windows;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
 
@@ -7,17 +7,15 @@ namespace UniversityManagement.WPF.GroupManagementService;
 
 public partial class GroupManagementWindowCreateGroupPage
 {
-    private UniversityDbContext _dbContext;
     private GroupService _groupService;
 
-    public GroupManagementWindowCreateGroupPage(UniversityDbContext dbContext, GroupService groupService)
+    public GroupManagementWindowCreateGroupPage(GroupService groupService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _groupService = groupService;
 
-        CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
+        CourseComboBox.ItemsSource = _groupService.PopulateCourseList();
     }
 
     private void CreateGroup_Click(object sender, RoutedEventArgs e)
@@ -26,14 +24,36 @@ public partial class GroupManagementWindowCreateGroupPage
         {
             string groupName = GroupNameTextBox.Text.Trim();
 
-            if (_groupService.CreateGroup(selectedCourse, groupName))
+            if (!string.IsNullOrWhiteSpace(groupName))
             {
-                GroupNameTextBox.Clear();
+                var groupNameExist = selectedCourse.Groups.Any(group =>
+                    group.GroupName == groupName);
+
+                if (!groupNameExist)
+                {
+                    _groupService.CreateGroup(selectedCourse, groupName);
+
+                    GroupNameTextBox.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("A group with the same name already exists. Please, use another name for the new group.",
+                        "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+            else
+            {
+                MessageBox.Show("Please, enter a valid group name", 
+                    "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
         else
         {
-            MessageBox.Show("Please, select a course first to add group to it", "Error",
+            MessageBox.Show("Please, select a course first to add group to it", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

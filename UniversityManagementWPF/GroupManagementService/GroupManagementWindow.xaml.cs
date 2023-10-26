@@ -1,29 +1,28 @@
 ﻿using System.Windows;
-using UniversityManagement.DataAccess;
 using UniversityManagement.Services;
 
 namespace UniversityManagement.WPF.GroupManagementService;
 
 public partial class GroupManagementWindow
 {
-    private UniversityDbContext _dbContext;
     private GroupService _groupService;
+    private TeacherService _teacherService;
     private DocxService _docxService;
     private PdfService _pdfService;
 
-    public GroupManagementWindow(UniversityDbContext dbContext, GroupService groupService, DocxService docxService, PdfService pdfService)
+    public GroupManagementWindow(GroupService groupService, DocxService docxService, PdfService pdfService, TeacherService teacherService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _groupService = groupService;
         _docxService = docxService;
         _pdfService = pdfService;
+        _teacherService = teacherService;
     }
 
     private void EditGroupInfo_Click(object sender, RoutedEventArgs e)
     {
-        var editGroupInfoPage = new GroupManagementWindowEditGroupInfoPage(_dbContext, _groupService);
+        var editGroupInfoPage = new GroupManagementWindowEditGroupInfoPage(_groupService , _teacherService);
 
         EditGroupInfoButton.Style = (Style)FindResource("HighlightedButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
@@ -35,7 +34,7 @@ public partial class GroupManagementWindow
 
     private void CreateGroup_Click(object sender, RoutedEventArgs e)
     {
-        var createGroupPage = new GroupManagementWindowCreateGroupPage(_dbContext, _groupService);
+        var createGroupPage = new GroupManagementWindowCreateGroupPage(_groupService);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("HighlightedButtonStyle");
@@ -47,7 +46,7 @@ public partial class GroupManagementWindow
 
     private void DeleteGroup_Click(object sender, RoutedEventArgs e)
     {
-        var deleteGroupPage = new GroupManagementWindowDeleteGroupPage(_dbContext, _groupService);
+        var deleteGroupPage = new GroupManagementWindowDeleteGroupPage(_groupService);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");
@@ -60,7 +59,7 @@ public partial class GroupManagementWindow
     private void CreateFileWithGroup_Click(object sender, RoutedEventArgs e)
     {
         var createFileWithGroupPage =
-            new GroupManagementWindowCreateFileWithGroupInfoPage(_dbContext, _pdfService, _docxService);
+            new GroupManagementWindowCreateFileWithGroupInfoPage(_groupService, _docxService, _pdfService);
 
         EditGroupInfoButton.Style = (Style)FindResource("NormalButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");

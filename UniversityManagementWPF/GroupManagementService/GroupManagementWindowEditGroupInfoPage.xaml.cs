@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
 
@@ -9,19 +8,19 @@ namespace UniversityManagement.WPF.GroupManagementService;
 
 public partial class GroupManagementWindowEditGroupInfoPage
 {
-    private UniversityDbContext _dbContext;
     private GroupService _groupService;
+    private TeacherService _teacherService;
 
-    public GroupManagementWindowEditGroupInfoPage(UniversityDbContext dbContext, GroupService groupService)
+    public GroupManagementWindowEditGroupInfoPage(GroupService groupService, TeacherService teacherService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _groupService = groupService;
+        _teacherService = teacherService;
 
-        CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
+        CourseComboBox.ItemsSource = _groupService.PopulateCourseList();
 
-        SelectCuratorNameComboBox.ItemsSource = _dbContext.Teachers.Local.ToObservableCollection();
+        SelectCuratorNameComboBox.ItemsSource = _teacherService.PopulateTeacherList();
 
         CourseComboBox.SelectionChanged += ComboBoxRefreshAll;
     }
@@ -36,26 +35,32 @@ public partial class GroupManagementWindowEditGroupInfoPage
             {
                 string newGroupName = EditGroupNameTextBox.Text.Trim();
 
-                bool groupNameChanged = _groupService.EditGroupName(selectedCourse, selectedGroupName, newGroupName);
-
-                if (groupNameChanged)
+                if (!string.IsNullOrWhiteSpace(newGroupName))
                 {
-                    ComboBoxRefreshAll(null, null);
+                    _groupService.EditGroupName(selectedCourse, selectedGroupName, newGroupName);
+
+                    ComboBoxRefreshAll(null!, null!);
 
                     EditGroupNameTextBox.Clear();
+                }
+                else
+                {
+                    MessageBox.Show("Please, enter a valid group name",
+                        "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Please, select a group from list to provide a new group name", "Error",
+                MessageBox.Show("Please, select a group from list to provide a new group name", 
+                    "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
-
-                EditGroupNameTextBox.Clear();
             }
         }
         else
         {
-            MessageBox.Show("Please, select a course first to edit the group name within", "Error",
+            MessageBox.Show("Please, select a course first to edit the group name within", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -67,17 +72,24 @@ public partial class GroupManagementWindowEditGroupInfoPage
             var selectedTeacher = SelectCuratorNameComboBox.SelectedItem as Teacher;
             var selectedGroupName = SelectGroupToAddCuratorComboBox.SelectedItem as string;
 
-            bool curatorAssigned = _groupService.SelectGroupCurator(selectedCourse, selectedTeacher, selectedGroupName);
-
-            if (curatorAssigned)
+            if (selectedTeacher != null && !string.IsNullOrWhiteSpace(selectedGroupName))
             {
+                _groupService.SelectGroupCurator(selectedCourse, selectedTeacher, selectedGroupName);
+
                 SelectGroupToAddCuratorComboBox.SelectedIndex = -1;
                 SelectCuratorNameComboBox.SelectedIndex = -1;
+            }
+            else
+            {
+                MessageBox.Show("Please, select both group and teacher to apply curation in group", 
+                    "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else
         {
-            MessageBox.Show("Please, select a course first to edit teacher curation in group", "Error",
+            MessageBox.Show("Please, select a course first to edit teacher curation in group", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -111,7 +123,6 @@ public partial class GroupManagementWindowEditGroupInfoPage
             EditGroupNameTextBox.Text = selectedGroupName;
         }
     }
-
 
     private Group GetSelectedGroupCurationInfo()
     {

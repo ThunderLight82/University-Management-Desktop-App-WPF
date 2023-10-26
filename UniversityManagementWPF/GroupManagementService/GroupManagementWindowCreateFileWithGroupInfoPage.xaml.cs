@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
 
@@ -10,19 +9,19 @@ namespace UniversityManagement.WPF.GroupManagementService;
 
 public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 {
-    private UniversityDbContext _dbContext;
+    private GroupService _groupService;
     private DocxService _docxService;
     private PdfService _pdfService;
 
-    public GroupManagementWindowCreateFileWithGroupInfoPage(UniversityDbContext dbContext, PdfService pdfService, DocxService docxService)
+    public GroupManagementWindowCreateFileWithGroupInfoPage(GroupService groupService, DocxService docxService, PdfService pdfService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _pdfService = pdfService;
         _docxService = docxService;
+        _groupService = groupService;
 
-        CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
+        CourseComboBox.ItemsSource = _groupService.PopulateCourseList();
     }
 
     private void CreateGroupInfoDocxFile_Click(object sender, RoutedEventArgs e)
@@ -30,7 +29,7 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
 
-        if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
+        if (selectedCourse != null && !string.IsNullOrWhiteSpace(selectedGroupName))
         {
             var saveFileDialog = new SaveFileDialog
             {
@@ -41,25 +40,39 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string filePath = saveFileDialog.FileName;
+                var studentsToExport = _docxService.GetStudentsListWithinGroup(selectedGroupName);
 
-                bool exportResult = _docxService.CreateGroupInfoDocxFile(selectedCourse, selectedGroupName, filePath);
-
-                if (exportResult)
+                if (studentsToExport.Any())
                 {
-                    MessageBox.Show("(.docx) file with selected group successfully created!", "Success",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    string exportFilePath = saveFileDialog.FileName;
+
+                    bool exportResult = _docxService.CreateGroupInfoDocxFile(selectedCourse, selectedGroupName, exportFilePath);
+
+                    if (exportResult)
+                    {
+                        MessageBox.Show("(.docx) file with selected group successfully created!", 
+                            "Success",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("An error occurred during export. Please, try again", 
+                            "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("An error occurred during export. Please, try again", "Error",
+                    MessageBox.Show("The selected group is empty. There are no students to include in the document",
+                        "Empty Group",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
         else
         {
-            MessageBox.Show("Please, select both a course and a group to save students list from", "Error",
+            MessageBox.Show("Please, select both a course and a group to save students list from", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -80,27 +93,43 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string filePath = saveFileDialog.FileName;
+                var studentsToExport = _pdfService.GetStudentsListWithinGroup(selectedGroupName);
 
-                bool exportResult = _pdfService.CreateGroupInfoPdfFile(selectedCourse, selectedGroupName, filePath);
-
-                if (exportResult)
+                if (studentsToExport.Any())
                 {
-                    MessageBox.Show("(.pdf) file with selected group successfully created!", "Success",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    string exportFilePath = saveFileDialog.FileName;
+
+                    bool exportResult = _pdfService.CreateGroupInfoPdfFile(selectedCourse, selectedGroupName, exportFilePath);
+
+                    if (exportResult)
+                    {
+                        MessageBox.Show("(.pdf) file with selected group successfully created!", 
+                            "Success",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("An error occurred during export. Please, try again", 
+                            "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("An error occurred during export. Please, try again", "Error",
+                    MessageBox.Show("The selected group is empty. There are no students to include in the document",
+                        "Empty Group",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
         else
         {
-            MessageBox.Show("Please, select both a course and a group to save students list from", "Error",
+            MessageBox.Show("Please, select both a course and a group to save students list from", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
     }
 
     private void CourseComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

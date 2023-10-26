@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using System.Windows;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using Xceed.Document.NET;
@@ -19,35 +20,50 @@ public class DocxService
 
     public bool CreateGroupInfoDocxFile(Course selectedCourse, string selectedGroupName, string filePath)
     {
-        var selectedGroup = _dbContext.Groups
-            .Include(group => group.Students)
-            .FirstOrDefault(group => group.CourseId == selectedCourse.CourseId && group.GroupName == selectedGroupName);
-
-        if (selectedGroup != null)
+        try
         {
-            if (!selectedGroup.Students.Any())
-            {
-                MessageBox.Show("The selected group is empty. There are no students to include in the document", "Empty Group",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
+            if (selectedCourse == null && string.IsNullOrWhiteSpace(selectedGroupName))
+                throw new ArgumentNullException();
 
-                return false;
+            var selectedGroup = _dbContext.Groups
+                .Include(group => group.Students)
+                .FirstOrDefault(group => group.CourseId == selectedCourse!.CourseId && group.GroupName == selectedGroupName);
+
+            var studentsToExport = GetStudentsListWithinGroup(selectedGroupName);
+
+            if (studentsToExport.Any())
+            {
+                using var doc = DocX.Create(filePath);
+
+                doc.InsertParagraph(selectedCourse!.CourseName).Bold().FontSize(18).Alignment = Alignment.center;
+                doc.InsertParagraph(selectedGroup!.GroupName).Bold().FontSize(14).Alignment = Alignment.center;
+
+                var students = selectedGroup.Students.Select(student => student.StudentFullName).ToList();
+
+                for (int i = 0; i < students.Count; i++)
+                {
+                    doc.InsertParagraph($"{i + 1}. {students[i]}");
+                }
+
+                doc.Save();
+            }
+            else
+            {
+                throw new InvalidOperationException();
             }
 
-            using var doc = DocX.Create(filePath);
-
-            doc.InsertParagraph(selectedCourse.CourseName).Bold().FontSize(18).Alignment = Alignment.center;
-            doc.InsertParagraph(selectedGroup.GroupName).Bold().FontSize(14).Alignment = Alignment.center;
-
-            var students = selectedGroup.Students.Select(student => student.StudentFullName).ToList();
-
-            for (int i = 0; i < students.Count; i++)
-            {
-                doc.InsertParagraph($"{i + 1}. {students[i]}");
-            }
-
-            doc.Save();
+            return true;
         }
+        catch
+        {
+            return false;
+        }
+    }
 
-        return true;
+    public List<Student> GetStudentsListWithinGroup(string selectedGroupName)
+    {
+        return _dbContext.Students.Where(student =>
+            !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
+            student.CurrentGroupName == selectedGroupName).ToList();
     }
 }

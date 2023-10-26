@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
 
@@ -9,17 +8,15 @@ namespace UniversityManagement.WPF.GroupManagementService;
 
 public partial class GroupManagementWindowDeleteGroupPage
 {
-    private UniversityDbContext _dbContext;
     private GroupService _groupService;
 
-    public GroupManagementWindowDeleteGroupPage(UniversityDbContext dbContext, GroupService groupService)
+    public GroupManagementWindowDeleteGroupPage(GroupService groupService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _groupService = groupService;
 
-        CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
+        CourseComboBox.ItemsSource = _groupService.PopulateCourseList();
 
         CourseComboBox.SelectionChanged += ComboBoxRefreshAll;
     }
@@ -32,22 +29,35 @@ public partial class GroupManagementWindowDeleteGroupPage
 
             if (!string.IsNullOrWhiteSpace(preferableGroupToDelete))
             {
-                bool groupDeleted = _groupService.DeleteGroup(selectedCourse, preferableGroupToDelete);
+                var deleteGroup = selectedCourse.Groups.FirstOrDefault(group =>
+                    group.GroupName == preferableGroupToDelete);
 
-                if (groupDeleted)
+                if (deleteGroup!.Students.Count == 0)
+                { 
+                    _groupService.DeleteGroup(selectedCourse, preferableGroupToDelete);
+
+                    ComboBoxRefreshAll(null!, null!);
+                }
+                else
                 {
-                    ComboBoxRefreshAll(null, null);
+                    MessageBox.Show("Cannot delete this group because it contains students.\n" +
+                                    "If you want to remove a group, please remove the active students within it in " +
+                                    "\"Manage Students\" section before proceeding",
+                        "Error",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Please, select a group from course to delete", "Error",
+                MessageBox.Show("Please, select a group from course to delete", 
+                    "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else
         {
-            MessageBox.Show("Please, select a course first to delete the group from", "Error",
+            MessageBox.Show("Please, select a course first to delete the group from", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
