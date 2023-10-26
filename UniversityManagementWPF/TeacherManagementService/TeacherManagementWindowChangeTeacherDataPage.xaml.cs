@@ -20,33 +20,33 @@ public partial class TeacherManagementWindowChangeTeacherDataPage
 
     private void ChangeTeacherNameAndWorkInfo_Click(object sender, RoutedEventArgs e)
     {
-        var selectedTeacher = TeachersListView.SelectedItem as Teacher;
-
-        if (selectedTeacher == null)
+        if (TeachersListView.SelectedItem is Teacher selectedTeacher)
         {
-            MessageBox.Show("Please, select teacher from list first to update info", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            string changedTeacherFullName = ChangeTeacherFullNameTextBox.Text.Trim();
 
-            return;
+            if (!string.IsNullOrWhiteSpace(changedTeacherFullName))
+            {
+                if (IsCorrespondence.SelectedItem is ComboBoxItem selectedItem)
+                {
+                    bool isCorrespondence = selectedItem.Content.ToString() == "Yes";
+
+                    _teacherService.ChangeTeacherNameAndWorkInfo(selectedTeacher, changedTeacherFullName, isCorrespondence);
+
+                    TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please, enter a valid teacher name", 
+                    "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
-
-        string changedTeacherFullName = ChangeTeacherFullNameTextBox.Text.Trim();
-
-        if (string.IsNullOrWhiteSpace(changedTeacherFullName))
+        else
         {
-            MessageBox.Show("Please, enter a valid teacher name", "Error",
+            MessageBox.Show("Please, select teacher from list first to update info", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
-
-            return;
-        }
-
-        if (IsCorrespondence.SelectedItem is ComboBoxItem selectedItem)
-        {
-            bool isCorrespondence = selectedItem.Content.ToString() == "Yes";
-
-            _teacherService.ChangeTeacherNameAndWorkInfo(selectedTeacher, changedTeacherFullName, isCorrespondence);
-            
-            TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
         }
     }
 

@@ -21,49 +21,49 @@ public partial class TeacherManagementWindowEditTeacherPage
     {
         string newTeacherFullName = NewTeacherFullNameTextBox.Text.Trim();
 
-        if (string.IsNullOrWhiteSpace(newTeacherFullName))
+        if (!string.IsNullOrWhiteSpace(newTeacherFullName))
         {
-            MessageBox.Show("Please, enter a valid teacher name", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
-
-            return;
-        }
-
-        if (_teacherService.CheckIfTeacherExists(newTeacherFullName))
-        {
-            var duplicateTeacherQuestion = MessageBox.Show(
-                "A teacher with the same name already exists. Do you want to add this teacher anyway?",
-                "Duplication name",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            if (duplicateTeacherQuestion == MessageBoxResult.No)
+            if (_teacherService.CheckIfTeacherExists(newTeacherFullName))
             {
-                return;
+                var duplicateTeacherQuestion = MessageBox.Show(
+                    "A teacher with the same name already exists. Do you want to add this teacher anyway?",
+                    "Duplication name",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (duplicateTeacherQuestion == MessageBoxResult.No)
+                {
+                    return;
+                }
             }
+
+            _teacherService.CreateTeacher(newTeacherFullName);
+
+            NewTeacherFullNameTextBox.Clear();
+
+            TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
         }
-
-        _teacherService.CreateTeacher(newTeacherFullName);
-        
-        NewTeacherFullNameTextBox.Clear();
-
-        TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
+        else
+        {
+            MessageBox.Show("Please, enter a valid teacher name", 
+                "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private void DeleteTeacher_Click(object sender, RoutedEventArgs e)
     {
-        var selectedTeacher = TeachersListView.SelectedItem as Teacher;
-
-        if (selectedTeacher == null)
+        if (TeachersListView.SelectedItem is Teacher selectedTeacher)
         {
-            MessageBox.Show("Please, select a teacher from the list below to remove", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            _teacherService.DeleteTeacher(selectedTeacher);
 
-            return;
+            TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
         }
-
-        _teacherService.DeleteTeacher(selectedTeacher);
-        
-        TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
+        else
+        {
+            MessageBox.Show("Please, select a teacher from the list below to remove", 
+                "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
