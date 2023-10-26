@@ -16,16 +16,6 @@ public class Group
 
     public List<Teacher> GroupCurator { get; set; }
 
-    // public string GroupCuratorDisplay
-    // {
-    //     get
-    //     {
-    //         if (GroupCurator == null || GroupCurator.Count == 0) return "";
-    //
-    //         return string.Join(", ", GroupCurator.Select(curator => curator.TeacherFullName));
-    //     }
-    // }
-
     public Group()
     {
         Students = new List<Student>();

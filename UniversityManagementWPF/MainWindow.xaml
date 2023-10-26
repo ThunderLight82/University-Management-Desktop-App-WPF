@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="University Management" Height="500" Width="810">
+        Title="University Management" Height="500" Width="900">
 
     <Grid>
 
@@ -34,7 +34,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Course ID" Width="60" DisplayMemberBinding="{Binding CourseId}" />
-                            <GridViewColumn Header="Course Name" Width="150" DisplayMemberBinding="{Binding CourseName}" />
+                            <GridViewColumn Header="Course Name" Width="205" DisplayMemberBinding="{Binding CourseName}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -43,8 +43,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Group ID" Width="60" DisplayMemberBinding="{Binding GroupId}" />
-                            <GridViewColumn Header="Group Name" Width="80" DisplayMemberBinding="{Binding GroupName}" />
-                            <GridViewColumn Header="Curator\Teacher" Width="120" DisplayMemberBinding="{Binding GroupCuratorDisplay}" />
+                            <GridViewColumn Header="Group Name" Width="235" DisplayMemberBinding="{Binding GroupName}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -53,8 +52,8 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Student ID" Width="60" DisplayMemberBinding="{Binding StudentId}" />
-                            <GridViewColumn Header="Full Name" Width="150" DisplayMemberBinding="{Binding StudentFullName}" />
-                            <GridViewColumn Header="Working" Width="50" DisplayMemberBinding="{Binding IsWorkingInDepartment}" />
+                            <GridViewColumn Header="Full Name" Width="180" DisplayMemberBinding="{Binding StudentFullName}" />
+                            <GridViewColumn Header="Working" Width="55" DisplayMemberBinding="{Binding IsWorkingInDepartment}" />
                         </GridView>
                     </ListView.View>
 
