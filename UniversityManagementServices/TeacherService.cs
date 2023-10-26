@@ -17,11 +17,6 @@ public class TeacherService
         _dbContext = dbContext;
     }
 
-    public IEnumerable<Teacher> PopulateTeacherList()
-    {
-        return new ObservableCollection<Teacher>(_dbContext.Teachers.ToList());
-    }
-
     public bool CreateTeacher(string teacherFullName)
     {
         try
@@ -29,7 +24,7 @@ public class TeacherService
             if (string.IsNullOrWhiteSpace(teacherFullName))
                 throw new ArgumentException();
 
-            if (_dbContext.Teachers.Any(teacher => teacher.TeacherFullName == teacherFullName))
+            if (CheckIfTeacherExists(teacherFullName))
                 throw new DuplicateNameException();
 
             var newTeacher = new Teacher
@@ -50,11 +45,6 @@ public class TeacherService
         }
     }
 
-    public bool CheckIfTeacherExists(string teacherFullName)
-    {
-        return _dbContext.Teachers.Any(teacher => teacher.TeacherFullName == teacherFullName);
-    }
-
     public bool DeleteTeacher(Teacher selectedTeacher)
     {
         try
@@ -62,7 +52,8 @@ public class TeacherService
             if (selectedTeacher == null)
                 throw new ArgumentNullException();
 
-            var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.GroupCurator.Contains(selectedTeacher));
+            var associatedGroup = _dbContext.Groups.FirstOrDefault(group =>
+                group.GroupCurator.Contains(selectedTeacher));
 
             if (associatedGroup != null)
             {
@@ -104,5 +95,15 @@ public class TeacherService
         {
             return false;
         }
+    }
+
+    public bool CheckIfTeacherExists(string teacherFullName)
+    {
+        return _dbContext.Teachers.Any(teacher => teacher.TeacherFullName == teacherFullName);
+    }
+
+    public IEnumerable<Teacher> PopulateTeacherList()
+    {
+        return new ObservableCollection<Teacher>(_dbContext.Teachers.ToList());
     }
 }

@@ -41,7 +41,6 @@ public class StudentServiceTests
     [InlineData("", false)]
     [InlineData("   ", false)]
     [InlineData(null, false)]
-    // Need to refuse student duplication name in pop-up window to pass this test case.
     [InlineData("StudentNameDuplicationTest", false)]
     public void AddStudent_DifferentNamesInputs_ShowExpectedResult(
         string newStudentName, 
@@ -59,7 +58,7 @@ public class StudentServiceTests
 
     [Theory]
     [InlineData("StudentToDelete", true)]
-    [InlineData("StudentWithinGroupTest", true)]
+    [InlineData("StudentWithinGroupTest2", true)]
     [InlineData("   [  )?{>?_?=-Secondvebe_0Studen4bv4bf gb8rh 9w 2  ", true)]
     [InlineData(",", true)]
     [InlineData(" ", true)]
@@ -81,7 +80,7 @@ public class StudentServiceTests
         Assert.Equal(expectedStudentDeletionResult, deletionResult);
 
         //case for clearing "Student" and "CurrentGroupName" in field when deleted in Group and Student entity.
-        if (studentToDeleteFullName == "StudentWithinGroupTest" && expectedStudentDeletionResult)
+        if (studentToDeleteFullName == "StudentWithinGroupTest2" && expectedStudentDeletionResult)
         {
             var associatedGroup = _dbContext.Groups.FirstOrDefault(group => group.Students.Contains(studentToDelete));
             var studentStillWithinGroup = studentToDelete.CurrentGroupName != null;
@@ -124,7 +123,7 @@ public class StudentServiceTests
     [InlineData("GroupWithSomeStudent", "StudentToAdd2", true)]
     [InlineData("GroupWithSomeStudent", "StudentWithNullInGroup", true)]
     [InlineData(",   Gro  upW  ithSo   meS    tudent   .", "ervwevberb Syrgb kbnm 4;", true)]
-    //Student already exist in group case need to refuse to pass test.
+    //VV Need to fix that VV
     [InlineData("GroupWithSomeStudent", "StudentWithinGroupTest", false)]
     [InlineData("drhe e45g w yW$YU4e3g $~!!~#", "", false)]
     [InlineData(" ", "WhiteSpaceGroup", false)]
@@ -152,7 +151,7 @@ public class StudentServiceTests
     }
 
     [Theory]
-    [InlineData("StudentWithinGroupTest", true)]
+    [InlineData("StudentWithinSOMEGroupTest", true)]
     [InlineData("DeleteFromGroupTestWithNullInGroup", false)]
     [InlineData("DeleteFromGroupTestWithNothingInGroupName", false)]
     public void DeleteStudentsFromGroup_DifferentStudentsDeleteVariants_ShowExpectedResult(
@@ -198,7 +197,7 @@ public class StudentServiceTests
             new() { StudentFullName = "StudentNameDuplicationTest" },
             // cases for [DeleteStudent] tests.
             new() { StudentFullName = "StudentToDelete" },
-            new() { StudentFullName = "StudentWithinGroupTest", CurrentGroupName = "GroupWithSomeStudent"},
+            new() { StudentFullName = "StudentWithinGroupTest2", CurrentGroupName = "GroupWithSomeStudent"},
             new() { StudentFullName = "   [  )?{>?_?=-Secondvebe_0Studen4bv4bf gb8rh 9w 2  " },
             new() { StudentFullName = "," },
             new() { StudentFullName = " " },
@@ -207,14 +206,16 @@ public class StudentServiceTests
             new() { StudentFullName = "StudentToChange", IsWorkingInDepartment = true },
             new() { StudentFullName = "StudentToChangeWithDepartmentWorking", IsWorkingInDepartment = false },
             new() { StudentFullName = "fw     34gStudentToChange       ><>?", IsWorkingInDepartment = true },
-            new() { StudentFullName = "ChangeToNull", IsWorkingInDepartment = true},
+            new() { StudentFullName = "ChangeToNull", IsWorkingInDepartment = true },
             // cases for [AddStudentsToGroup] tests.
             new() { StudentFullName = "StudentToAdd1"},
             new() { StudentFullName = "StudentToAdd2" },
+            new() { StudentFullName = "StudentWithinGroupTest", CurrentGroupName = "GroupWithSomeStudent" },
             new() { StudentFullName = "StudentWithNullInGroup", CurrentGroupName = null},
             new() { StudentFullName = "ervwevberb Syrgb kbnm 4;"},
             new() { StudentFullName = "WhiteSpaceGroup" },
             // cases for [DeleteStudentsFromGroup] tests.
+            new() { StudentFullName = "StudentWithinSOMEGroupTest", CurrentGroupName = "GroupWithSomeStudent" },
             new() { StudentFullName = "DeleteFromGroupTestWithNullInGroup", CurrentGroupName = null},
             new() { StudentFullName = "DeleteFromGroupTestWithNothingInGroupName" }
         };
@@ -225,7 +226,7 @@ public class StudentServiceTests
         var groups = new List<Group>
         {
             // cases for [AddStudentsToGroup] test.
-            new() { GroupName = "EmptyGroup", CourseId = selectedCourse.CourseId},
+            new() { GroupName = "EmptyGroup", CourseId = selectedCourse.CourseId },
             new() { GroupName = "GroupWithSomeStudent", CourseId = selectedCourse.CourseId },
             new() { GroupName = ",   Gro  upW  ithSo   meS    tudent   .", CourseId = selectedCourse.CourseId },
             new() { GroupName = "drhe e45g w yW$YU4e3g $~!!~#", CourseId = selectedCourse.CourseId },

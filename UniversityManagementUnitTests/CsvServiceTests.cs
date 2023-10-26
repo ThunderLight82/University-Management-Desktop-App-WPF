@@ -69,7 +69,6 @@ public class CsvServiceTests
     }
     
     [Theory]
-    // Need to accept group data rewrite in pop-up window to pass some tests cases.
     [InlineData("GroupWithSomeStudent", true,
         "StudentWithinGroupTest,False,GroupWithSomeStudent,")]
     // Different Non existing student tests. Adding into db and selected group.
@@ -103,7 +102,7 @@ public class CsvServiceTests
         var students = new List<Student>
         {
             // case for [CsvService] tests.
-            new() { StudentFullName = "StudentWithinGroupTest", CurrentGroupName = "GroupWithSomeStudent"},
+            new() { StudentFullName = "StudentWithinGroupTest", CurrentGroupName = "GroupWithSomeStudent"}
         };
 
         _dbContext.Students.AddRange(students);

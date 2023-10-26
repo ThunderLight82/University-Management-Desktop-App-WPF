@@ -72,7 +72,7 @@ public partial class MainWindow
 
     private void OpenGroupManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var groupManagementWindow = new GroupManagementWindow(_dbContext, _groupService, _docxService, _pdfService);
+        var groupManagementWindow = new GroupManagementWindow(_groupService, _docxService, _pdfService, _teacherService);
         groupManagementWindow.ShowDialog();
     }
     

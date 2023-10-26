@@ -61,7 +61,7 @@ public class GroupServiceTests
     [InlineData("DeleteTestGroup1", true)]
     [InlineData("    1-20-2-Delete New Test Group 2", true)]
     [InlineData("GroupWithStudentsInIt", false)]
-    [InlineData("", true)]
+    [InlineData("", false)]
     [InlineData(null, false)]
     public void DeleteGroup_DifferentDeletionsVariants_ShowExpectedResult(
         string groupToDeleteName,
@@ -81,7 +81,7 @@ public class GroupServiceTests
     [InlineData("GroupToRename", "!RenamedGroup10101.", true)]
     [InlineData("TrimCheck", "   !RenamedGroup10101.         ", true)]
     [InlineData("-;;-[;g-=4;g4=0 30f 3-0f/'/. f3a", "gf 4pg leg0,  d0mf we 31>?>>:#%^$%%", true)]
-    [InlineData(" ", ",", true)]
+    [InlineData(" ", ",", false)]
     [InlineData("", "", false)]
     [InlineData("NullTest", null, false)]
     [InlineData(null, null, false)]
