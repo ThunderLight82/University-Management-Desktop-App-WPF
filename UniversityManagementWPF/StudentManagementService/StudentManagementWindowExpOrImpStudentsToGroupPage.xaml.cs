@@ -3,7 +3,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
-using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
 
@@ -11,17 +10,17 @@ namespace UniversityManagement.WPF.StudentManagementService;
 
 public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 {
-    private UniversityDbContext _dbContext;
+    private StudentService _studentService;
     private CsvService _csvService;
 
-    public StudentManagementWindowExpOrImpStudentsToGroupPage(UniversityDbContext dbContext, CsvService csvService)
+    public StudentManagementWindowExpOrImpStudentsToGroupPage(StudentService studentService, CsvService csvService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _csvService = csvService;
+        _studentService = studentService;
 
-        CourseComboBox.ItemsSource = _dbContext.Courses.Local.ToObservableCollection();
+        CourseComboBox.ItemsSource = _studentService.PopulateCourseList();
 
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
@@ -31,7 +30,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
 
-        if (selectedCourse != null && !string.IsNullOrEmpty(selectedGroupName))
+        if (selectedCourse != null && !string.IsNullOrWhiteSpace(selectedGroupName))
         {
             var saveFileDialog = new SaveFileDialog
             {
@@ -42,25 +41,39 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                string filePath = saveFileDialog.FileName;
+                var studentsToExport = _csvService.GetStudentsToExport(selectedGroupName);
 
-                bool exportResult = await _csvService.ExportStudentsAsync(selectedCourse, selectedGroupName, filePath);
-
-                if (exportResult)
+                if (studentsToExport.Any())
                 {
-                    MessageBox.Show("Students have been successfully exported!", "Success",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    string exportFilePath = saveFileDialog.FileName;
+
+                    bool exportResult = await _csvService.ExportStudentsAsync(selectedCourse, selectedGroupName, exportFilePath);
+
+                    if (exportResult)
+                    {
+                        MessageBox.Show("Students have been successfully exported!", 
+                            "Success",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("An error occurred during export. Please, try again", 
+                            "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("An error occurred during export. Please, try again", "Error",
+                    MessageBox.Show("No students found in the selected group", 
+                        "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
         else
         {
-            MessageBox.Show("Please, select both a course and a group to export students from", "Error",
+            MessageBox.Show("Please, select both a course and a group to export students from", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -79,25 +92,35 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 
             if (openFileDialog.ShowDialog() == true)
             {
-                string importFilePath = openFileDialog.FileName;
+                var userAnswerResult = MessageBox.Show(
+                    "This action will overwrite the current group student list. Do you want to continue?",
+                    "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                bool importResult = await _csvService.ImportStudentsAsync(selectedCourse, selectedGroupName, importFilePath);
+                if (userAnswerResult == MessageBoxResult.Yes)
+                {
+                    string importFilePath = openFileDialog.FileName;
 
-                if (importResult)
-                {
-                    MessageBox.Show("Students have been successfully imported to the selected group!", "Success",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show("Failed to import students to the selected group. Please, try again", "Error",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    bool importResult = await _csvService.ImportStudentsAsync(selectedCourse, selectedGroupName, importFilePath);
+
+                    if (importResult)
+                    {
+                        MessageBox.Show("Students have been successfully imported to the selected group!", 
+                            "Success",
+                            MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to import students to the selected group. Please, try again", 
+                            "Error",
+                            MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
             }
         }
         else
         {
-            MessageBox.Show("Please, select both a course and a group to import students to", "Error",
+            MessageBox.Show("Please, select both a course and a group to import students to", 
+                "Error",
                 MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }

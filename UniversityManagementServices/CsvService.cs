@@ -1,12 +1,13 @@
-﻿using CsvHelper.Configuration;
+﻿using System;
+using CsvHelper.Configuration;
 using CsvHelper;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
+using System.Collections.Generic;
 
 namespace UniversityManagement.Services;
 
@@ -19,72 +20,59 @@ public class CsvService
         _dbContext = dbContext;
     }
 
-    public async Task<bool> ExportStudentsAsync(Course selectedCourse, string selectedGroupName, string filePath)
+    public async Task<bool> ExportStudentsAsync(Course selectedCourse, string selectedGroupName, string exportFilePath)
     {
-        var selectedGroup = selectedCourse.Groups.FirstOrDefault(group =>
-            group.GroupName == selectedGroupName);
-
-        if (selectedGroup == null)
+        try
         {
-            MessageBox.Show("The selected group does not exist for the chosen course", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            if (selectedCourse == null && string.IsNullOrWhiteSpace(selectedGroupName))
+                throw new ArgumentNullException();
 
+            var studentsToExport = GetStudentsToExport(selectedGroupName);
+
+            if (studentsToExport.Any())
+            {
+                await using var streamWriter = new StreamWriter(exportFilePath);
+                await using var csv = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture));
+                await csv.WriteRecordsAsync(studentsToExport);
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+
+            return true;
+        }
+        catch
+        {
             return false;
         }
-
-        var studentsToExport = _dbContext.Students.Where(student =>
-            !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
-            student.CurrentGroupName == selectedGroupName).ToList();
-
-        if (!studentsToExport.Any())
-        {
-            MessageBox.Show("No students found in the selected group", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
-
-            return false;
-        }
-
-        await using var streamWriter = new StreamWriter(filePath);
-        await using var csv = new CsvWriter(streamWriter, new CsvConfiguration(CultureInfo.InvariantCulture));
-        {
-            await csv.WriteRecordsAsync(studentsToExport);
-        }
-
-        return true;
     }
 
-    public async Task<bool> ImportStudentsAsync(Course selectedCourse, string selectedGroupName, string filePath)
+    public async Task<bool> ImportStudentsAsync(Course selectedCourse, string selectedGroupName, string importFilePath)
     {
-        var selectedGroup = selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
-
-        if (selectedGroup == null)
+        try
         {
-            MessageBox.Show("The selected group does not exist for the chosen course", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            if (selectedCourse == null && string.IsNullOrWhiteSpace(selectedGroupName))
+                throw new ArgumentNullException();
 
-            return false;
-        }
-
-        var userAnswerResult = MessageBox.Show(
-            "This action will overwrite the current group student list. Do you want to continue?",
-            "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-
-        if (userAnswerResult == MessageBoxResult.Yes)
-        {
-            using var streamReader = new StreamReader(filePath);
+            using var streamReader = new StreamReader(importFilePath);
             using var csv = new CsvReader(streamReader, new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HeaderValidated = null,
                 MissingFieldFound = null
             });
 
-            var studentsToRemove = selectedGroup.Students.ToList();
+            var selectedGroup = selectedCourse!.Groups.FirstOrDefault(group =>
+                group.GroupName == selectedGroupName);
+
+            var studentsToRemove = selectedGroup!.Students.ToList();
 
             foreach (var student in studentsToRemove)
             {
                 student.GroupId = null;
                 student.CurrentGroupName = null;
             }
+
             await _dbContext.SaveChangesAsync();
 
             var studentsToImport = csv.GetRecords<Student>().ToList();
@@ -114,7 +102,16 @@ public class CsvService
 
             return true;
         }
+        catch
+        {
+            return false;
+        }
+    }
 
-        return false;
+    public List<Student> GetStudentsToExport(string selectedGroupName)
+    {
+        return _dbContext.Students.Where(student =>
+            !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
+            student.CurrentGroupName == selectedGroupName).ToList();
     }
 }

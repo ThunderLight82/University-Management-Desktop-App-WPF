@@ -54,7 +54,7 @@ public partial class StudentManagementWindow
 
     private void ExportOrImportStudentToGroup_Click(object sender, RoutedEventArgs e)
     {
-        var exportOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_csvService);
+        var exportOrImportStudentsToGroup = new StudentManagementWindowExpOrImpStudentsToGroupPage(_studentService, _csvService);
 
         EditStudentsButton.Style = (Style)FindResource("NormalButtonStyle");
         ManageStudentsGroupButton.Style = (Style)FindResource("NormalButtonStyle");
