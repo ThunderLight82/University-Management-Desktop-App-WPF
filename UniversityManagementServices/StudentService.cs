@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +16,11 @@ public class StudentService
     public StudentService(UniversityDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public IEnumerable<Student> PopulateStudentList()
+    {
+        return new ObservableCollection<Student>(_dbContext.Students.ToList());
     }
 
     public bool AddStudent(string studentFullName)
@@ -86,28 +93,25 @@ public class StudentService
 
     public bool ChangeStudentNameAndWorkInfo(Student selectedStudent, string newFullName, bool isWorkingInDepartment)
     {
-        if (selectedStudent == null)
+        try
         {
-            MessageBox.Show("Please, select student from list first to update info", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
+            if (selectedStudent == null)
+                throw new ArgumentNullException();
 
+            if (string.IsNullOrWhiteSpace(newFullName))
+                throw new ArgumentException();
+
+            selectedStudent.StudentFullName = newFullName;
+            selectedStudent.IsWorkingInDepartment = isWorkingInDepartment;
+
+            _dbContext.SaveChanges();
+
+            return true;
+        }
+        catch
+        {
             return false;
         }
-
-        if (string.IsNullOrWhiteSpace(newFullName))
-        {
-            MessageBox.Show("Please, enter a valid student name", "Error",
-                MessageBoxButton.OK, MessageBoxImage.Error);
-
-            return false;
-        }
-
-        selectedStudent.StudentFullName = newFullName;
-        selectedStudent.IsWorkingInDepartment = isWorkingInDepartment;
-
-        _dbContext.SaveChanges();
-
-        return true;
     }
 
     public bool AddStudentsToGroup(Course selectedCourse, string selectedGroupName, List<Student> selectedStudents)

@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
 
@@ -8,33 +7,46 @@ namespace UniversityManagement.WPF.StudentManagementService;
 
 public partial class StudentManagementWindowChangeStudentDataPage
 {
-    private UniversityDbContext _dbContext;
     private StudentService _studentService;
 
-    public StudentManagementWindowChangeStudentDataPage(UniversityDbContext dbContext, StudentService studentService)
+    public StudentManagementWindowChangeStudentDataPage(StudentService studentService)
     {
         InitializeComponent();
 
-        _dbContext = dbContext;
         _studentService = studentService;
 
-        StudentsListView.ItemsSource = _dbContext.Students.Local.ToObservableCollection();
+        StudentsListView.ItemsSource = _studentService.PopulateStudentList();
     }
 
     private void ChangeStudentNameAndWorkInfo_Click (object sender, RoutedEventArgs e)
     {
         var selectedStudent = StudentsListView.SelectedItem as Student;
 
+        if (selectedStudent == null)
+        {
+            MessageBox.Show("Please, select student from list first to update info", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return;
+        }
+
         string changedStudentFullName = ChangeStudentFullNameTextBox.Text.Trim();
+
+        if (string.IsNullOrWhiteSpace(changedStudentFullName))
+        {
+            MessageBox.Show("Please, enter a valid student name", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+
+            return;
+        }
 
         if (IsWorkingComboBox.SelectedItem is ComboBoxItem selectedItem)
         {
             bool isWorkingInDepartment = selectedItem.Content.ToString() == "Yes";
 
-            if (_studentService.ChangeStudentNameAndWorkInfo(selectedStudent, changedStudentFullName, isWorkingInDepartment))
-            {
-                StudentsListView.Items.Refresh();
-            }
+            _studentService.ChangeStudentNameAndWorkInfo(selectedStudent, changedStudentFullName, isWorkingInDepartment);
+            
+            StudentsListView.ItemsSource = _studentService.PopulateStudentList();
         }
     }
 

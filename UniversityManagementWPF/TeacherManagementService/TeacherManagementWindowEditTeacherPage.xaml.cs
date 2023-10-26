@@ -46,6 +46,7 @@ public partial class TeacherManagementWindowEditTeacherPage
         _teacherService.CreateTeacher(newTeacherFullName);
         
         NewTeacherFullNameTextBox.Clear();
+
         TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
     }
 

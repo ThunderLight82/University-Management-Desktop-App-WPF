@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.EntityFrameworkCore;
-using Novacode;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using UniversityManagement.Services;
@@ -81,7 +78,7 @@ public partial class MainWindow
     
     private void OpenStudentManagementWindow_Click(object sender, RoutedEventArgs e)
     {
-        var studentManagementWindow = new StudentManagementWindow(_dbContext, _studentService, _csvService);
+        var studentManagementWindow = new StudentManagementWindow(_studentService, _csvService);
         studentManagementWindow.ShowDialog();
     }
     
