@@ -31,15 +31,15 @@ public class TeacherServiceTests
     [InlineData("   ", false)]
     [InlineData(null, false)]
     [InlineData("TeacherNameDuplicationTest", false)]
-    public void CreateTeacher_DifferentNamesInputs_ShowExpectedResult(
+    public async Task CreateTeacherAsync_DifferentNamesInputs_ShowExpectedResult(
         string newTeacherName, 
         bool expectedTeacherCreationResult)
     {
         //Arrange
-        FillTeachersTestsWithAbstractData();
+        await FillTeachersTestsWithAbstractDataAsync();
 
         //Act
-        var creationResult = _teacherService.CreateTeacher(newTeacherName);
+        var creationResult = await _teacherService.CreateTeacherAsync(newTeacherName);
 
         //Assert
         Assert.Equal(expectedTeacherCreationResult, creationResult);
@@ -52,17 +52,17 @@ public class TeacherServiceTests
     [InlineData(" ", true)]
     [InlineData("", true)]
     [InlineData(null, false)]
-    public void DeleteTeacher_DifferentDeletionsVariants_ShowExpectedResult(
+    public async Task DeleteTeacherAsync_DifferentDeletionsVariants_ShowExpectedResult(
         string teacherToDeleteFullName, 
         bool expectedTeacherDeletionResult)
     {
         //Arrange
-        FillTeachersTestsWithAbstractData();
+        await FillTeachersTestsWithAbstractDataAsync();
 
         var teacherToDelete = _dbContext.Teachers.FirstOrDefault(t => t.TeacherFullName == teacherToDeleteFullName);
 
         //Act
-        var deletionResult = _teacherService.DeleteTeacher(teacherToDelete);
+        var deletionResult = await _teacherService.DeleteTeacherAsync(teacherToDelete);
 
         //Assert
         Assert.Equal(expectedTeacherDeletionResult, deletionResult);
@@ -87,7 +87,7 @@ public class TeacherServiceTests
     [InlineData(null, "OnlyNullCheck", null, null, false)]
     [InlineData(null, null, true, false, false)]
     [InlineData("ChangeToNull", null,false, false, false)]
-    public void ChangeTeacherNameAndWorkInfo_DifferentChangesInNameAndWorkInfo_ShowExpectedResult(
+    public async Task ChangeTeacherNameAndWorkInfoAsync_DifferentChangesInNameAndWorkInfo_ShowExpectedResult(
         string currentTeacherFullName,
         string newTeacherFullName,
         bool? currentCorrespondence, 
@@ -95,18 +95,29 @@ public class TeacherServiceTests
         bool expectedTeacherChangesResult)
     {
         //Arrange
-        FillTeachersTestsWithAbstractData();
+        await FillTeachersTestsWithAbstractDataAsync();
 
         var teacherToChange = _dbContext.Teachers.FirstOrDefault(t => t.TeacherFullName == currentTeacherFullName);
+        
+        var originalTeacherFullName = teacherToChange?.TeacherFullName;
 
         //Act
-        var changeResult = _teacherService.ChangeTeacherNameAndWorkInfo(teacherToChange, newTeacherFullName, newCorrespondence);
+        var changeResult = await _teacherService.ChangeTeacherNameAndWorkInfoAsync(teacherToChange, newTeacherFullName, newCorrespondence);
 
         //Assert
         Assert.Equal(expectedTeacherChangesResult, changeResult);
+        
+        if (changeResult)
+        {
+            Assert.Equal(newTeacherFullName, teacherToChange.TeacherFullName);
+        }
+        else
+        {
+            Assert.Equal(currentTeacherFullName, originalTeacherFullName);
+        }
     }
 
-    private void FillTeachersTestsWithAbstractData()
+    private async Task FillTeachersTestsWithAbstractDataAsync()
     {
         var teachers = new List<Teacher>
         {
@@ -126,6 +137,6 @@ public class TeacherServiceTests
         };
 
         _dbContext.Teachers.AddRange(teachers);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 }

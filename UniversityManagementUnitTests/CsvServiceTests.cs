@@ -26,7 +26,7 @@ public class CsvServiceTests
 
         _selectedCourse = new Course
         {
-            CourseName = "TestCourse1",
+            CourseName = "TestCourse1"
         };
 
         _dbContext.Courses.Add(_selectedCourse);
@@ -34,18 +34,18 @@ public class CsvServiceTests
     }
 
     [Theory]
-    [InlineData("GroupWithSomeStudent", true, "StudentWithinGroupTest,False,GroupWithSomeStudent,")]
+    [InlineData("GroupWithSomeStudent", true, "StudentWithinGroupTest,False,GroupWithSomeStudent")]
     [InlineData("NonExistedGroup", false, null)]
-    [InlineData("EmptyGroup", false, null)]
+    [InlineData("EmptyGroupForTest", false, null)]
     public async Task ExportStudentsAsync_DifferentExportScenarios_ReturnsExpectedResult(
         string selectedGroupName,
         bool expectedExportResult,
         string expectedCsvContent)
     {
         // Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
         string currentDirectory = Directory.GetCurrentDirectory();
-        var filePath = Path.Combine(currentDirectory, "test.csv");
+        var filePath = Path.Combine(currentDirectory, "testcsv.csv");
     
         // Act
         var exportResult = await _csvService.ExportStudentsAsync(_selectedCourse, selectedGroupName, filePath);
@@ -72,8 +72,8 @@ public class CsvServiceTests
     [InlineData("GroupWithSomeStudent", true,
         "StudentWithinGroupTest,False,GroupWithSomeStudent,")]
     // Different Non existing student tests. Adding into db and selected group.
-    [InlineData("EmptyGroup", true, "StudentFullName,IsWorkingInDepartment,CurrentGroupName\r\nNonExistedInDBStudent,False,EmptyGegegroup,3f3g")]
-    [InlineData("EmptyGroup", true, "StudentFullName,IsWorkingInDepartment,CurrentGroupName\r\nNonExistedInDBStudent,False,EmptyGroup,")]
+    [InlineData("EmptyGroup1", true, "StudentFullName,IsWorkingInDepartment,CurrentGroupName\r\nNonExistedInDBStudent,False,EmptyGegegroup,3f3g")]
+    [InlineData("EmptyGroup2", true, "StudentFullName,IsWorkingInDepartment,CurrentGroupName\r\nNonExistedInDBStudent,False,EmptyGroup,")]
     [InlineData("NonExistedGroup", false, null)]
     public async Task ImportStudentsAsync_ImportScenarios_ReturnsExpectedResult(
         string selectedGroupName,
@@ -81,9 +81,9 @@ public class CsvServiceTests
         string expectedCsvContent)
     {
         //Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
         string currentDirectory = Directory.GetCurrentDirectory();
-        var filePath = Path.Combine(currentDirectory, "test.csv");
+        var filePath = Path.Combine(currentDirectory, "testcsv.csv");
     
         if (!string.IsNullOrWhiteSpace(expectedCsvContent))
         {
@@ -97,7 +97,7 @@ public class CsvServiceTests
         Assert.Equal(expectedImportResult, importResult);
     }
 
-    private void FillStudentsTestsWithAbstractData(Course selectedCourse)
+    private async Task FillStudentsTestsWithAbstractDataAsync(Course selectedCourse)
     {
         var students = new List<Student>
         {
@@ -106,16 +106,17 @@ public class CsvServiceTests
         };
 
         _dbContext.Students.AddRange(students);
-        _dbContext.SaveChanges();
 
         var groups = new List<Group>
         {
             // cases for [CsvService] tests.
-            new() { GroupName = "EmptyGroup", CourseId = selectedCourse.CourseId},
+            new() { GroupName = "EmptyGroup1", CourseId = selectedCourse.CourseId},
+            new() { GroupName = "EmptyGroup2", CourseId = selectedCourse.CourseId},
+            new() { GroupName = "EmptyGroupForTest", CourseId = selectedCourse.CourseId},
             new() { GroupName = "GroupWithSomeStudent", CourseId = selectedCourse.CourseId },
         };
 
         _dbContext.Groups.AddRange(groups);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 }

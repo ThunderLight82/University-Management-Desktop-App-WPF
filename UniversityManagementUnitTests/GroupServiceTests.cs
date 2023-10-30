@@ -26,7 +26,7 @@ public class GroupServiceTests
 
         _selectedCourse = new Course
         {
-            CourseName = "TestCourse1",
+            CourseName = "TestCourse3"
         };
 
         _dbContext.Courses.Add(_selectedCourse);
@@ -43,15 +43,15 @@ public class GroupServiceTests
     [InlineData("   ", false)]
     [InlineData(null, false)]
     [InlineData("GroupNameDuplicationTest", false)]
-    public void CreateGroup_DifferentNamesInputs_ShowExpectedResult(
+    public async Task CreateGroupAsync_DifferentNamesInputs_ShowExpectedResult(
         string groupName,
         bool expectedGroupCreationResult)
     {
         //Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
 
         //Act
-        var creationResult = _groupService.CreateGroup(_selectedCourse, groupName);
+        var creationResult = await _groupService.CreateGroupAsync(_selectedCourse, groupName);
 
         //Assert
         Assert.Equal(expectedGroupCreationResult, creationResult);
@@ -63,15 +63,15 @@ public class GroupServiceTests
     [InlineData("GroupWithStudentsInIt", false)]
     [InlineData("", false)]
     [InlineData(null, false)]
-    public void DeleteGroup_DifferentDeletionsVariants_ShowExpectedResult(
+    public async Task DeleteGroupAsync_DifferentDeletionsVariants_ShowExpectedResult(
         string groupToDeleteName,
         bool expectedGroupDeletionResult)
     {
         //Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
 
         //Act
-        var deletionResult = _groupService.DeleteGroup(_selectedCourse, groupToDeleteName);
+        var deletionResult = await _groupService.DeleteGroupAsync(_selectedCourse, groupToDeleteName);
 
         //Assert
         Assert.Equal(expectedGroupDeletionResult, deletionResult);
@@ -85,19 +85,34 @@ public class GroupServiceTests
     [InlineData("", "", false)]
     [InlineData("NullTest", null, false)]
     [InlineData(null, null, false)]
-    public void EditGroupName_DifferentNewNamesVariants_ShowExpectedResult(
+    public async Task EditGroupNameAsync_DifferentNewNamesVariants_ShowExpectedResult(
         string currentGroupName,
         string newGroupName,
         bool expectedGroupRenameResult)
     {
         //Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
+
+        var originalGroupName = _selectedCourse.Groups.FirstOrDefault(group =>
+            group.GroupName == currentGroupName)?.GroupName;
 
         //Act
-        var renamingResult = _groupService.EditGroupName(_selectedCourse, currentGroupName, newGroupName);
+        var renamingResult = await _groupService.EditGroupNameAsync(_selectedCourse, currentGroupName, newGroupName);
+
+        var renamedGroupName = _selectedCourse.Groups.FirstOrDefault(group =>
+            group.GroupName == newGroupName)?.GroupName;
 
         //Assert
         Assert.Equal(expectedGroupRenameResult, renamingResult);
+
+        if (renamingResult)
+        {
+            Assert.Equal(newGroupName, renamedGroupName);
+        }
+        else
+        {
+            Assert.Equal(currentGroupName,originalGroupName);
+        }
     }
 
     [Theory]
@@ -109,24 +124,24 @@ public class GroupServiceTests
     [InlineData(null, "TeacherExistButNotGroup", false)]
     [InlineData("GroupExistButNotTeacher", null, false)]
     [InlineData(null, null, false)]
-    public void SelectGroupCurator_DifferentCurationVariants_ShowExpectedResult(
+    public async Task SelectGroupCuratorAsync_DifferentCurationVariants_ShowExpectedResult(
         string groupName,
         string teacherFullName,
         bool expectedGroupCurationAssignResult)
     {
         //Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
 
         var teacherToAssign = _dbContext.Teachers.FirstOrDefault(t => t.TeacherFullName == teacherFullName);
 
         //Act
-        var curationAssignResult = _groupService.SelectGroupCurator(_selectedCourse, teacherToAssign, groupName);
+        var curationAssignResult = await _groupService.SelectGroupCuratorAsync(_selectedCourse, teacherToAssign, groupName);
 
         //Assert
         Assert.Equal(expectedGroupCurationAssignResult, curationAssignResult);
     }
 
-    private void FillGroupsTestsWithAbstractData(Course selectedCourse)
+    private async Task FillGroupsTestsWithAbstractDataAsync(Course selectedCourse)
     {
         var groups = new List<Group>
         {
@@ -149,9 +164,8 @@ public class GroupServiceTests
             new() { GroupName = "           WEIRDNAMEGROZPYUhb 4 g4o defm 21 ", CourseId = selectedCourse.CourseId },
             new() { GroupName = "GroupExistButNotTeacher", CourseId = selectedCourse.CourseId },
         };
-
+        
         _dbContext.Groups.AddRange(groups);
-        _dbContext.SaveChanges();
 
         // Insert existing students into group to get "false" in [DeleteGroup] case.
         var newStudentInGroup = new Student
@@ -162,7 +176,6 @@ public class GroupServiceTests
         };
 
         _dbContext.Students.Add(newStudentInGroup);
-        _dbContext.SaveChanges();
 
         // Insert existing teacher into context to get correct results in [SelectGroupCurator] tests.
         var teachersToAssign = new List<Teacher>
@@ -176,6 +189,6 @@ public class GroupServiceTests
         };
 
         _dbContext.Teachers.AddRange(teachersToAssign);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 }

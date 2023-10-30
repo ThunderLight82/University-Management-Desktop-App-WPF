@@ -26,7 +26,7 @@ public class PdfServiceTests
 
         _selectedCourse = new Course
         {
-            CourseName = "TestCourse1",
+            CourseName = "TestCourse4"
         };
 
         _dbContext.Courses.Add(_selectedCourse);
@@ -34,50 +34,45 @@ public class PdfServiceTests
     }
 
     [Fact]
-    public void CreateGroupInfoPdfFile_GroupWithStudents_CreatesPdfFileAndCheckStringsInFile()
+    public async Task CreateGroupInfoPdfFileAsync_GroupWithStudents_CreatesPdfFileAndCheckStringsInFile()
     {
         // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
     
         //Act
         var pdfCreationResult =
-            _pdfService.CreateGroupInfoPdfFile(_selectedCourse, "GroupWithStudentsInIt", "test.pdf");
+            await _pdfService.CreateGroupInfoPdfFileAsync(_selectedCourse, "GroupWithStudentsInIt", "test.pdf");
     
         // Assert
         Assert.True(pdfCreationResult);
         Assert.True(File.Exists("test.pdf"));
         Assert.True(new FileInfo("test.pdf").Length > 0);
-    
-        File.Delete("test.pdf");
     }
     
     [Fact]
-    public void CreateGroupInfoPdfFile_EmptyGroup_ShowErrorMessageBox()
+    public async Task CreateGroupInfoPdfFileAsync_EmptyGroup_GetFalseResult()
     {
         // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
     
         // Act
-        var pdfCreationResult = _pdfService.CreateGroupInfoPdfFile(_selectedCourse, "EmptyGroup", "test.pdf");
+        var pdfCreationResult = await _pdfService.CreateGroupInfoPdfFileAsync(_selectedCourse, "EmptyGroupY", "test.pdf");
     
         // Assert
         Assert.False(pdfCreationResult);
-    
-        File.Delete("test.pdf");
     }
 
-    private void FillGroupsTestsWithAbstractData(Course selectedCourse)
+    private async Task FillGroupsTestsWithAbstractDataAsync(Course selectedCourse)
     {
         var groups = new List<Group>
         {
             // case for [CreateGroupInfoPdfFile_GroupWithStudents] test.
             new() { GroupName = "GroupWithStudentsInIt", CourseId = selectedCourse.CourseId },
             // case for [CreateGroupInfoPdfFile_EmptyGroup] test.
-            new() { GroupName = "EmptyGroup", CourseId = selectedCourse.CourseId }
+            new() { GroupName = "EmptyGroupY", CourseId = selectedCourse.CourseId }
         };
 
         _dbContext.Groups.AddRange(groups);
-        _dbContext.SaveChanges();
 
         // Insert existing students into group to get "true" in [CreateGroupInfoPdfFile_GroupWithStudents]
         var newStudentInGroup = new Student
@@ -88,6 +83,6 @@ public class PdfServiceTests
         };
 
         _dbContext.Students.Add(newStudentInGroup);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 }

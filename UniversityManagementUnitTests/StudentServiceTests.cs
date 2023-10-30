@@ -26,7 +26,7 @@ public class StudentServiceTests
 
         _selectedCourse = new Course
         {
-            CourseName = "TestCourse1",
+            CourseName = "TestCourse5"
         };
 
         _dbContext.Courses.Add(_selectedCourse);
@@ -42,15 +42,15 @@ public class StudentServiceTests
     [InlineData("   ", false)]
     [InlineData(null, false)]
     [InlineData("StudentNameDuplicationTest", false)]
-    public void AddStudent_DifferentNamesInputs_ShowExpectedResult(
+    public async Task AddStudentAsync_DifferentNamesInputs_ShowExpectedResult(
         string newStudentName, 
         bool expectedStudentCreationResult)
     {
         //Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
 
         //Act
-        var creationResult = _studentService.AddStudent(newStudentName);
+        var creationResult = await _studentService.AddStudentAsync(newStudentName);
 
         //Assert
         Assert.Equal(expectedStudentCreationResult, creationResult);
@@ -64,17 +64,17 @@ public class StudentServiceTests
     [InlineData(" ", true)]
     [InlineData("", true)]
     [InlineData(null, false)]
-    public void DeleteStudent_DifferentDeletionsVariants_ShowExpectedResult(
+    public async Task DeleteStudentAsync_DifferentDeletionsVariants_ShowExpectedResult(
         string studentToDeleteFullName,
         bool expectedStudentDeletionResult)
     {
         //Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
 
         var studentToDelete = _dbContext.Students.FirstOrDefault(s => s.StudentFullName == studentToDeleteFullName);
 
         //Act
-        var deletionResult = _studentService.DeleteStudent(studentToDelete);
+        var deletionResult = await _studentService.DeleteStudentAsync(studentToDelete);
 
         //Assert
         Assert.Equal(expectedStudentDeletionResult, deletionResult);
@@ -94,28 +94,39 @@ public class StudentServiceTests
     [InlineData("StudentToChange", "ChangedStudentName", false, false, true)]
     [InlineData("StudentToChangeWithDepartmentWorking", " 34 32 ChangedStudentNameAndWorkInfo  113", true, false, true)]
     [InlineData("fw     34gStudentToChange       ><>?", " ", false, true, false)]
-    [InlineData("", "", false, false, false)]
     [InlineData(" ", "NewStudentNameAdnNullCheck", null, true, true)]
+    [InlineData("", "", false, false, false)]
     [InlineData(null, "OnlyNullCheck", null, null, false)]
     [InlineData(null, null, true, false, false)]
     [InlineData("ChangeToNull", null, false, false, false)]
-    public void ChangeStudentNameAndWorkInfo_DifferentChangesInNameAndWorkInfo_ShowExpectedResult(
+    public async Task ChangeStudentNameAndWorkInfoAsync_DifferentChangesInNameAndWorkInfo_ShowExpectedResult(
         string currentStudentFullName,
         string newStudentFullName,
-        bool? currentWorkingInDepartment,
+        bool currentWorkingInDepartment,
         bool newWorkingInDepartment,
         bool expectedStudentChangesResult)
     {
         //Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
 
         var studentToChange = _dbContext.Students.FirstOrDefault(s => s.StudentFullName == currentStudentFullName);
 
+        var originalStudentFullName = studentToChange?.StudentFullName;
+
         //Act
-        var changeResult = _studentService.ChangeStudentNameAndWorkInfo(studentToChange, newStudentFullName, newWorkingInDepartment);
+        var changeResult = await _studentService.ChangeStudentNameAndWorkInfoAsync(studentToChange, newStudentFullName, newWorkingInDepartment);
 
         //Assert
         Assert.Equal(expectedStudentChangesResult, changeResult);
+
+        if (changeResult)
+        {
+            Assert.Equal(newStudentFullName, studentToChange.StudentFullName);
+        }
+        else
+        {
+            Assert.Equal(currentStudentFullName, originalStudentFullName);
+        }
     }
     
     [Theory]
@@ -131,20 +142,20 @@ public class StudentServiceTests
     [InlineData("", "",  false)]
     [InlineData(null, "StudentWithNullInGroup", false)]
     [InlineData(null, null,  false)]
-    public void AddStudentsToGroup_DifferentStudentsAddingVariants_ShowExpectedResult(
+    public async Task AddStudentsToGroupAsync_DifferentStudentsAddingVariants_ShowExpectedResult(
         string selectedGroupName,
         string studentFullName,
         bool expectedStudentAddToGroupResult)
     {
         //Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
 
         var studentToAddInGroup = _dbContext.Students.FirstOrDefault(s => s.StudentFullName == studentFullName);
 
         var studentsToAdd = new List<Student> { studentToAddInGroup };
 
         //Act
-        var addedResult = _studentService.AddStudentsToGroup(_selectedCourse, selectedGroupName, studentsToAdd);
+        var addedResult = await _studentService.AddStudentsToGroupAsync(_selectedCourse, selectedGroupName, studentsToAdd);
 
         //Assert
         Assert.Equal(expectedStudentAddToGroupResult, addedResult);
@@ -154,19 +165,19 @@ public class StudentServiceTests
     [InlineData("StudentWithinSOMEGroupTest", true)]
     [InlineData("DeleteFromGroupTestWithNullInGroup", false)]
     [InlineData("DeleteFromGroupTestWithNothingInGroupName", false)]
-    public void DeleteStudentsFromGroup_DifferentStudentsDeleteVariants_ShowExpectedResult(
+    public async Task DeleteStudentsFromGroupAsync_DifferentStudentsDeleteVariants_ShowExpectedResult(
         string selectedStudentToDelete,
         bool expectedStudentDeleteFromGroupResult)
     {
         //Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
 
         var studentToRemoveFromGroup = _dbContext.Students.FirstOrDefault(s => s.StudentFullName == selectedStudentToDelete);
 
         var studentsToRemove = new List<Student> { studentToRemoveFromGroup };
 
         //Act
-        var deletedResult = _studentService.DeleteStudentsFromGroup(studentsToRemove);
+        var deletedResult = await _studentService.DeleteStudentsFromGroupAsync(studentsToRemove);
 
         //Assert
         Assert.Equal(expectedStudentDeleteFromGroupResult, deletedResult);
@@ -174,22 +185,22 @@ public class StudentServiceTests
 
     [Theory]
     [InlineData("StudentNotInSelectedGroup", false)]
-    public void DeleteStudentsFromGroup_StudentNotSelected_ShowExpectedResult(
+    public async Task DeleteStudentsFromGroupAsync_StudentNotSelected_ShowExpectedResult(
         string selectedStudentToDelete,
         bool expectedStudentDeleteFromGroupResult)
     {
         // Arrange
-        FillStudentsTestsWithAbstractData(_selectedCourse);
+        await FillStudentsTestsWithAbstractDataAsync(_selectedCourse);
 
         // Act
-        var deletedResult = _studentService.DeleteStudentsFromGroup(new List<Student> { new() { StudentFullName = selectedStudentToDelete } });
+        var deletedResult = await _studentService.DeleteStudentsFromGroupAsync(new List<Student> { new() { StudentFullName = selectedStudentToDelete } });
 
         // Assert
         Assert.Equal(expectedStudentDeleteFromGroupResult, deletedResult);
     }
 
 
-    private void FillStudentsTestsWithAbstractData(Course selectedCourse)
+    private async Task FillStudentsTestsWithAbstractDataAsync(Course selectedCourse)
     {
         var students = new List<Student>
         {
@@ -221,7 +232,6 @@ public class StudentServiceTests
         };
 
         _dbContext.Students.AddRange(students);
-        _dbContext.SaveChanges();
 
         var groups = new List<Group>
         {
@@ -235,6 +245,6 @@ public class StudentServiceTests
         };
 
         _dbContext.Groups.AddRange(groups);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 }

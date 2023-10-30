@@ -27,7 +27,7 @@ public class DocxServiceTests
 
         _selectedCourse = new Course
         {
-            CourseName = "TestCourse1",
+            CourseName = "TestCourse2"
         };
 
         _dbContext.Courses.Add(_selectedCourse);
@@ -35,35 +35,35 @@ public class DocxServiceTests
     }
 
     [Fact]
-    public void CreateGroupInfoDocxFile_GroupWithStudents_CreatesDocxFileAndCheckStringsInFile()
+    public async Task CreateGroupInfoDocxFileAsync_GroupWithStudents_CreatesDocxFileAndCheckStringsInFile()
     {
         // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
 
         // Act
         var docxCreationResult =
-            _docxService.CreateGroupInfoDocxFile(_selectedCourse, "GroupWithStudentsInIt", "test.docx");
+            await _docxService.CreateGroupInfoDocxFileAsync(_selectedCourse, "GroupWithStudentsInIt", "test.docx");
 
         using var doc = DocX.Load("test.docx");
         var text = doc.Text;
 
         // Assert
         Assert.True(docxCreationResult);
-        Assert.Contains("TestCourse1", text);
+        Assert.Contains("TestCourse2", text);
         Assert.Contains("GroupWithStudentsInIt", text);
-        Assert.Contains("TestStudent", text);
+        Assert.Contains("TestStudent22", text);
 
         File.Delete("test.docx");
     }
 
     [Fact]
-    public void CreateGroupInfoDocxFile_EmptyGroup_ShowErrorMessageBox()
+    public async Task CreateGroupInfoDocxFileAsync_EmptyGroup_GetFalseResult()
     {
         // Arrange
-        FillGroupsTestsWithAbstractData(_selectedCourse);
+        await FillGroupsTestsWithAbstractDataAsync(_selectedCourse);
 
         // Act
-        var docxCreationResult = _docxService.CreateGroupInfoDocxFile(_selectedCourse, "EmptyGroup", "test.docx");
+        var docxCreationResult = await _docxService.CreateGroupInfoDocxFileAsync(_selectedCourse, "1EmptyGroup", "test.docx");
 
         // Assert
         Assert.False(docxCreationResult);
@@ -71,28 +71,27 @@ public class DocxServiceTests
         File.Delete("test.docx");
     }
 
-    private void FillGroupsTestsWithAbstractData(Course selectedCourse)
+    private async Task FillGroupsTestsWithAbstractDataAsync(Course selectedCourse)
     {
         var groups = new List<Group>
         {
             // case for [CreateGroupInfoDocxFile_GroupWithStudents] test.
             new() { GroupName = "GroupWithStudentsInIt", CourseId = selectedCourse.CourseId },
             // case for [CreateGroupInfoDocxFile_EmptyGroup] test.
-            new() { GroupName = "EmptyGroup", CourseId = selectedCourse.CourseId }
+            new() { GroupName = "1EmptyGroup", CourseId = selectedCourse.CourseId }
         };
 
         _dbContext.Groups.AddRange(groups);
-        _dbContext.SaveChanges();
 
         // Insert existing students into group to get "true" in [CreateGroupInfoDocxFile_GroupWithStudents]
         var newStudentInGroup = new Student
         {
-            StudentFullName = "TestStudent",
+            StudentFullName = "TestStudent22",
             CurrentGroupName = "GroupWithStudentsInIt",
             GroupId = groups.First(g => g.GroupName == "GroupWithStudentsInIt").GroupId
         };
 
         _dbContext.Students.Add(newStudentInGroup);
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync();
     }
 }
