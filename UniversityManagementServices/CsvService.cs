@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace UniversityManagement.Services;
 
@@ -27,7 +28,7 @@ public class CsvService
             if (selectedCourse == null && string.IsNullOrWhiteSpace(selectedGroupName))
                 throw new ArgumentNullException();
 
-            var studentsToExport = GetStudentsToExport(selectedGroupName);
+            var studentsToExport = await GetStudentsToExportAsync(selectedGroupName);
 
             if (studentsToExport.Any())
             {
@@ -39,7 +40,7 @@ public class CsvService
             {
                 throw new InvalidOperationException();
             }
-
+            
             return true;
         }
         catch
@@ -73,8 +74,6 @@ public class CsvService
                 student.CurrentGroupName = null;
             }
 
-            await _dbContext.SaveChangesAsync();
-
             var studentsToImport = csv.GetRecords<Student>().ToList();
 
             foreach (var importedStudent in studentsToImport)
@@ -98,8 +97,6 @@ public class CsvService
                 await _dbContext.SaveChangesAsync();
             }
 
-            await _dbContext.SaveChangesAsync();
-
             return true;
         }
         catch
@@ -108,10 +105,10 @@ public class CsvService
         }
     }
 
-    public List<Student> GetStudentsToExport(string selectedGroupName)
+    public async Task<IEnumerable<Student>> GetStudentsToExportAsync(string selectedGroupName)
     {
-        return _dbContext.Students.Where(student =>
+        return await _dbContext.Students.Where(student =>
             !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
-            student.CurrentGroupName == selectedGroupName).ToList();
+            student.CurrentGroupName == selectedGroupName).ToListAsync();
     }
 }

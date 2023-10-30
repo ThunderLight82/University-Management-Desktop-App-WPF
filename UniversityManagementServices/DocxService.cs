@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading.Tasks;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 using Xceed.Document.NET;
@@ -18,7 +19,7 @@ public class DocxService
         _dbContext = dbContext;
     }
 
-    public bool CreateGroupInfoDocxFile(Course selectedCourse, string selectedGroupName, string filePath)
+    public async Task<bool> CreateGroupInfoDocxFileAsync(Course selectedCourse, string selectedGroupName, string filePath)
     {
         try
         {
@@ -29,7 +30,7 @@ public class DocxService
                 .Include(group => group.Students)
                 .FirstOrDefault(group => group.CourseId == selectedCourse!.CourseId && group.GroupName == selectedGroupName);
 
-            var studentsToExport = GetStudentsListWithinGroup(selectedGroupName);
+            var studentsToExport = await GetStudentsListWithinGroupAsync(selectedGroupName);
 
             if (studentsToExport.Any())
             {
@@ -39,7 +40,7 @@ public class DocxService
                 doc.InsertParagraph(selectedGroup!.GroupName).Bold().FontSize(14).Alignment = Alignment.center;
 
                 var students = selectedGroup.Students.Select(student => student.StudentFullName).ToList();
-
+                
                 for (int i = 0; i < students.Count; i++)
                 {
                     doc.InsertParagraph($"{i + 1}. {students[i]}");
@@ -60,10 +61,10 @@ public class DocxService
         }
     }
 
-    public List<Student> GetStudentsListWithinGroup(string selectedGroupName)
+    public async Task<IEnumerable<Student>> GetStudentsListWithinGroupAsync(string selectedGroupName)
     {
-        return _dbContext.Students.Where(student =>
+        return await _dbContext.Students.Where(student =>
             !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
-            student.CurrentGroupName == selectedGroupName).ToList();
+            student.CurrentGroupName == selectedGroupName).ToListAsync();
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 
@@ -19,7 +20,7 @@ public class PdfService
         _dbContext = dbContext;
     }
 
-    public bool CreateGroupInfoPdfFile(Course selectedCourse, string selectedGroupName, string filePath)
+    public async Task<bool> CreateGroupInfoPdfFileAsync(Course selectedCourse, string selectedGroupName, string filePath)
     {
         try
         {
@@ -30,7 +31,7 @@ public class PdfService
                 .Include(group => group.Students)
                 .FirstOrDefault(group => group.CourseId == selectedCourse!.CourseId && group.GroupName == selectedGroupName);
 
-            var studentsToExport = GetStudentsListWithinGroup(selectedGroupName);
+            var studentsToExport = await GetStudentsListWithinGroupAsync(selectedGroupName);
 
             if (studentsToExport.Any())
             {
@@ -70,10 +71,10 @@ public class PdfService
         }
     }
 
-    public List<Student> GetStudentsListWithinGroup(string selectedGroupName)
+    public async Task<IEnumerable<Student>> GetStudentsListWithinGroupAsync(string selectedGroupName)
     {
-        return _dbContext.Students.Where(student =>
+        return await _dbContext.Students.Where(student =>
             !string.IsNullOrWhiteSpace(student.CurrentGroupName) &&
-            student.CurrentGroupName == selectedGroupName).ToList();
+            student.CurrentGroupName == selectedGroupName).ToListAsync();
     }
 }

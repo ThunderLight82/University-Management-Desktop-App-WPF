@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 
@@ -17,7 +18,7 @@ public class TeacherService
         _dbContext = dbContext;
     }
 
-    public bool CreateTeacher(string teacherFullName)
+    public async Task<bool> CreateTeacherAsync(string teacherFullName)
     {
         try
         {
@@ -35,7 +36,7 @@ public class TeacherService
 
             _dbContext.Teachers.Add(newTeacher);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -45,7 +46,7 @@ public class TeacherService
         }
     }
 
-    public bool DeleteTeacher(Teacher selectedTeacher)
+    public async Task<bool> DeleteTeacherAsync(Teacher selectedTeacher)
     {
         try
         {
@@ -64,7 +65,7 @@ public class TeacherService
 
             _dbContext.Teachers.Remove(selectedTeacher);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -74,7 +75,7 @@ public class TeacherService
         }
     }
 
-    public bool ChangeTeacherNameAndWorkInfo(Teacher selectedTeacher, string newFullName, bool isCorrespondence)
+    public async Task<bool> ChangeTeacherNameAndWorkInfoAsync(Teacher selectedTeacher, string newFullName, bool isCorrespondence)
     {
         try
         {
@@ -87,7 +88,7 @@ public class TeacherService
             selectedTeacher.TeacherFullName = newFullName;
             selectedTeacher.IsCorrespondence = isCorrespondence;
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }

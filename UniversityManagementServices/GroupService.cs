@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
 
@@ -17,7 +18,7 @@ public class GroupService
         _dbContext = dbContext;
     }
 
-    public bool CreateGroup(Course selectedCourse, string groupName)
+    public async Task<bool> CreateGroupAsync(Course selectedCourse, string groupName)
     {
         try
         {
@@ -36,7 +37,7 @@ public class GroupService
 
             _dbContext.Groups.Add(createNewGroup);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -46,7 +47,7 @@ public class GroupService
         }
     }
 
-    public bool DeleteGroup(Course selectedCourse, string groupName)
+    public async Task<bool> DeleteGroupAsync(Course selectedCourse, string groupName)
     {
         try
         {
@@ -67,8 +68,7 @@ public class GroupService
 
                 _dbContext.Groups.Remove(deleteGroup);
 
-                _dbContext.SaveChanges();
-
+                await _dbContext.SaveChangesAsync();
             }
             else
             {
@@ -83,7 +83,7 @@ public class GroupService
         }
     }
 
-    public bool EditGroupName(Course selectedCourse, string currentGroupName, string newGroupName)
+    public async Task<bool> EditGroupNameAsync(Course selectedCourse, string currentGroupName, string newGroupName)
     {
         try
         {
@@ -114,7 +114,7 @@ public class GroupService
                 teacher.CurrentGroupCurationName = newGroupName;
             }
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -124,7 +124,7 @@ public class GroupService
         }
     }
 
-    public bool SelectGroupCurator(Course selectedCourse, Teacher teacherToAssign, string groupName)
+    public async Task<bool> SelectGroupCuratorAsync(Course selectedCourse, Teacher teacherToAssign, string groupName)
     {
         try
         {
@@ -138,7 +138,7 @@ public class GroupService
 
             teacherToAssign.CurrentGroupCurationName = groupName;
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -151,5 +151,10 @@ public class GroupService
     public IEnumerable<Course> PopulateCourseList()
     {
         return new ObservableCollection<Course>(_dbContext.Courses.ToList());
+    }
+
+    public IEnumerable<Teacher> PopulateTeacherList()
+    {
+        return new ObservableCollection<Teacher>(_dbContext.Teachers.ToList());
     }
 }

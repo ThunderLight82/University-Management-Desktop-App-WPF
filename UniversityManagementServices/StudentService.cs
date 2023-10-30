@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UniversityManagement.DataAccess;
 using UniversityManagement.Entities;
@@ -17,7 +18,7 @@ public class StudentService
         _dbContext = dbContext;
     }
 
-    public bool AddStudent(string studentFullName)
+    public async Task<bool> AddStudentAsync(string studentFullName)
     {
         try
         {
@@ -31,13 +32,11 @@ public class StudentService
             {
                 StudentFullName = studentFullName,
                 IsWorkingInDepartment = false,
-                CurrentGroupName = null,
-                GroupId = null
             };
 
             _dbContext.Students.Add(newStudent);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -47,7 +46,7 @@ public class StudentService
         }
     }
 
-    public bool DeleteStudent(Student selectedStudent)
+    public async Task<bool> DeleteStudentAsync(Student selectedStudent)
     {
         try
         {
@@ -63,10 +62,10 @@ public class StudentService
             }
 
             selectedStudent.CurrentGroupName = null;
-
+            
             _dbContext.Students.Remove(selectedStudent);
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -76,7 +75,7 @@ public class StudentService
         }
     }
 
-    public bool ChangeStudentNameAndWorkInfo(Student selectedStudent, string newFullName, bool isWorkingInDepartment)
+    public async Task<bool> ChangeStudentNameAndWorkInfoAsync(Student selectedStudent, string newFullName, bool isWorkingInDepartment)
     {
         try
         {
@@ -89,7 +88,7 @@ public class StudentService
             selectedStudent.StudentFullName = newFullName;
             selectedStudent.IsWorkingInDepartment = isWorkingInDepartment;
 
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -99,7 +98,7 @@ public class StudentService
         }
     }
 
-    public bool AddStudentsToGroup(Course selectedCourse, string selectedGroupName, List<Student> selectedStudents)
+    public async Task<bool> AddStudentsToGroupAsync(Course selectedCourse, string selectedGroupName, List<Student> selectedStudents)
     {
         try
         {
@@ -119,7 +118,7 @@ public class StudentService
 
                 if (string.IsNullOrWhiteSpace(student.CurrentGroupName))
                 {
-                    student.CurrentGroupName = selectedGroup.GroupName;
+                    student.CurrentGroupName = selectedGroup!.GroupName;
                     student.GroupId = selectedGroup.GroupId;
                 }
                 else
@@ -128,7 +127,7 @@ public class StudentService
                 }
             }
             
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -138,7 +137,7 @@ public class StudentService
         }
     }
 
-    public bool DeleteStudentsFromGroup(List<Student> selectedStudents)
+    public async Task<bool> DeleteStudentsFromGroupAsync(List<Student> selectedStudents)
     {
         try
         {
@@ -160,7 +159,8 @@ public class StudentService
                     throw new ArgumentException();
                 }
             }
-            _dbContext.SaveChanges();
+
+            await _dbContext.SaveChangesAsync();
 
             return true;
         }
