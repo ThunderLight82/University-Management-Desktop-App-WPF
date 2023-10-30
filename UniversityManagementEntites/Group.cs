@@ -10,8 +10,6 @@ public class Group
 
     public int CourseId { get; set; }
 
-    public Course Course { get; set; }
-
     public List<Student> Students { get; set; }
 
     public List<Teacher> GroupCurator { get; set; }

@@ -12,12 +12,9 @@ public class Course
 
     public List<Teacher> Teachers { get; set; }
 
-    public int LastUsedGroupId { get; set; }
-
     public Course()
     {
         Groups = new List<Group>();
         Teachers = new List<Teacher>();
-        LastUsedGroupId = 0;
     }
 }
