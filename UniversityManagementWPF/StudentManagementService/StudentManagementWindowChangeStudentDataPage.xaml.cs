@@ -18,7 +18,7 @@ public partial class StudentManagementWindowChangeStudentDataPage
         StudentsListView.ItemsSource = _studentService.PopulateStudentList();
     }
 
-    private void ChangeStudentNameAndWorkInfo_Click (object sender, RoutedEventArgs e)
+    private async void ChangeStudentNameAndWorkInfoAsync_Click (object sender, RoutedEventArgs e)
     {
         if (StudentsListView.SelectedItem is Student selectedStudent)
         {
@@ -30,7 +30,7 @@ public partial class StudentManagementWindowChangeStudentDataPage
                 {
                     bool isWorkingInDepartment = selectedItem.Content.ToString() == "Yes";
 
-                    _studentService.ChangeStudentNameAndWorkInfo(selectedStudent, changedStudentFullName, isWorkingInDepartment);
+                    await _studentService.ChangeStudentNameAndWorkInfoAsync(selectedStudent, changedStudentFullName, isWorkingInDepartment);
 
                     StudentsListView.ItemsSource = _studentService.PopulateStudentList();
                 }

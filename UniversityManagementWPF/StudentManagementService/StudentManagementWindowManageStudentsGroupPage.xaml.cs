@@ -19,7 +19,7 @@ public partial class StudentManagementWindowManageStudentsGroupPage
         CourseComboBox.ItemsSource = _studentService.PopulateCourseList();
         StudentsListView.ItemsSource = _studentService.PopulateStudentList();
     }
-    private void AddStudentsToGroup_Click(object sender, RoutedEventArgs e)
+    private async void AddStudentsToGroupAsync_Click(object sender, RoutedEventArgs e)
     {
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
@@ -36,7 +36,7 @@ public partial class StudentManagementWindowManageStudentsGroupPage
                     {
                         if (string.IsNullOrWhiteSpace(student.CurrentGroupName))
                         {
-                            _studentService.AddStudentsToGroup(selectedCourse, selectedGroupName, selectedStudents);
+                            await _studentService.AddStudentsToGroupAsync(selectedCourse, selectedGroupName, selectedStudents);
 
                             StudentsListView.ItemsSource = _studentService.PopulateStudentList();
 
@@ -77,7 +77,7 @@ public partial class StudentManagementWindowManageStudentsGroupPage
 
     }
 
-    private void DeleteStudentsFromGroup_Click(object sender, RoutedEventArgs e)
+    private async void DeleteStudentsFromGroupAsync_Click(object sender, RoutedEventArgs e)
     {
         var selectedStudents = StudentsListView.SelectedItems.OfType<Student>().ToList();
 
@@ -89,7 +89,7 @@ public partial class StudentManagementWindowManageStudentsGroupPage
                 {
                     if (!string.IsNullOrWhiteSpace(student.CurrentGroupName))
                     {
-                        _studentService.DeleteStudentsFromGroup(selectedStudents);
+                       await _studentService.DeleteStudentsFromGroupAsync(selectedStudents);
 
                         StudentsListView.ItemsSource = _studentService.PopulateStudentList();
 

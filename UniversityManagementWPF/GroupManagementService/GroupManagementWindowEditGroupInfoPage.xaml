@@ -43,7 +43,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Apply Curator Selection" Click="SelectGroupCurator_Click" Width="200" Height="30"
+                <Button Content="Apply Curator Selection" Click="SelectGroupCuratorAsync_Click" Width="200" Height="30"
                         Margin="15,5" />
             </StackPanel>
         </StackPanel>
@@ -113,7 +113,7 @@
             <!--     </TextBox.Style> -->
             <!-- </TextBox> -->
 
-            <Button Content="Edit Group Name" Click="EditGroupName_Click" Width="200" Height="30" Margin="5" />
+            <Button Content="Edit Group Name" Click="EditGroupNameAsync_Click" Width="200" Height="30" Margin="5" />
         </StackPanel>
     </Grid>
 </Page>

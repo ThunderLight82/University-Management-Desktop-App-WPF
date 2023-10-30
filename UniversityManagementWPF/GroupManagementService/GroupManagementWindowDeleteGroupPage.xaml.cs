@@ -21,7 +21,7 @@ public partial class GroupManagementWindowDeleteGroupPage
         CourseComboBox.SelectionChanged += ComboBoxRefreshAll;
     }
 
-    private void DeleteGroup_Click(object sender, RoutedEventArgs e)
+    private async void DeleteGroupAsync_Click(object sender, RoutedEventArgs e)
     {
         if (CourseComboBox.SelectedItem is Course selectedCourse)
         {
@@ -34,7 +34,7 @@ public partial class GroupManagementWindowDeleteGroupPage
 
                 if (deleteGroup!.Students.Count == 0)
                 { 
-                    _groupService.DeleteGroup(selectedCourse, preferableGroupToDelete);
+                   await _groupService.DeleteGroupAsync(selectedCourse, preferableGroupToDelete);
 
                     ComboBoxRefreshAll(null!, null!);
                 }

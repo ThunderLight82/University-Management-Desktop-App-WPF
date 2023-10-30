@@ -17,7 +17,7 @@ public partial class StudentManagementWindowEditStudentPage
         StudentsListView.ItemsSource = _studentService.PopulateStudentList();
     }
 
-    private void AddStudent_Click(object sender, RoutedEventArgs e)
+    private async void AddStudentAsync_Click(object sender, RoutedEventArgs e)
     {
         string newStudentFullName = NewStudentFullNameTextBox.Text.Trim();
 
@@ -39,7 +39,7 @@ public partial class StudentManagementWindowEditStudentPage
                 }
             }
 
-            _studentService.AddStudent(newStudentFullName);
+            await _studentService.AddStudentAsync(newStudentFullName);
 
             NewStudentFullNameTextBox.Clear();
 
@@ -53,11 +53,11 @@ public partial class StudentManagementWindowEditStudentPage
         }
     }
 
-    private void DeleteStudent_Click(object sender, RoutedEventArgs e)
+    private async void DeleteStudentAsync_Click(object sender, RoutedEventArgs e)
     {
         if (StudentsListView.SelectedItem is Student selectedStudent)
         {
-            _studentService.DeleteStudent(selectedStudent);
+            await _studentService.DeleteStudentAsync(selectedStudent);
 
             StudentsListView.ItemsSource = _studentService.PopulateStudentList();
         }

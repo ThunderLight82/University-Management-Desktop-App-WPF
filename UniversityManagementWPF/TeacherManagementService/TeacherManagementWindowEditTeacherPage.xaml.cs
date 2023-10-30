@@ -17,7 +17,7 @@ public partial class TeacherManagementWindowEditTeacherPage
         TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
     }
 
-    private void CreateTeacher_Click(object sender, RoutedEventArgs e)
+    private async void CreateTeacherAsync_Click(object sender, RoutedEventArgs e)
     {
         string newTeacherFullName = NewTeacherFullNameTextBox.Text.Trim();
 
@@ -37,7 +37,7 @@ public partial class TeacherManagementWindowEditTeacherPage
                 }
             }
 
-            _teacherService.CreateTeacher(newTeacherFullName);
+            await _teacherService.CreateTeacherAsync(newTeacherFullName);
 
             NewTeacherFullNameTextBox.Clear();
 
@@ -51,11 +51,11 @@ public partial class TeacherManagementWindowEditTeacherPage
         }
     }
 
-    private void DeleteTeacher_Click(object sender, RoutedEventArgs e)
+    private async void DeleteTeacherAsync_Click(object sender, RoutedEventArgs e)
     {
         if (TeachersListView.SelectedItem is Teacher selectedTeacher)
         {
-            _teacherService.DeleteTeacher(selectedTeacher);
+            await _teacherService.DeleteTeacherAsync(selectedTeacher);
 
             TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
         }

@@ -74,10 +74,10 @@
         </ListView>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30">
-            <Button Content="Add Teacher" Click="CreateTeacher_Click" Width="200" Height="35" Margin="15,0,15,-5"
+            <Button Content="Add Teacher" Click="CreateTeacherAsync_Click" Width="200" Height="35" Margin="15,0,15,-5"
                     VerticalAlignment="Bottom" />
 
-            <Button Content="Remove Teacher" Click="DeleteTeacher_Click" Width="200" Height="35" Margin="15,0,15,-5"
+            <Button Content="Remove Teacher" Click="DeleteTeacherAsync_Click" Width="200" Height="35" Margin="15,0,15,-5"
                     VerticalAlignment="Bottom" />
         </StackPanel>
 

@@ -49,10 +49,10 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
-                <Button Content="Export Students List" Click="ExportStudents_Click" Width="200" Height="35"
+                <Button Content="Export Students List" Click="ExportStudentsAsync_Click" Width="200" Height="35"
                         Margin="0,0,15,0" VerticalAlignment="Bottom" />
 
-                <Button Content="Import Students List" Click="ImportStudents_Click" Width="200" Height="35"
+                <Button Content="Import Students List" Click="ImportStudentsAsync_Click" Width="200" Height="35"
                         VerticalAlignment="Bottom" />
 
             </StackPanel>

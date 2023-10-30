@@ -18,7 +18,7 @@ public partial class GroupManagementWindowCreateGroupPage
         CourseComboBox.ItemsSource = _groupService.PopulateCourseList();
     }
 
-    private void CreateGroup_Click(object sender, RoutedEventArgs e)
+    private async void CreateGroupAsync_Click(object sender, RoutedEventArgs e)
     {
         if (CourseComboBox.SelectedItem is Course selectedCourse)
         {
@@ -31,7 +31,7 @@ public partial class GroupManagementWindowCreateGroupPage
 
                 if (!groupNameExist)
                 {
-                    _groupService.CreateGroup(selectedCourse, groupName);
+                    await _groupService.CreateGroupAsync(selectedCourse, groupName);
 
                     GroupNameTextBox.Clear();
                 }

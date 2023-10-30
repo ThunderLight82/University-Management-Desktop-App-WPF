@@ -65,7 +65,7 @@
                     </TextBox.Style>
                 </TextBox>
 
-                <Button Content="Create Group" Click="CreateGroup_Click" Width="200" Height="30" Margin="15,5" />
+                <Button Content="Create Group" Click="CreateGroupAsync_Click" Width="200" Height="30" Margin="15,5" />
             </StackPanel>
         </StackPanel>
     </Grid>

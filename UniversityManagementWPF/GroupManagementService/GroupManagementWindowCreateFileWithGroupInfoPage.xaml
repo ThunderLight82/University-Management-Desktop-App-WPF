@@ -29,10 +29,10 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
-                <Button Content="Save Group Info as (.docx) file" Click="CreateGroupInfoDocxFile_Click" Width="200"
+                <Button Content="Save Group Info as (.docx) file" Click="CreateGroupInfoDocxFileAsync_Click" Width="200"
                         Height="35" Margin="0,0,15,0" VerticalAlignment="Bottom" />
 
-                <Button Content="Save Group Info as (.pdf) file" Click="CreateGroupInfoPdfFile_Click" Width="200"
+                <Button Content="Save Group Info as (.pdf) file" Click="CreateGroupInfoPdfFileAsync_Click" Width="200"
                         Height="35" VerticalAlignment="Bottom" />
             </StackPanel>
         </StackPanel>

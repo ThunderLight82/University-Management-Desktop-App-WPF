@@ -43,10 +43,10 @@
         </ListView>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30">
-            <Button Content="Add Student To Group" Click="AddStudentsToGroup_Click" Width="200" Height="35"
+            <Button Content="Add Student To Group" Click="AddStudentsToGroupAsync_Click" Width="200" Height="35"
                     Margin="15,0,15,-5" VerticalAlignment="Bottom" />
 
-            <Button Content="Remove Student From Group" Click="DeleteStudentsFromGroup_Click" Width="200" Height="35"
+            <Button Content="Remove Student From Group" Click="DeleteStudentsFromGroupAsync_Click" Width="200" Height="35"
                     Margin="15,0,15,-5" VerticalAlignment="Bottom" />
         </StackPanel>
 

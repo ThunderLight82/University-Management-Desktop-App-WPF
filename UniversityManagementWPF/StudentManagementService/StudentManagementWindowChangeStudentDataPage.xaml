@@ -57,7 +57,7 @@
         </ListView>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="30">
-            <Button Content="Change Student Info" Click="ChangeStudentNameAndWorkInfo_Click" Width="200" Height="35"
+            <Button Content="Change Student Info" Click="ChangeStudentNameAndWorkInfoAsync_Click" Width="200" Height="35"
                     Margin="15,0,15,-5" VerticalAlignment="Bottom" />
         </StackPanel>
 

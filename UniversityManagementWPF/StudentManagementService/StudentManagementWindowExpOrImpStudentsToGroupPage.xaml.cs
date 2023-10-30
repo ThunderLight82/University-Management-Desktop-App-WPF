@@ -25,7 +25,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
-    private async void ExportStudents_Click(object sender, RoutedEventArgs e)
+    private async void ExportStudentsAsync_Click(object sender, RoutedEventArgs e)
     {
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
@@ -41,7 +41,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var studentsToExport = _csvService.GetStudentsToExport(selectedGroupName);
+                var studentsToExport = await _csvService.GetStudentsToExportAsync(selectedGroupName);
 
                 if (studentsToExport.Any())
                 {
@@ -78,7 +78,7 @@ public partial class StudentManagementWindowExpOrImpStudentsToGroupPage
         }
     }
 
-    private async void ImportStudents_Click(object sender, RoutedEventArgs e)
+    private async void ImportStudentsAsync_Click(object sender, RoutedEventArgs e)
     {
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;

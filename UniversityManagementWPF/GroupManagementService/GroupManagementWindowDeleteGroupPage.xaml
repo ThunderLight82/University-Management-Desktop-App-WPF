@@ -30,7 +30,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
                 <ComboBox Name="DeleteGroupComboBox" Width="200" Height="25" />
 
-                <Button Content="Delete Group" Click="DeleteGroup_Click" Width="200" Height="30" Margin="15,5" />
+                <Button Content="Delete Group" Click="DeleteGroupAsync_Click" Width="200" Height="30" Margin="15,5" />
             </StackPanel>
         </StackPanel>
     </Grid>

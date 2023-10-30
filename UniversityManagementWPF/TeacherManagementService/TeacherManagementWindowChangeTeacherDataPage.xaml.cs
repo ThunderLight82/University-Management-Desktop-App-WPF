@@ -18,7 +18,7 @@ public partial class TeacherManagementWindowChangeTeacherDataPage
         TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
     }
 
-    private void ChangeTeacherNameAndWorkInfo_Click(object sender, RoutedEventArgs e)
+    private async void ChangeTeacherNameAndWorkInfoAsync_Click(object sender, RoutedEventArgs e)
     {
         if (TeachersListView.SelectedItem is Teacher selectedTeacher)
         {
@@ -30,7 +30,7 @@ public partial class TeacherManagementWindowChangeTeacherDataPage
                 {
                     bool isCorrespondence = selectedItem.Content.ToString() == "Yes";
 
-                    _teacherService.ChangeTeacherNameAndWorkInfo(selectedTeacher, changedTeacherFullName, isCorrespondence);
+                    await _teacherService.ChangeTeacherNameAndWorkInfoAsync(selectedTeacher, changedTeacherFullName, isCorrespondence);
 
                     TeachersListView.ItemsSource = _teacherService.PopulateTeacherList();
                 }

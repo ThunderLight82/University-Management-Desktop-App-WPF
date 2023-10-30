@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
@@ -24,7 +25,7 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
         CourseComboBox.ItemsSource = _groupService.PopulateCourseList();
     }
 
-    private void CreateGroupInfoDocxFile_Click(object sender, RoutedEventArgs e)
+    private async void CreateGroupInfoDocxFileAsync_Click(object sender, RoutedEventArgs e)
     {
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
@@ -40,13 +41,13 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var studentsToExport = _docxService.GetStudentsListWithinGroup(selectedGroupName);
+                var studentsToExport = await _docxService.GetStudentsListWithinGroupAsync(selectedGroupName);
 
                 if (studentsToExport.Any())
                 {
                     string exportFilePath = saveFileDialog.FileName;
 
-                    bool exportResult = _docxService.CreateGroupInfoDocxFile(selectedCourse, selectedGroupName, exportFilePath);
+                    bool exportResult = await _docxService.CreateGroupInfoDocxFileAsync(selectedCourse, selectedGroupName, exportFilePath);
 
                     if (exportResult)
                     {
@@ -77,7 +78,7 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
         }
     }
 
-    private void CreateGroupInfoPdfFile_Click(object sender, RoutedEventArgs e)
+    private async void CreateGroupInfoPdfFileAsync_Click(object sender, RoutedEventArgs e)
     {
         var selectedCourse = CourseComboBox.SelectedItem as Course;
         var selectedGroupName = GroupComboBox.SelectedItem as string;
@@ -93,14 +94,14 @@ public partial class GroupManagementWindowCreateFileWithGroupInfoPage
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                var studentsToExport = _pdfService.GetStudentsListWithinGroup(selectedGroupName);
+                var studentsToExport = await _pdfService.GetStudentsListWithinGroupAsync(selectedGroupName);
 
                 if (studentsToExport.Any())
                 {
 
                     string exportFilePath = saveFileDialog.FileName;
 
-                    bool exportResult = _pdfService.CreateGroupInfoPdfFile(selectedCourse, selectedGroupName, exportFilePath);
+                    bool exportResult = await _pdfService.CreateGroupInfoPdfFileAsync(selectedCourse, selectedGroupName, exportFilePath);
 
                     if (exportResult)
                     {

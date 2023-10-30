@@ -6,23 +6,21 @@ namespace UniversityManagement.WPF.GroupManagementService;
 public partial class GroupManagementWindow
 {
     private GroupService _groupService;
-    private TeacherService _teacherService;
     private DocxService _docxService;
     private PdfService _pdfService;
 
-    public GroupManagementWindow(GroupService groupService, DocxService docxService, PdfService pdfService, TeacherService teacherService)
+    public GroupManagementWindow(GroupService groupService, DocxService docxService, PdfService pdfService)
     {
         InitializeComponent();
 
         _groupService = groupService;
         _docxService = docxService;
         _pdfService = pdfService;
-        _teacherService = teacherService;
     }
 
     private void EditGroupInfo_Click(object sender, RoutedEventArgs e)
     {
-        var editGroupInfoPage = new GroupManagementWindowEditGroupInfoPage(_groupService , _teacherService);
+        var editGroupInfoPage = new GroupManagementWindowEditGroupInfoPage(_groupService);
 
         EditGroupInfoButton.Style = (Style)FindResource("HighlightedButtonStyle");
         CreateGroupButton.Style = (Style)FindResource("NormalButtonStyle");

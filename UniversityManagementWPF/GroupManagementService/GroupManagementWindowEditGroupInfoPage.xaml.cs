@@ -9,23 +9,21 @@ namespace UniversityManagement.WPF.GroupManagementService;
 public partial class GroupManagementWindowEditGroupInfoPage
 {
     private GroupService _groupService;
-    private TeacherService _teacherService;
 
-    public GroupManagementWindowEditGroupInfoPage(GroupService groupService, TeacherService teacherService)
+    public GroupManagementWindowEditGroupInfoPage(GroupService groupService)
     {
         InitializeComponent();
 
         _groupService = groupService;
-        _teacherService = teacherService;
 
         CourseComboBox.ItemsSource = _groupService.PopulateCourseList();
 
-        SelectCuratorNameComboBox.ItemsSource = _teacherService.PopulateTeacherList();
+        SelectCuratorNameComboBox.ItemsSource = _groupService.PopulateTeacherList();
 
         CourseComboBox.SelectionChanged += ComboBoxRefreshAll;
     }
 
-    private void EditGroupName_Click(object sender, RoutedEventArgs e)
+    private async void EditGroupNameAsync_Click(object sender, RoutedEventArgs e)
     {
         if (CourseComboBox.SelectedItem is Course selectedCourse)
         {
@@ -37,7 +35,7 @@ public partial class GroupManagementWindowEditGroupInfoPage
 
                 if (!string.IsNullOrWhiteSpace(newGroupName))
                 {
-                    _groupService.EditGroupName(selectedCourse, selectedGroupName, newGroupName);
+                    await _groupService.EditGroupNameAsync(selectedCourse, selectedGroupName, newGroupName);
 
                     ComboBoxRefreshAll(null!, null!);
 
@@ -65,7 +63,7 @@ public partial class GroupManagementWindowEditGroupInfoPage
         }
     }
 
-    private void SelectGroupCurator_Click(object sender, RoutedEventArgs e)
+    private async void SelectGroupCuratorAsync_Click(object sender, RoutedEventArgs e)
     {
         if (CourseComboBox.SelectedItem is Course selectedCourse)
         {
@@ -74,7 +72,7 @@ public partial class GroupManagementWindowEditGroupInfoPage
 
             if (selectedTeacher != null && !string.IsNullOrWhiteSpace(selectedGroupName))
             {
-                _groupService.SelectGroupCurator(selectedCourse, selectedTeacher, selectedGroupName);
+                await _groupService.SelectGroupCuratorAsync(selectedCourse, selectedTeacher, selectedGroupName);
 
                 SelectGroupToAddCuratorComboBox.SelectedIndex = -1;
                 SelectCuratorNameComboBox.SelectedIndex = -1;
@@ -134,7 +132,7 @@ public partial class GroupManagementWindowEditGroupInfoPage
             return selectedCourse.Groups.FirstOrDefault(group => group.GroupName == selectedGroupName);
         }
     
-        return null;
+        return null!;
     }
 
     private void ComboBoxRefreshAll(object sender, SelectionChangedEventArgs e)
