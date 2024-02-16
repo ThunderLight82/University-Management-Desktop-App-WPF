@@ -11,7 +11,7 @@ namespace UniversityManagement.Services;
 
 public class GroupService
 {
-    private UniversityDbContext _dbContext;
+    private readonly UniversityDbContext _dbContext;
 
     public GroupService(UniversityDbContext dbContext)
     {

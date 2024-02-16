@@ -13,7 +13,7 @@ namespace UniversityManagement.Services;
 
 public class PdfService
 {
-    private UniversityDbContext _dbContext;
+    private readonly UniversityDbContext _dbContext;
 
     public PdfService(UniversityDbContext dbContext)
     {

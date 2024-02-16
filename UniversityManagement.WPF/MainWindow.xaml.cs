@@ -13,13 +13,13 @@ namespace UniversityManagement.WPF;
 
 public partial class MainWindow
 {
-    private UniversityDbContext _dbContext;
-    private GroupService _groupService;
-    private TeacherService _teacherService;
-    private StudentService _studentService;
-    private DocxService _docxService;
-    private PdfService _pdfService;
-    private CsvService _csvService;
+    private readonly UniversityDbContext _dbContext;
+    private readonly GroupService _groupService;
+    private readonly TeacherService _teacherService;
+    private readonly StudentService _studentService;
+    private readonly DocxService _docxService;
+    private readonly PdfService _pdfService;
+    private readonly CsvService _csvService;
 
     public MainWindow(UniversityDbContext dbContext)
     {

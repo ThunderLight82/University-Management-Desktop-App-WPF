@@ -12,7 +12,7 @@ namespace UniversityManagement.Services;
 
 public class DocxService
 {
-    private UniversityDbContext _dbContext;
+    private readonly UniversityDbContext _dbContext;
 
     public DocxService(UniversityDbContext dbContext)
     {

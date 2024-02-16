@@ -14,7 +14,7 @@ namespace UniversityManagement.Services;
 
 public class CsvService
 {
-    private UniversityDbContext _dbContext;
+    private readonly UniversityDbContext _dbContext;
 
     public CsvService(UniversityDbContext dbContext)
     {
