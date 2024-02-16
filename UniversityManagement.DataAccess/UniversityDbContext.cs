@@ -10,7 +10,5 @@ public class UniversityDbContext : DbContext
     public DbSet<Teacher> Teachers { get; set; }
     public DbSet<Student> Students { get; set; }
 
-    public UniversityDbContext(DbContextOptions<UniversityDbContext> options) : base(options)
-    {
-    }
+    public UniversityDbContext(DbContextOptions<UniversityDbContext> options) : base(options) { }
 }

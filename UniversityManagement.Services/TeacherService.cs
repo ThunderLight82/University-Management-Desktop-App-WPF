@@ -11,7 +11,7 @@ namespace UniversityManagement.Services;
 
 public class TeacherService
 {
-    private UniversityDbContext _dbContext;
+    private readonly UniversityDbContext _dbContext;
 
     public TeacherService (UniversityDbContext dbContext)
     {

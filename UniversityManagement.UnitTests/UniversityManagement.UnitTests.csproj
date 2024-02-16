@@ -28,10 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UniversityManagementApp\UniversityManagement.WPF.csproj" />
-    <ProjectReference Include="..\UniversityManagementDataAccess\UniversityManagement.DataAccess.csproj" />
-    <ProjectReference Include="..\UniversityManagementEntites\UniversityManagement.Entities.csproj" />
-    <ProjectReference Include="..\UniversityManagementServices\UniversityManagement.Services.csproj" />
+    <ProjectReference Include="..\UniversityManagement.DataAccess\UniversityManagement.DataAccess.csproj" />
+    <ProjectReference Include="..\UniversityManagement.Entites\UniversityManagement.Entities.csproj" />
+    <ProjectReference Include="..\UniversityManagement.Services\UniversityManagement.Services.csproj" />
   </ItemGroup>
 
 </Project>

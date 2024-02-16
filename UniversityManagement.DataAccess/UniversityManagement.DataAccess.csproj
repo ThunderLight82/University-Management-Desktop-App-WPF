@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UniversityManagementEntites\UniversityManagement.Entities.csproj" />
+    <ProjectReference Include="..\UniversityManagement.Entites\UniversityManagement.Entities.csproj" />
   </ItemGroup>
 
 </Project>
