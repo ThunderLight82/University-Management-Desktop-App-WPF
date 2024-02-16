@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\UniversityManagementDataAccess\UniversityManagement.DataAccess.csproj" />
-    <ProjectReference Include="..\UniversityManagementEntites\UniversityManagement.Entities.csproj" />
+    <ProjectReference Include="..\UniversityManagement.DataAccess\UniversityManagement.DataAccess.csproj" />
+    <ProjectReference Include="..\UniversityManagement.Entites\UniversityManagement.Entities.csproj" />
   </ItemGroup>
 
 </Project>
