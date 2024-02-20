@@ -4,19 +4,14 @@ The Desktop Application project seamlessly organizes university affairs, from pe
 
 ## Tech Stack
 
-**Back-End:**
-- ASP.NET Core Web API
-- MVC
+- WPF
+- XAML
 - EF Core
-- MediatR
-- Carter
-- Swagger
 - MSSQL
-- Serilog
-- xUnit
+- CsvHelper
+- DocX
 - Moq
-- FluentValidation
-- FluentAssertions
+- xUnit
 
 ## Contacts
 
